@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Safety Evidence Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+  <header>
+    <h1>AI Safety Evidence Dashboard</h1>
+    <p class="sub">How the evidence on three contested questions has moved over time. Each dot is a paper, scored against the exact question wording.</p>
+  </header>
+
+  <nav id="tabs" role="tablist"></nav>
+
+  <main>
+    <section id="question-box">
+      <p id="question-text"></p>
+      <p id="question-stats" class="muted"></p>
+    </section>
+
+    <section id="chart-wrap">
+      <div id="chart" aria-label="Stance over time chart"></div>
+      <div id="tooltip" role="tooltip" hidden></div>
+    </section>
+
+    <section id="legend" aria-label="Legend"></section>
+
+    <section id="detail" aria-live="polite">
+      <p class="muted">Tap or click a dot to see the paper's details.</p>
+    </section>
+  </main>
+
+  <footer class="muted">
+    Stance: −2 strongly against … +2 strongly for. Dot size = evidence strength, opacity = judge confidence, colour = dominant model family (most models tested).
+    Data: <a href="data/papers.json">data/papers.json</a>.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

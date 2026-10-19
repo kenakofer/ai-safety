@@ -1,0 +1,136 @@
+:root {
+  --bg: #fafaf8;
+  --fg: #1d1d1f;
+  --muted: #6b6b70;
+  --line: #e2e2e0;
+  --card: #fff;
+  --accent: #3a5bd9;
+  --warn: #b45309;
+  --warn-bg: #fef3c7;
+  --override: #6d28d9;
+  --override-bg: #ede9fe;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 0 16px 32px;
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+h1 { font-size: 1.4rem; margin: 20px 0 4px; }
+.sub, .muted { color: var(--muted); }
+.sub { margin: 0 0 12px; }
+a { color: var(--accent); }
+
+#tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+#tabs button {
+  flex: 0 0 auto;
+  border: 0;
+  background: none;
+  padding: 10px 14px;
+  font: inherit;
+  color: var(--muted);
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+#tabs button[aria-selected="true"] {
+  color: var(--fg);
+  font-weight: 600;
+  border-bottom-color: var(--accent);
+}
+
+#question-text { font-size: 1.05rem; font-weight: 500; margin: 14px 0 2px; }
+#question-stats { margin: 0 0 8px; font-size: 0.9rem; }
+
+#chart-wrap { position: relative; }
+#chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+.axis text { fill: var(--muted); font-size: 11px; }
+.axis path, .axis line { stroke: #c9c9c6; }
+.band-label { font-size: 12px; font-weight: 600; fill: var(--muted); }
+.gridline { stroke: var(--line); }
+.zero-line { stroke: #bdbdb9; stroke-dasharray: 3 3; }
+
+.dot { cursor: pointer; stroke: #fff; stroke-width: 1.5; }
+.dot:focus { outline: none; }
+.dot.selected, .dot:focus-visible { stroke: var(--fg); stroke-width: 2.5; }
+.dot-flag { fill: none; stroke: var(--warn); stroke-width: 1.5; stroke-dasharray: 2 2; pointer-events: none; }
+.dot-override { fill: none; stroke: var(--override); stroke-width: 2; pointer-events: none; }
+
+.edge { fill: none; stroke-width: 1.5; opacity: 0.45; pointer-events: none; }
+.edge.dim { opacity: 0.08; }
+.edge.hi { opacity: 0.95; stroke-width: 2.2; }
+.edge.replicates { stroke: #15803d; }
+.edge.critiques { stroke: #dc2626; stroke-dasharray: 6 4; }
+.edge.extends { stroke: #64748b; stroke-dasharray: 1.5 3; }
+
+#tooltip {
+  position: absolute;
+  pointer-events: none;
+  max-width: 260px;
+  background: rgba(29, 29, 31, 0.92);
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+#legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 8px 0 16px;
+  font-size: 12px;
+}
+#legend .group { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+#legend .group-title { font-weight: 600; color: var(--muted); margin-right: 2px; }
+#legend .item { display: inline-flex; align-items: center; gap: 4px; }
+#legend svg { overflow: visible; }
+
+#detail {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+#detail h2 { font-size: 1.15rem; margin: 0 0 4px; line-height: 1.3; }
+#detail .meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 10px; }
+#detail dl { display: grid; grid-template-columns: 150px 1fr; gap: 6px 14px; margin: 12px 0 0; }
+#detail dt { font-weight: 600; color: var(--muted); font-size: 0.85rem; }
+#detail dd { margin: 0; }
+#detail ul { margin: 0; padding-left: 18px; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip { background: #f0f0ee; border-radius: 999px; padding: 1px 8px; font-size: 0.82rem; }
+
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.badge { font-size: 0.8rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; }
+.badge.flag { color: var(--warn); background: var(--warn-bg); }
+.badge.override { color: var(--override); background: var(--override-bg); }
+.badge.stance { background: #eef2ff; color: var(--accent); }
+
+.rel-link { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; text-align: left; text-decoration: underline; }
+
+footer { margin-top: 20px; font-size: 0.82rem; }
+
+@media (max-width: 640px) {
+  body { padding: 0 10px 24px; font-size: 14px; }
+  h1 { font-size: 1.2rem; }
+  #tabs button { padding: 8px 10px; }
+  #detail { padding: 12px; }
+  #detail dl { grid-template-columns: 1fr; gap: 2px; }
+  #detail dd { margin-bottom: 8px; }
+}
+
+.arrow.replicates { fill: #15803d; }
+.arrow.critiques { fill: #dc2626; }
+.arrow.extends { fill: #64748b; }
