@@ -1061,8 +1061,8 @@
       "Tomek Korbak",
       "Mikita Balesni",
       "Elizabeth Barnes",
+      "Yoshua Bengio",
       "Joe Benton",
-      "Mark Chen",
       "et al."
     ],
     "first_version_date": "2025-07-15",
@@ -1455,6 +1455,695 @@
       {
         "target_id": "2503.11926",
         "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2209.10652",
+    "question_id": "superposition",
+    "title": "Toy Models of Superposition",
+    "authors": [
+      "Nelson Elhage",
+      "Tristan Hume",
+      "Catherine Olsson",
+      "Nicholas Schiefer",
+      "Tom Henighan",
+      "et al."
+    ],
+    "first_version_date": "2022-09-21",
+    "url": "https://arxiv.org/abs/2209.10652",
+    "claim": "In toy models, polysemanticity can be fully understood as the result of storing more sparse features than dimensions in superposition.",
+    "models_tested": [
+      "Toy ReLU networks"
+    ],
+    "setup": "Small ReLU networks trained on synthetic sparse features, varying sparsity and feature importance; analysis of phase changes and representation geometry.",
+    "key_result": "Superposition emerges once features are sufficiently sparse, with phase changes between dedicated, superposed and ignored features and uniform-polytope geometry; links to adversarial examples.",
+    "stance": 1,
+    "stance_passes": [
+      2,
+      1
+    ],
+    "stance_rationale": "This paper originates the superposition explanation, and its abstract presents polysemanticity as arising from superposition. All evidence is from toy models; the closing discussion only hypothesizes that non-superposition and basis alignment occur 'sometimes' in real networks, so the evidence pass gives +1 for LLM neurons.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.75,
+    "caveats": [
+      "Toy models with synthetic sparse features",
+      "No direct LLM neuron measurement"
+    ],
+    "code_available": true,
+    "relations": [],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2210.01892",
+    "question_id": "superposition",
+    "title": "Polysemanticity and Capacity in Neural Networks",
+    "authors": [
+      "Adam Scherlis",
+      "Kshitij Sachan",
+      "Adam S. Jermyn",
+      "Joe Benton",
+      "Buck Shlegeris"
+    ],
+    "first_version_date": "2022-10-04",
+    "url": "https://arxiv.org/abs/2210.01892",
+    "claim": "Under optimal capacity allocation, toy models represent the most important features monosemantically, less important ones polysemantically, and ignore the least important.",
+    "models_tested": [
+      "Toy 2-layer quadratic-activation model"
+    ],
+    "setup": "Treat feature capacity (fraction of an embedding dimension per feature) as a constrained optimization; phase diagram in a 2-layer quadratic model; embedding geometry.",
+    "key_result": "Polysemanticity arises when marginal loss reductions balance across features; it is more prevalent with higher kurtosis/sparsity and in some architectures; efficient embeddings are block-semi-orthogonal.",
+    "stance": 1,
+    "stance_passes": [
+      1,
+      1
+    ],
+    "stance_rationale": "Gives a capacity-based account in which polysemanticity follows from limited dimensions (abstract, conclusion), consistent with the superposition explanation. It is entirely theoretical/toy and says nothing directly about LLM neurons.",
+    "evidence_strength": "low",
+    "judge_confidence": 0.7,
+    "caveats": [
+      "Toy model only",
+      "Assumes independent input features"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2211.09169",
+    "question_id": "superposition",
+    "title": "Engineering Monosemanticity in Toy Models",
+    "authors": [
+      "Adam S. Jermyn",
+      "Nicholas Schiefer",
+      "Evan Hubinger"
+    ],
+    "first_version_date": "2022-11-16",
+    "url": "https://arxiv.org/abs/2211.09169",
+    "claim": "Toy models can be made more monosemantic without increasing loss by steering training toward different local minima; more neurons per layer also increases monosemanticity.",
+    "models_tested": [
+      "Toy feature-decoder models"
+    ],
+    "setup": "Toy models trained to decode sparse features; vary biases, initialization and width; mechanistic interpretation of resulting neurons.",
+    "key_result": "Monosemantic minima with moderate negative biases exist at equal loss; wider layers give more monosemantic models at higher compute cost.",
+    "stance": 0,
+    "stance_passes": [
+      0,
+      0
+    ],
+    "stance_rationale": "Equal-loss monosemantic solutions (abstract) suggest polysemanticity is not forced purely by capacity in these models. However, the result that more neurons reduces polysemanticity fits the superposition account, so it is mixed. Toy evidence only.",
+    "evidence_strength": "low",
+    "judge_confidence": 0.55,
+    "caveats": [
+      "Preliminary toy-model results",
+      "No LLM evidence"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2305.01610",
+    "question_id": "superposition",
+    "title": "Finding Neurons in a Haystack: Case Studies with Sparse Probing",
+    "authors": [
+      "Wes Gurnee",
+      "Neel Nanda",
+      "Matthew Pauly",
+      "Katherine Harvey",
+      "Dmitrii Troitskii",
+      "Dimitris Bertsimas"
+    ],
+    "first_version_date": "2023-05-02",
+    "url": "https://arxiv.org/abs/2305.01610",
+    "claim": "k-sparse probing of LLM neurons shows early layers represent many features in superposition via sparse neuron combinations, while middle layers have more dedicated neurons.",
+    "models_tested": [
+      "Pythia 70M–6.9B"
+    ],
+    "setup": "Train k-sparse linear probes on neuron activations for 100+ features in 10 categories across 7 models from 70M to 6.9B parameters.",
+    "key_result": "Early layers use sparse combinations of neurons (superposition); middle layers have seemingly dedicated neurons for higher-level contextual features; scale increases representational sparsity on average with varied dynamics.",
+    "stance": 1,
+    "stance_passes": [
+      1,
+      1
+    ],
+    "stance_rationale": "Provides some of the first 'in the wild' LLM evidence of superposition (abstract, conclusion), supporting the explanation for early-layer polysemanticity. It also finds dedicated neurons in middle layers and varied scaling, so it does not show superposition is the primary explanation everywhere.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.65,
+    "caveats": [
+      "Probes for chosen features only",
+      "Pythia models up to 6.9B",
+      "Layer-dependent findings"
+    ],
+    "code_available": true,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2309.08600",
+    "question_id": "superposition",
+    "title": "Sparse Autoencoders Find Highly Interpretable Features in Language Models",
+    "authors": [
+      "Hoagy Cunningham",
+      "Aidan Ewart",
+      "Logan Riggs",
+      "Robert Huben",
+      "Lee Sharkey"
+    ],
+    "first_version_date": "2023-09-15",
+    "url": "https://arxiv.org/abs/2309.08600",
+    "claim": "Sparse autoencoders trained on LM activations learn features that are more interpretable and monosemantic than neurons or other decompositions, suggesting superposition can be resolved.",
+    "models_tested": [
+      "Pythia-70M",
+      "Pythia-410M"
+    ],
+    "setup": "Train SAEs on residual stream/MLP activations; score interpretability with automated methods; causal feature localization on indirect object identification.",
+    "key_result": "SAE features score as more interpretable than neurons, PCA, ICA; they pinpoint causally responsible features for IOI more finely than prior decompositions.",
+    "stance": 1,
+    "stance_passes": [
+      1,
+      1
+    ],
+    "stance_rationale": "Motivated explicitly by the superposition hypothesis, and finding an overcomplete set of more monosemantic directions (abstract) is evidence in its favor. Interpretability is measured with automated scores, which later work (Heap et al.) questions, and better SAE features do not by themselves prove superposition is the primary cause of neuron polysemanticity.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.65,
+    "caveats": [
+      "Small Pythia models",
+      "Automated interpretability metrics",
+      "Indirect evidence for superposition"
+    ],
+    "code_available": true,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "web:towards-monosemanticity",
+    "question_id": "superposition",
+    "title": "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning",
+    "authors": [
+      "Trenton Bricken",
+      "Adly Templeton",
+      "Joshua Batson",
+      "Brian Chen",
+      "Adam Jermyn",
+      "et al.",
+      "Chris Olah"
+    ],
+    "first_version_date": "2023-10-04",
+    "url": "https://transformer-circuits.pub/2023/monosemantic-features/index.html",
+    "claim": "A sparse autoencoder on a one-layer transformer's 512-neuron MLP extracts tens of thousands of relatively monosemantic, interpretable features, many invisible in the neuron basis.",
+    "models_tested": [
+      "One-layer transformer (512-neuron MLP)"
+    ],
+    "setup": "Dictionary learning with SAEs from 512 to over 131,000 features on a one-layer transformer; detailed feature case studies, human and automated interpretability, steering, universality across models.",
+    "key_result": "Most learned features are interpretable; some (e.g. Hebrew script) are not visible in any neuron's top activations; features steer generation, split at larger dictionary sizes, and are relatively universal across models.",
+    "stance": 1,
+    "stance_passes": [
+      2,
+      1
+    ],
+    "stance_rationale": "The summary of results directly supports the claim that polysemantic neurons hide many more monosemantic features ('just 512 neurons can represent tens of thousands of features'). The evidence is from a one-layer toy-scale language model, and SAE recoverability is consistent with but does not prove superposition is the primary cause.",
+    "evidence_strength": "high",
+    "judge_confidence": 0.7,
+    "caveats": [
+      "One-layer transformer only",
+      "SAE features may be partly artifacts of the method",
+      "Interpretability partly automated"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "extends"
+      },
+      {
+        "target_id": "2309.08600",
+        "type": "replicates"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2312.03096",
+    "question_id": "superposition",
+    "title": "What Causes Polysemanticity? An Alternative Origin Story of Mixed Selectivity from Incidental Causes",
+    "authors": [
+      "Victor Lecomte",
+      "Kushal Thaman",
+      "Rylan Schaeffer",
+      "Naomi Bashkansky",
+      "Trevor Chow",
+      "Sanmi Koyejo"
+    ],
+    "first_version_date": "2023-12-05",
+    "url": "https://arxiv.org/abs/2312.03096",
+    "claim": "Polysemanticity can arise incidentally, even with ample neurons for all features, through regularization, noise and random initialization overlaps reinforced by training.",
+    "models_tested": [
+      "Toy models"
+    ],
+    "setup": "Theory and toy experiments with more neurons than features, varying L1 regularization and noise.",
+    "key_result": "Random initialization can assign multiple features to one neuron by chance and training strengthens the overlap; incidental polysemanticity occurs without capacity pressure.",
+    "stance": -1,
+    "stance_passes": [
+      -1,
+      -1
+    ],
+    "stance_rationale": "Offers an alternative, non-mutually-exclusive origin for polysemanticity that does not require compression (abstract), which counts against 'primarily explained by superposition'. Evidence is theoretical and toy-scale, and it does not measure how much LLM polysemanticity is incidental.",
+    "evidence_strength": "low",
+    "judge_confidence": 0.6,
+    "caveats": [
+      "Toy models only",
+      "Non-mutually-exclusive with superposition",
+      "No LLM quantification"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "critiques"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2401.12181",
+    "question_id": "superposition",
+    "title": "Universal Neurons in GPT2 Language Models",
+    "authors": [
+      "Wes Gurnee",
+      "Theo Horsley",
+      "Zifan Carl Guo",
+      "Tara Rezaei Kheirkhah",
+      "Qinyi Sun",
+      "Will Hathaway",
+      "Neel Nanda",
+      "Dimitris Bertsimas"
+    ],
+    "first_version_date": "2024-01-22",
+    "url": "https://arxiv.org/abs/2401.12181",
+    "claim": "Only 1–5% of GPT-2 neurons are universal across random seeds, and these usually have clear interpretations.",
+    "models_tested": [
+      "GPT-2 small",
+      "GPT-2 medium",
+      "Pythia-160M"
+    ],
+    "setup": "Pairwise activation correlations of neurons over 100M tokens across GPT-2 models trained from five seeds; taxonomy of universal neuron families.",
+    "key_result": "1–5% of neurons pass the universality threshold; universal neurons are largely interpretable and fall into a few families (e.g. unigram, prediction, entropy neurons).",
+    "stance": 0,
+    "stance_passes": [
+      0,
+      0
+    ],
+    "stance_rationale": "Shows most neurons are neither universal nor cleanly interpretable (abstract, Sec. 4), consistent with widespread polysemanticity. It does not test why, so it neither supports nor refutes superposition as the main explanation.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.65,
+    "caveats": [
+      "GPT-2 scale",
+      "Universality measured by activation correlation"
+    ],
+    "code_available": true,
+    "relations": [
+      {
+        "target_id": "2305.01610",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2405.14860",
+    "question_id": "superposition",
+    "title": "Not All Language Model Features Are One-Dimensionally Linear",
+    "authors": [
+      "Joshua Engels",
+      "Eric J. Michaud",
+      "Isaac Liao",
+      "Wes Gurnee",
+      "Max Tegmark"
+    ],
+    "first_version_date": "2024-05-23",
+    "url": "https://arxiv.org/abs/2405.14860",
+    "claim": "Some LM features are irreducibly multi-dimensional (e.g. circular day-of-week and month features) and are the unit of computation for some tasks.",
+    "models_tested": [
+      "GPT-2",
+      "Mistral 7B",
+      "Llama 3 8B"
+    ],
+    "setup": "Define irreducible multi-dimensional features; SAE-based search for them; interventions on modular-arithmetic tasks over days and months. ICLR 2025.",
+    "key_result": "Circular features found and causally used for day/month arithmetic in Mistral 7B and Llama 3 8B.",
+    "stance": 0,
+    "stance_passes": [
+      -1,
+      0
+    ],
+    "stance_rationale": "Challenges the one-dimensional-linear version of the superposition hypothesis that standard accounts assume (abstract). It does not dispute that models pack more features than dimensions, and multi-dimensional features can themselves be superposed, so the evidence pass is mixed.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.5,
+    "caveats": [
+      "Few example features",
+      "Addresses feature geometry, not the cause of polysemanticity"
+    ],
+    "code_available": true,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "critiques"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2408.05451",
+    "question_id": "superposition",
+    "title": "Mathematical Models of Computation in Superposition",
+    "authors": [
+      "Kaarel Hänni",
+      "Jake Mendel",
+      "Dmitry Vaintrob",
+      "Lawrence Chan"
+    ],
+    "first_version_date": "2024-08-10",
+    "url": "https://arxiv.org/abs/2408.05451",
+    "claim": "Superposition can be actively useful for computation: a one-layer MLP can compute pairwise ANDs of m features using far fewer neurons, even with inputs in superposition.",
+    "models_tested": [],
+    "setup": "Theoretical constructions of circuits computing in superposition (universal AND and generalizations to sparse boolean circuits), with error bounds.",
+    "key_result": "Constructions computing many boolean functions with roughly m^(2/3) neurons for m features, supporting that networks may compute in superposition.",
+    "stance": 0,
+    "stance_passes": [
+      1,
+      0
+    ],
+    "stance_rationale": "Strengthens the theoretical case that superposition is efficient and therefore likely to be learned (abstract, intro). As pure theory with no measurement of LLM neurons, it provides no empirical evidence on whether superposition primarily explains observed polysemanticity.",
+    "evidence_strength": "low",
+    "judge_confidence": 0.6,
+    "caveats": [
+      "Pure theory",
+      "No experiments on trained LLMs"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2409.14507",
+    "question_id": "superposition",
+    "title": "A is for Absorption: Studying Feature Splitting and Absorption in Sparse Autoencoders",
+    "authors": [
+      "David Chanin",
+      "James Wilken-Smith",
+      "Tomáš Dulka",
+      "Hardik Bhatnagar",
+      "Satvik Golechha",
+      "Joseph Bloom"
+    ],
+    "first_version_date": "2024-09-22",
+    "url": "https://arxiv.org/abs/2409.14507",
+    "claim": "SAE decomposition of hierarchical features is not robust: seemingly monosemantic latents fail to fire and get absorbed into child latents, driven by the sparsity objective.",
+    "models_tested": [
+      "Gemma 2 2B",
+      "Qwen2 0.5B",
+      "Llama 3.2 1B"
+    ],
+    "setup": "First-letter spelling task with known ground truth; absorption metric across hundreds of SAEs of varying size and sparsity.",
+    "key_result": "Feature absorption is widespread and not fixed by changing SAE size or sparsity.",
+    "stance": 0,
+    "stance_passes": [
+      0,
+      0
+    ],
+    "stance_rationale": "Concerns a failure mode of the SAE tool used to study superposition, not the underlying explanation of neuron polysemanticity (abstract). It weakens how cleanly SAE evidence can be read, but is orthogonal to the question as worded.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.6,
+    "caveats": [
+      "About SAE methodology",
+      "Single ground-truth task family"
+    ],
+    "code_available": true,
+    "relations": [
+      {
+        "target_id": "web:towards-monosemanticity",
+        "type": "critiques"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2501.17727",
+    "question_id": "superposition",
+    "title": "Automated Interpretability Metrics Do Not Distinguish Trained and Random Transformers",
+    "authors": [
+      "Thomas Heap",
+      "Tim Lawson",
+      "Lucy Farnik",
+      "et al."
+    ],
+    "first_version_date": "2025-01-29",
+    "url": "https://arxiv.org/abs/2501.17727",
+    "claim": "SAEs trained on randomly initialized transformers often achieve auto-interpretability and reconstruction scores similar to those on trained models.",
+    "models_tested": [
+      "Pythia 70M–6.9B (trained and randomized)"
+    ],
+    "setup": "Train SAEs on activations from trained vs several randomization schemes across Pythia sizes; compare auto-interpretability and SAE quality metrics.",
+    "key_result": "Similar aggregate scores in many settings; the authors recommend randomized baselines and measures of feature abstractness.",
+    "stance": -1,
+    "stance_passes": [
+      -1,
+      -1
+    ],
+    "stance_rationale": "If SAE 'interpretable features' appear even in random networks (abstract), high SAE interpretability is weak evidence that trained LLMs compress learned features in superposition. This undermines a main line of evidence for the superposition account rather than refuting it directly.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.5,
+    "caveats": [
+      "Undermines evidence rather than the hypothesis itself",
+      "Pythia models only",
+      "Random networks may still superpose input-token features"
+    ],
+    "code_available": true,
+    "relations": [
+      {
+        "target_id": "2309.08600",
+        "type": "critiques"
+      },
+      {
+        "target_id": "web:towards-monosemanticity",
+        "type": "critiques"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2502.04878",
+    "question_id": "superposition",
+    "title": "Sparse Autoencoders Do Not Find Canonical Units of Analysis",
+    "authors": [
+      "Patrick Leask",
+      "Bart Bussmann",
+      "Michael Pearce",
+      "Joseph Bloom",
+      "Curt Tigges",
+      "Noura Al Moubayed",
+      "Lee Sharkey",
+      "Neel Nanda"
+    ],
+    "first_version_date": "2025-02-07",
+    "url": "https://arxiv.org/abs/2502.04878",
+    "claim": "SAEs do not recover a unique, complete set of atomic features: smaller SAEs are incomplete and larger SAE latents decompose into combinations of others.",
+    "models_tested": [
+      "GPT-2 small",
+      "Gemma 2 2B"
+    ],
+    "setup": "SAE stitching (swapping latents between SAE sizes) and meta-SAEs trained on SAE decoder matrices. ICLR 2025.",
+    "key_result": "Larger SAEs contain novel latents absent from smaller ones; meta-SAEs decompose latents (e.g. 'Einstein' into science, physicist, German, …).",
+    "stance": 0,
+    "stance_passes": [
+      -1,
+      0
+    ],
+    "stance_rationale": "Undercuts the idea that SAEs reveal the true set of superposed features (abstract), weakening the canonical-features picture behind the superposition explanation. It does not test whether neuron polysemanticity is caused by compression, so the evidence pass is neutral.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.55,
+    "caveats": [
+      "About SAE methodology",
+      "Small models"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "web:towards-monosemanticity",
+        "type": "critiques"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2502.16681",
+    "question_id": "superposition",
+    "title": "Are Sparse Autoencoders Useful? A Case Study in Sparse Probing",
+    "authors": [
+      "Subhash Kantamneni",
+      "Joshua Engels",
+      "Senthooran Rajamanoharan",
+      "Max Tegmark",
+      "Neel Nanda"
+    ],
+    "first_version_date": "2025-02-23",
+    "url": "https://arxiv.org/abs/2502.16681",
+    "claim": "SAE-based probes do not consistently beat strong non-SAE baselines across data scarcity, class imbalance, label noise and covariate shift.",
+    "models_tested": [
+      "Gemma 2 9B",
+      "Llama 3.1 8B"
+    ],
+    "setup": "Compare probes on SAE latents vs baselines on residual activations across many datasets and four challenging regimes.",
+    "key_result": "No ensemble with SAEs consistently beats baseline-only ensembles; apparent SAE wins (spurious-correlation detection, multi-token probes) are matched by simple baselines.",
+    "stance": 0,
+    "stance_passes": [
+      0,
+      0
+    ],
+    "stance_rationale": "Evaluates the practical usefulness of SAEs, not the cause of polysemanticity (abstract). Orthogonal to the question.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.7,
+    "caveats": [
+      "Downstream utility only",
+      "Probing task"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "2309.08600",
+        "type": "critiques"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2505.10465",
+    "question_id": "superposition",
+    "title": "Superposition Yields Robust Neural Scaling",
+    "authors": [
+      "Yizhou Liu",
+      "Ziming Liu",
+      "Jeff Gore"
+    ],
+    "first_version_date": "2025-05-15",
+    "url": "https://arxiv.org/abs/2505.10465",
+    "claim": "Representation superposition can cause neural scaling laws, and open-source LLMs operate in the strong-superposition regime with loss scaling inversely with model dimension.",
+    "models_tested": [
+      "Toy model",
+      "GPT-2 family",
+      "Pythia",
+      "Other open LLMs"
+    ],
+    "setup": "Anthropic toy model with weight decay controlling superposition; analysis of loss scaling; measurement of representation overlap and loss vs width in open LLMs and Chinchilla data.",
+    "key_result": "Under strong superposition, loss scales as 1/width across frequency distributions; open LLMs appear to be in this regime.",
+    "stance": 1,
+    "stance_passes": [
+      1,
+      1
+    ],
+    "stance_rationale": "Claims LLMs are in the strong-superposition regime (abstract), indirectly supporting superposition as pervasive in LLM representations. It does not tie this to neuron-level polysemanticity specifically.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.55,
+    "caveats": [
+      "Indirect: about scaling, not polysemanticity",
+      "Toy-model-derived diagnostics applied to LLMs"
+    ],
+    "code_available": true,
+    "relations": [
+      {
+        "target_id": "2209.10652",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null
+  },
+  {
+    "id": "2604.00443",
+    "question_id": "superposition",
+    "title": "Polysemanticity or Polysemy? Lexical Identity Confounds Superposition Metrics",
+    "authors": [
+      "Iyad Ait Hou",
+      "Rebecca Hwa"
+    ],
+    "first_version_date": "2026-04-01",
+    "url": "https://arxiv.org/abs/2604.00443",
+    "claim": "A substantial part of what metrics call polysemanticity reflects neurons responding to a shared word form (lexical identity) rather than compressed unrelated concepts.",
+    "models_tested": [
+      "BERT-base",
+      "GPT-2",
+      "GPT-2 medium",
+      "Pythia-1B",
+      "Pythia-6.9B",
+      "Pythia-12B",
+      "Llama-2-13B",
+      "Llama-2-70B"
+    ],
+    "setup": "2×2 factorial (same/different word × same/different meaning) over 407 polysemous words in nine transformers from 110M to 70B; SAE analysis; lexical-subspace removal effects on WSD and knowledge editing.",
+    "key_result": "Lexical-only overlap consistently exceeds semantic-only overlap; 18–36% of SAE features blend senses; the confound lives in ≤1% of dimensions and removing it improves WSD and edit selectivity (p = 0.002).",
+    "stance": -1,
+    "stance_passes": [
+      -2,
+      -1
+    ],
+    "stance_rationale": "The conclusion states a substantial portion of measured polysemanticity is lexical identity, not superposition, which directly targets 'primarily'. The authors also say genuine superposition exists and the confound must be separated out first, and the study is limited to polysemous words, so the evidence pass gives -1.",
+    "evidence_strength": "medium",
+    "judge_confidence": 0.6,
+    "caveats": [
+      "Preprint under review",
+      "Only polysemous-word contexts",
+      "Recent, not replicated"
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "web:towards-monosemanticity",
+        "type": "critiques"
+      },
+      {
+        "target_id": "2209.10652",
+        "type": "critiques"
       }
     ],
     "flagged": false,
