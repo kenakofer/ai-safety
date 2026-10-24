@@ -3711,5 +3711,122 @@
       "location": "The Short Version; Appendix: Does Scale Help or Hurt Superposition?",
       "basis": "estimated"
     }
+  },
+  {
+    "id": "web:sae-feature-geometry",
+    "question_id": "superposition",
+    "title": "SAE feature geometry is outside the superposition hypothesis",
+    "authors": [
+      "Jake Mendel"
+    ],
+    "first_version_date": "2024-06-24",
+    "url": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis",
+    "claim": "Superposition-based accounts of activation spaces are incomplete: where SAE feature vectors sit relative to each other carries structure that a list of sparse, nearly orthogonal features leaves out, so a new or supplementary theory is needed.",
+    "models_tested": [],
+    "setup": "Essay on LessWrong (Apollo Research; not peer reviewed, no new experiments). Draws on published observations: days and months on ordered circles (Engels et al.), structure in UMAPs of SAE decoder vectors, and feature splitting. Then lays out kinds of theory that could fill the gap and four research approaches.",
+    "key_result": "No new results. Argues that this geometry is probably everywhere rather than an occasional exception, and that even perfect SAE reconstruction with monosemantic features would leave it unexplained.",
+    "stance": 0,
+    "stance_passes": [
+      0,
+      0
+    ],
+    "stance_rationale": "The essay takes the sparse-coding picture as its starting point and argues it is incomplete, not wrong: what it disputes is that feature geometry carries no structure beyond correlations. It does not discuss why neurons are polysemantic, or whether models hold more features than dimensions.",
+    "evidence_strength": "low",
+    "judge_confidence": 0.5,
+    "caveats": [
+      "Essay, not peer reviewed; no new experiments",
+      "Evidence is borrowed: the Engels et al. day/month circles, UMAPs of SAE features, and feature splitting",
+      "Argues against a stronger superposition hypothesis (no residual geometry) than the question's count definition",
+      "Talks about SAE features, not neurons"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "But let’s suppose that these issues have been solved: SAE improvements lead to perfect reconstruction and extremely monosemantic features",
+        "location": "The placement of each feature vector in the activation space matters"
+      },
+      {
+        "kind": "stated",
+        "quote": "In the case of language modelling, it’s hard to resolve even big disagreements about how much feature geometry matters (both the view that feature geometry doesn’t matter at all and the view that they imply SAEs have achieved nearly nothing are not insane to me)",
+        "location": "Approach 3: Carefully reverse engineering relevant toy models with ground truth access"
+      },
+      {
+        "kind": "stated",
+        "quote": "It’s hard to flesh out examples of what these new concepts might look like before the conceptual work has been done.",
+        "location": "Option 2: Supplementing superposition"
+      },
+      {
+        "kind": "stated",
+        "quote": "This seems particularly plausible if we are talking about current SAE performance, with imperfect reconstruction and inadequate feature interpretations.",
+        "location": "Footnote 4"
+      }
+    ],
+    "code_available": false,
+    "relations": [
+      {
+        "target_id": "2405.14860",
+        "type": "extends"
+      }
+    ],
+    "flagged": false,
+    "human_override": null,
+    "source_type": "essay",
+    "author_claim": {
+      "quote": "Superposition-based interpretations of neural network activation spaces are incomplete.",
+      "location": "Summary"
+    },
+    "operationalization": {
+      "terms": {
+        "superposition": {
+          "quote": "the superposition hypothesis, which posits that the important structure in an activation space is the sparse coding of vectors which have no important residual structure beyond correlations",
+          "location": "The placement of each feature vector in the activation space matters"
+        },
+        "feature": {
+          "quote": "The features are embedded as vectors, and the activation vector on any input is a linear combination of the feature vectors that are related to the input.",
+          "location": "What would it mean if we could fully understand an activation space through the lens of superposition?"
+        }
+      },
+      "measured": "No experiments of its own: the argument rests on cited observations (days of the week and months arranged in order on a circle, rich structure in UMAPs of SAE feature vectors, and feature splitting), read as evidence that where feature vectors sit carries structure beyond a list of sparse features.",
+      "unit": "SAE latent / decoder direction",
+      "models_scope": "LLM",
+      "lane": "SAE / dictionary"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "definition_mismatch",
+          "term": "superposition",
+          "text": "The text's superposition also claims there is no residual geometry, which goes beyond features outnumbering dimensions; what it challenges is that extra claim.",
+          "quote": "the superposition hypothesis, which posits that the important structure in an activation space is the sparse coding of vectors which have no important residual structure beyond correlations",
+          "location": "The placement of each feature vector in the activation space matters"
+        },
+        {
+          "kind": "scope_gap",
+          "text": "Here monosemanticity is a property of SAE features; the essay never discusses individual neurons or why they are polysemantic.",
+          "quote": "Second, not all features seem monosemantic, and it is hard to find semantic descriptions of even the most monosemantic features",
+          "location": "The placement of each feature vector in the activation space matters"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "In the opening section the essay lets a superposition account include feature correlations, which could also produce non-random UMAP structure.",
+          "quote": "If all the important structure of an activation space is contained in the feature descriptions, then the UMAP should be a random mess",
+          "location": "The placement of each feature vector in the activation space matters"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "The direct examples given are two circles from one cited paper.",
+          "quote": "Once you consider that this kind of structure is present in some cases, it seems much more natural to assume that the structure is ubiquitous than that the right way to think of activation spaces is with superposition plus an occasional circle.",
+          "location": "The placement of each feature vector in the activation space matters"
+        }
+      ]
+    },
+    "author_view": {
+      "stance": 0,
+      "relevance": "partial",
+      "quote": "Superposition-based interpretations of neural network activation spaces are incomplete. ... I have quite substantial probability on the ‘next’ theory looking more like this than something that is built on top of superposition.",
+      "location": "Summary; Option 3: Superseding superposition",
+      "basis": "estimated"
+    }
   }
 ]

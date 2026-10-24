@@ -203,5 +203,15 @@
       "comment_count": 3,
       "note": "Zvi roundup of reactions to the essay, assessing how big an update it is."
     }
+  ],
+  "web:sae-feature-geometry": [
+    {
+      "platform": "lesswrong",
+      "post_id": "MFBTjb2qf3ziWmzz6",
+      "title": "SAE feature geometry is outside the superposition hypothesis",
+      "url": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis",
+      "comment_count": 18,
+      "note": "Author's own post; LW discussion thread."
+    }
   ]
 }

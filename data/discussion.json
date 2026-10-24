@@ -281,5 +281,66 @@
       "pull": 0,
       "summary": "About 92% of features; kurtosis still shows a privileged neuron basis, and they cannot rule out SAE noise."
     }
+  ],
+  "web:sae-feature-geometry|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis?commentId=F6z8gu7nMMyDCLuxJ",
+      "source": "lw:MFBTjb2qf3ziWmzz6",
+      "platform": "lesswrong",
+      "author": "Eric J. Michaud",
+      "date": "2024-06-26",
+      "score": 32,
+      "quote": "We also looked at ~2000 Mistral-7B clusters and only the days of the week and months of the year clusters seemed clearly interesting. So at least for the LLMs we looked at, for the SAEs we had, and with our method for discovering interesting geometry, interesting geometry didn't seem ubiquitous.",
+      "effect": "weakens",
+      "pull": 1,
+      "summary": "An Engels et al. author. The same comment agrees that the near-orthogonal picture from Toy Models is wrong."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis?commentId=fFmHfx98m8NwL7nAC",
+      "source": "lw:MFBTjb2qf3ziWmzz6",
+      "platform": "lesswrong",
+      "author": "Adam Scherlis",
+      "date": "2024-06-26",
+      "score": 5,
+      "quote": "it says that the total amount of correlation between a given feature and all other features (i.e. interference from them) matters, but which other features are interfering with it doesn't matter, and the particular amount of interference from each other feature doesn't matter either. This version of the hypothesis seems pretty well falsified at this point.",
+      "effect": "reframes",
+      "pull": 0
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis?commentId=2BwacbvQkLiqz9Ljn",
+      "source": "lw:MFBTjb2qf3ziWmzz6",
+      "platform": "lesswrong",
+      "author": "Adam Scherlis",
+      "date": "2026-01-06",
+      "score": 11,
+      "quote": "the full set of correlations is nearly equivalent to the embeddings themselves, and has all of the interesting parts. ... I don't think I've heard of an improved theory yet.",
+      "effect": "reframes",
+      "pull": 0,
+      "summary": "A review 18 months on that otherwise says the post holds up."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis?commentId=GcA8MYnZok4wubLyH",
+      "source": "lw:MFBTjb2qf3ziWmzz6",
+      "platform": "lesswrong",
+      "author": "Eric Winsor",
+      "date": "2024-06-24",
+      "score": 6,
+      "quote": "GPT-2-small uses a cosine/sine spiral for its learned positional embeddings embeddings, and I don't think I've seen a mechanistic/dynamical explanation for this",
+      "effect": "supports",
+      "pull": 0
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis?commentId=soswhKrjCC2vBomFS",
+      "source": "lw:MFBTjb2qf3ziWmzz6",
+      "platform": "lesswrong",
+      "author": "Jake Mendel",
+      "date": "2024-06-24",
+      "score": 14,
+      "quote": "I think the embedding at layer 0 is a good place for thinking about the kind of structure that the superposition hypothesis is blind to. ... But those embeddings aren't random! They have been carefully learned and contain lots of useful information.",
+      "effect": "supports",
+      "pull": 0,
+      "paper_author": true,
+      "reply_to": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis?commentId=GcA8MYnZok4wubLyH"
+    }
   ]
 }
