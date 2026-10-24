@@ -1,0 +1,262 @@
+{
+  "2210.01892|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/kWp4R9SYgKJFHAufB/polysemanticity-and-capacity-in-neural-networks?commentId=uaroQ9BTrK43Sg9Lt",
+      "source": "lw:kWp4R9SYgKJFHAufB",
+      "platform": "lesswrong",
+      "author": "Kshitij Sachan",
+      "date": "2022-10-10",
+      "score": 1,
+      "quote": "The relationship between increasing/decreasing marginal returns and polysemanticity generalizes beyond our toy model. However, we don't have a generic technique to define capacity across different architectures and loss functions.",
+      "effect": "scope",
+      "summary": "An author concedes that capacity, the paper's measure of polysemanticity, has no general definition beyond the analysed toy architecture, so the capacity account cannot yet be measured in LLM layers."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/kWp4R9SYgKJFHAufB/polysemanticity-and-capacity-in-neural-networks?commentId=R2xjYoWjnJPEfu7Qq",
+      "source": "lw:kWp4R9SYgKJFHAufB",
+      "platform": "lesswrong",
+      "author": "Adam Jermyn",
+      "date": "2022-10-10",
+      "score": 1,
+      "quote": "As long as you know what the features are you can calculate dL/dC_i for each feature and figure out what's going on with that. The main challenge to this is feature identification: in a one layer model with synthetic data it's often easy to know what the features are. In more complicated settings it's much less clear what the \"right\" or \"natural\" features are...",
+      "effect": "scope",
+      "summary": "An author notes that applying the capacity analysis presupposes knowing the ground-truth features, which is available in synthetic toy settings but not in real networks, limiting what the result says about LLM neurons."
+    }
+  ],
+  "2211.09169|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/LvznjZuygoeoTpSE6/engineering-monosemanticity-in-toy-models?commentId=evQnh3fzotoARoyey",
+      "source": "lw:LvznjZuygoeoTpSE6",
+      "platform": "lesswrong",
+      "author": "Adam Jermyn",
+      "date": "2022-11-21",
+      "score": 4,
+      "quote": "I think my expectation is that the number of features exceeds the number of neurons in real-world settings, but that it might be possible to arrange for the number of neurons to exceed the number of important features ... We haven't really pinned this down, and it may also depend on the initialization/training procedure (as we saw when k > N), so it's definitely worth a thorough look.",
+      "effect": "scope",
+      "summary": "Asked whether the paper's k > N regime is realistic, the author says real models likely have more features than neurons and that behaviour in that superposition regime is not pinned down, so the monosemantic-basin results mainly speak to a regime unlike LLMs."
+    }
+  ],
+  "2309.08600|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/Qryk6FqjtZk9FHHJR/sparse-autoencoders-find-highly-interpretable-directions-in?commentId=B2NJKjxa9qffC2XsL",
+      "source": "lw:Qryk6FqjtZk9FHHJR",
+      "platform": "lesswrong",
+      "author": "Hoagy",
+      "date": "2023-09-22",
+      "score": 3,
+      "quote": "we did not find a working CUDA-compatible version and used the scikit version you mention. This meant that the data volumes used are somewhat limited - still on the order of a million examples but 10-50x less than went into the autoencoders.",
+      "effect": "undermines",
+      "summary": "An author says the ICA baseline, a decomposition that cannot be overcomplete, got 10-50x less data than the autoencoders, so the SAE-over-ICA gap is not a clean test of whether having more features than dimensions is what makes the features interpretable."
+    }
+  ],
+  "2312.03096|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/sEyWufriufTnBKnTG/incidental-polysemanticity?commentId=PxTD5WNyqkuSQw5Yh",
+      "source": "lw:sEyWufriufTnBKnTG",
+      "platform": "lesswrong",
+      "author": "Rohin Shah",
+      "date": "2023-12-03",
+      "score": 3,
+      "quote": "In particular, I think it is likely very sensitive to the implicit assumption that feature i and feature j never co-occur on a single input. ... My prediction would be that polysemanticity goes down very significantly (probably to zero if the probabilities are high enough and the training is done for long enough).",
+      "effect": "undermines",
+      "summary": "Argues that incidental polysemanticity may depend on features never co-occurring in training and predicts it largely disappears when features co-occur, weakening it as a competitor to superposition for real-network polysemanticity (the author replies that unrelated features rarely co-occur, but this is untested)."
+    }
+  ],
+  "2408.05451|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in?commentId=FQCyWtDtqyNLSLkwd",
+      "source": "lw:2roZtSr5TGmLjXMnT",
+      "platform": "lesswrong",
+      "author": "Lucius Bushnaq",
+      "date": "2024-01-18",
+      "score": 58,
+      "quote": "If basically all we can do with the 'superposed variables' is make lookup tables of them, there didn't seem to me to be much need for the concept at all to reverse engineer neural networks. Just stick with the summary variables, summarising is what intelligence is all about. If we can do actual, general computation with the sparse variables? ... Well, that would change things.",
+      "effect": "supports",
+      "summary": "A self-described superposition skeptic argues that storage-only superposition can be redescribed as compression into at most d summary variables, so it is computation in superposition (this paper's result) that makes superposition a needed explanatory concept; he conditions this on the error analysis holding up."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in?commentId=QdBqtRjJKs3F759ps",
+      "source": "lw:2roZtSr5TGmLjXMnT",
+      "platform": "lesswrong",
+      "author": "LawrenceC",
+      "date": "2024-01-18",
+      "score": 15,
+      "quote": "My guess is that most computations are indeed closer to continuous than to boolean. While it's possible to construct boolean interpretations of bigram circuits or induction heads, my impression (having not looked at either in detail on real models) is that neither of these cleanly occur inside LMs.",
+      "effect": "scope",
+      "summary": "Questions whether the boolean-AND constructions describe the mostly continuous computations in language models, limiting how far the result reaches toward LLM polysemanticity."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in?commentId=gdRDqMj7wyxcmW5To",
+      "source": "lw:2roZtSr5TGmLjXMnT",
+      "platform": "lesswrong",
+      "author": "jake_mendel",
+      "date": "2024-01-23",
+      "score": 3,
+      "quote": "We certainly don't expect that real neural networks implement our constructions with weights that are exactly 0 or 1. Rather, neural networks probably do a messier thing which is (potentially substantially) more efficient, and we are not making predictions about the quantitative sizes of errors at a fixed d.",
+      "effect": "scope",
+      "summary": "An author clarifies that the constructions are asymptotic existence proofs, not predictions of real networks' weights or finite-width error, narrowing the claim that real networks may implement them."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in?commentId=uY7W7YjxXJkiNMDzY",
+      "source": "lw:2roZtSr5TGmLjXMnT",
+      "platform": "lesswrong",
+      "author": "Lucius Bushnaq",
+      "date": "2024-02-09",
+      "score": 3,
+      "quote": "But as currently written, it doesn't seem like I can use the outputs of one layer performing a subset of ANDs as the inputs of another layer performing another subset of ANDs. ... Talked it through with Jake. Bias setoff can help, but it currently looks to us like you still end up with AND gates that share a variable systematically having positive sign in their inner product.",
+      "effect": "undermines",
+      "summary": "Points out (and an author provisionally agrees) that the constructions rely on uncorrelated interference, which fails when ReLU outputs feed later layers, so multi-layer computation in superposition is not yet shown."
+    }
+  ],
+  "2409.14507|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/3zBsxeZzd3cvuueMJ/paper-a-is-for-absorption-studying-feature-splitting-and?commentId=nabBE56LpdYj8xnsr",
+      "source": "lw:3zBsxeZzd3cvuueMJ",
+      "platform": "lesswrong",
+      "author": "Joseph Bloom",
+      "date": "2024-09-25",
+      "score": 1,
+      "quote": "I see it as doubling down on sparsity and a single decomposition, both of which I think may just not reflect the underlying data generating process.",
+      "effect": "reframes",
+      "summary": "A co-author reads absorption as a sign that the premise of a flat, sparse dictionary of features may itself be wrong for LLM activations, not only as an SAE bug. If so, the result also counts against the sparse-feature picture that count-based superposition relies on (elsewhere in the thread he frames the work more narrowly as SAE measurement error)."
+    }
+  ],
+  "2502.16681|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+      "source": "lw:4uXCAJNuPKtKBsi28",
+      "platform": "lesswrong",
+      "author": "Lewis Smith et al. (GDM mech interp team)",
+      "date": "2025-03-26",
+      "score": 118,
+      "quote": "Dense linear probes perform nearly perfectly, including out of distribution. ... Linear probes trained only on the SAE reconstruction are also significantly worse than linear probes on the residual stream OOD, suggesting that SAEs are discarding information relevant to the target concept",
+      "effect": "supports",
+      "summary": "A parallel GDM study (some authors shared with the paper) finds the same gap on OOD harmful-intent probing in Gemma-2-9B. Its probes on SAE reconstructions also lose task-relevant information, which points to SAE dictionaries missing model features rather than only to 'even true features would not help', so the result says more about whether SAE latents can stand in for the model's features."
+    }
+  ],
+  "web:already-clean|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/x4kvabkF2Jk8GLZp8/linkpost-neural-networks-are-already-clean?commentId=GnTbLpcx6xiyw4ZFa",
+      "source": "lw:x4kvabkF2Jk8GLZp8",
+      "platform": "lesswrong",
+      "author": "Adam Scherlis",
+      "date": "2026-10-15",
+      "score": 10,
+      "quote": "But in fact, cosine similarities between feature vectors have rich semantic content ... Features aren't just crammed together arbitrarily; they're grouped with similar features.",
+      "effect": "reframes",
+      "summary": "Quoted by Dean Valentine: under the count definition, superposed features already cluster with similar ones, so neurons with related offshoots ('recursive generalization') do not tell against superposition."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/x4kvabkF2Jk8GLZp8/linkpost-neural-networks-are-already-clean?commentId=7wcSqBNzQF2o9SHyY",
+      "source": "lw:x4kvabkF2Jk8GLZp8",
+      "platform": "lesswrong",
+      "author": "Neel Nanda",
+      "date": "2026-10-16",
+      "score": 111,
+      "quote": "For neuron/computational superposition, it seems to me like language models have far more facts and memorized things in them than they have neurons. ... I expect that weak neuron activations contain lots of semantic superposition-y info, which, if ablated, would meaningfully damage network performance.",
+      "effect": "undermines",
+      "summary": "Argues LLMs store more facts than they have neurons, which forces computational superposition, and that the essay's top-activation audits leave the weak-activation range, where that superposition would live, unexamined in LLMs."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/x4kvabkF2Jk8GLZp8/linkpost-neural-networks-are-already-clean?commentId=TWv5r7a9MW2opm5sP",
+      "source": "lw:x4kvabkF2Jk8GLZp8",
+      "platform": "lesswrong",
+      "author": "Manic Pixie",
+      "date": "2026-10-16",
+      "score": 15,
+      "quote": "Showing that most neurons in a model encode one primary concept is not the same as showing that most concepts a model knows are represented by one neuron. Qwen3-32B has only tens of thousands of neurons per layer, right?",
+      "effect": "reframes",
+      "summary": "Points out that a per-neuron legibility rate says nothing about the features-to-neurons ratio, which is exactly what the count definition of superposition is about."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/x4kvabkF2Jk8GLZp8/linkpost-neural-networks-are-already-clean?commentId=7vRC6TBgFZnsMPaug",
+      "source": "lw:x4kvabkF2Jk8GLZp8",
+      "platform": "lesswrong",
+      "author": "Shiva's Right Foot",
+      "date": "2026-10-16",
+      "score": 7,
+      "quote": "In my exploration of gpt2 -xl, I haven't really encountered neurons that are polysemantic in that way. Many times neurons signify a somewhat abstract concept which has many different instantiations in text",
+      "effect": "supports",
+      "summary": "An earlier, independent informal survey of GPT-2 XL neurons found the same thing: apparent polysemanticity was usually one abstract concept, not unrelated concepts packed together."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/Dkh7pXKjoNWkkxQDz/neural-networks-are-not-already-clean",
+      "source": "lw:Dkh7pXKjoNWkkxQDz",
+      "platform": "lesswrong",
+      "author": "leogao",
+      "date": "2026-10-17",
+      "score": 344,
+      "quote": "My best guess from all the results I've seen is that ablating small neuron activations quite substantially degrades model performance, so I don’t think we get to ignore weak activations completely. ... If you can’t simulate the neuron in a way that doesn’t degrade the model, you don’t really understand the neuron.",
+      "effect": "undermines",
+      "summary": "Argues that legibility judged from activating examples overstates monosemanticity, since it misses both narrow sub-patterns and magnitude information. Gao reports unpublished results showing that ablating weak activations hurts the model, contrary to the essay, and asks for KL-based simulation scores before the ~90% figure is trusted."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/Dkh7pXKjoNWkkxQDz/neural-networks-are-not-already-clean?commentId=BfgZxcqWyaWpPnPma",
+      "source": "lw:Dkh7pXKjoNWkkxQDz",
+      "platform": "lesswrong",
+      "author": "Julian Bradshaw",
+      "date": "2026-10-17",
+      "score": 15,
+      "quote": "What we see in the Colorado neuron is instead decreasing activations for increasingly less-related concepts, exactly the branching pattern Nick's idea predicts. (~87% of activations >50% of max are directly Colorado-related.)",
+      "effect": "supports",
+      "summary": "Checking the essay's released data, he finds that the Colorado neuron's off-topic activations (including Tornado) are weak and fall off with relatedness, the shape recursive generalization predicts rather than strong unrelated peaks. This cuts against the Tornado counterexample."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/x4kvabkF2Jk8GLZp8/linkpost-neural-networks-are-already-clean?commentId=bySRD2nBT2GLfPmJS",
+      "source": "lw:x4kvabkF2Jk8GLZp8",
+      "platform": "lesswrong",
+      "author": "StefanHex",
+      "date": "2026-10-18",
+      "score": 11,
+      "quote": "I find the evidence against superposition less convincing because many experiments are doing extreme compressions (retraining a layer down to 10 neurons), and take the absence of superposition as evidence against superposition in realistic settings. However, it is quite established that superposition (and computation in superposition) only really works in high dimensions / for large numbers of neurons, so I wouldn't have expected superposition in their the very-low dimension experiment.",
+      "effect": "undermines",
+      "summary": "The shrink-the-layer experiments test a regime where superposition theory predicts none, so finding none there is not evidence against superposition in full-width LLM layers."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/w2tBHwNERDoSawznx/i-can-see-everything",
+      "source": "lw:w2tBHwNERDoSawznx",
+      "platform": "lesswrong",
+      "author": "Brangus",
+      "date": "2026-10-19",
+      "score": 49,
+      "quote": "I had Claude check what else it tracks: Tornado’s Python HTTP client code, just as hard. ... If you force Qwen to pick a US state that it most associates with Tornado, it assigns 59% to Colorado. If you zero out this neuron, that drops to 15%.",
+      "effect": "undermines",
+      "summary": "Quoted in Zvi's roundup: the essay's showcase 'Colorado' neuron also responds to an unrelated concept (the Tornado web framework), with causal leakage between the two. That is the kind of unrelated-concept sharing superposition predicts. Others dispute 'just as hard'."
+    }
+  ],
+  "web:towards-monosemanticity|superposition": [
+    {
+      "url": "https://www.lesswrong.com/posts/TDqvQFks6TWutJEKu/towards-monosemanticity-decomposing-language-models-with?commentId=RBMx5zmR7TpzcGoa7",
+      "source": "lw:TDqvQFks6TWutJEKu",
+      "platform": "lesswrong",
+      "author": "nostalgebraist",
+      "date": "2023-10-09",
+      "score": 53,
+      "quote": "In the paper, the MLP that is decomposed into features is the last sub-block in the network. ... Yet, the second view -- in which features are fundamentally directions in logit-update space -- seems closer to the way the autoencoder works mechanistically.",
+      "effect": "reframes",
+      "summary": "Because the decomposed MLP feeds straight into the logits, many of the tens of thousands of 'features' (e.g. hundreds of 'the'-in-context features) may be rarely used logit-update directions rather than input features the model packs into 512 neurons. That weakens the step from dictionary size to 'more features than neurons', although he notes that similar results from deeper layers suggest this is not just a quirk of the setup."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/fKuugaxt2XLTkASkk/open-source-replication-and-commentary-on-anthropic-s",
+      "source": "lw:fKuugaxt2XLTkASkk",
+      "platform": "lesswrong",
+      "author": "Neel Nanda",
+      "date": "2023-10-23",
+      "score": 93,
+      "quote": "The core results seem to replicate - I trained a sparse autoencoder on the MLP layer of an open source 1 layer GELU language model, and a significant fraction of the latent space features were interpretable",
+      "effect": "supports",
+      "summary": "An independent replication on a different one-layer model (gelu-1l, 2048 neurons, 16384-latent SAE) finds that a substantial share of SAE latents are interpretable, although 60% of its latents fall into an uninterpretable ultra-low-frequency cluster. It stays within the same one-layer scope."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/fKuugaxt2XLTkASkk/open-source-replication-and-commentary-on-anthropic-s",
+      "source": "lw:fKuugaxt2XLTkASkk",
+      "platform": "lesswrong",
+      "author": "Neel Nanda",
+      "date": "2023-10-23",
+      "score": 93,
+      "quote": "However, a significant majority of features seem to be fairly dense in the neuron basis! ... But this seems like evidence that being dense in the neuron basis is the norm, not the exception.",
+      "effect": "reframes",
+      "summary": "About 92% of the replicated features spread over many neurons, yet kurtosis shows the neuron basis is still privileged. So the latents are not an arbitrary rotation, but each neuron mixes many features rather than a few. This sharpens what the 'polysemantic neurons from features' picture claims, and Nanda cannot rule out that the density is SAE noise."
+    }
+  ]
+}

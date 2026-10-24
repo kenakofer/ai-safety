@@ -1,0 +1,207 @@
+{
+  "2209.10652": [
+    {
+      "platform": "lesswrong",
+      "post_id": "3cR2YH9dpr7SmKvCb",
+      "title": "Toy Models and Tegum Products",
+      "url": "https://www.lesswrong.com/posts/3cR2YH9dpr7SmKvCb/toy-models-and-tegum-products",
+      "comment_count": 7,
+      "note": "Adam Jermyn post explaining a headline TMS result (sparse features organizing into tegum-product subspaces) and why it arises from the loss."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "pCJXa3DbEfGjcZAgZ",
+      "title": "Alternative Models of Superposition",
+      "url": "https://www.lesswrong.com/posts/pCJXa3DbEfGjcZAgZ/alternative-models-of-superposition",
+      "comment_count": 6,
+      "note": "Proposes an alternative toy model to the TMS setup and tests TMS assumptions; comments (incl. StefanHex) debate whether the modified loss is comparable to TMS."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "CTh74TaWgvRiXnkS6",
+      "title": "Toy Models of Superposition",
+      "url": "https://www.lesswrong.com/posts/CTh74TaWgvRiXnkS6/toy-models-of-superposition",
+      "comment_count": 4,
+      "note": "evhub's AF/LW linkpost of the paper; short comment thread reacting to the result (phase transitions, missing phases, terminology)."
+    }
+  ],
+  "2210.01892": [
+    {
+      "platform": "lesswrong",
+      "post_id": "kWp4R9SYgKJFHAufB",
+      "title": "Polysemanticity and Capacity in Neural Networks",
+      "url": "https://www.lesswrong.com/posts/kWp4R9SYgKJFHAufB/polysemanticity-and-capacity-in-neural-networks",
+      "comment_count": 14,
+      "note": "Author summary post (Buck / Redwood) announcing the paper."
+    }
+  ],
+  "2211.09169": [
+    {
+      "platform": "lesswrong",
+      "post_id": "LvznjZuygoeoTpSE6",
+      "title": "Engineering Monosemanticity in Toy Models",
+      "url": "https://www.lesswrong.com/posts/LvznjZuygoeoTpSE6/engineering-monosemanticity-in-toy-models",
+      "comment_count": 7,
+      "note": "Author announcement post (Adam Jermyn) of the paper."
+    }
+  ],
+  "2305.01610": [
+    {
+      "platform": "lesswrong",
+      "post_id": "yXiu6DBxKKWXC8Ygx",
+      "title": "Finding Neurons in a Haystack: Case Studies with Sparse Probing",
+      "url": "https://www.lesswrong.com/posts/yXiu6DBxKKWXC8Ygx/finding-neurons-in-a-haystack-case-studies-with-sparse",
+      "comment_count": 6,
+      "note": "Author announcement post (Wes Gurnee) of the paper; comments discuss it as early evidence of superposition in LMs."
+    }
+  ],
+  "2309.08600": [
+    {
+      "platform": "lesswrong",
+      "post_id": "Qryk6FqjtZk9FHHJR",
+      "title": "Sparse Autoencoders Find Highly Interpretable Directions in Language Models",
+      "url": "https://www.lesswrong.com/posts/Qryk6FqjtZk9FHHJR/sparse-autoencoders-find-highly-interpretable-directions-in",
+      "comment_count": 8,
+      "note": "Author linkpost (Logan Riggs et al.) announcing the paper (posted under its preprint title 'Directions')."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "F4iogK5xdNd7jDNyw",
+      "title": "Comparing Anthropic's Dictionary Learning to Ours",
+      "url": "https://www.lesswrong.com/posts/F4iogK5xdNd7jDNyw/comparing-anthropic-s-dictionary-learning-to-ours",
+      "comment_count": 8,
+      "note": "Co-author Robert Huben compares this paper's SAE method/results with Anthropic's concurrent Towards Monosemanticity."
+    }
+  ],
+  "web:towards-monosemanticity": [
+    {
+      "platform": "lesswrong",
+      "post_id": "TDqvQFks6TWutJEKu",
+      "title": "Towards Monosemanticity: Decomposing Language Models With Dictionary Learning",
+      "url": "https://www.lesswrong.com/posts/TDqvQFks6TWutJEKu/towards-monosemanticity-decomposing-language-models-with",
+      "comment_count": 22,
+      "note": "Linkpost of the paper by Zac Hatfield-Dodds (Anthropic); main LW discussion thread."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "fKuugaxt2XLTkASkk",
+      "title": "Open Source Replication & Commentary on Anthropic's Dictionary Learning Paper",
+      "url": "https://www.lesswrong.com/posts/fKuugaxt2XLTkASkk/open-source-replication-and-commentary-on-anthropic-s",
+      "comment_count": 12,
+      "note": "Neel Nanda's open-source replication of and commentary on the paper."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "F4iogK5xdNd7jDNyw",
+      "title": "Comparing Anthropic's Dictionary Learning to Ours",
+      "url": "https://www.lesswrong.com/posts/F4iogK5xdNd7jDNyw/comparing-anthropic-s-dictionary-learning-to-ours",
+      "comment_count": 8,
+      "note": "Cunningham et al. co-author compares Anthropic's dictionary learning results with their concurrent SAE paper."
+    }
+  ],
+  "2312.03096": [
+    {
+      "platform": "lesswrong",
+      "post_id": "sEyWufriufTnBKnTG",
+      "title": "Incidental polysemanticity",
+      "url": "https://www.lesswrong.com/posts/sEyWufriufTnBKnTG/incidental-polysemanticity",
+      "comment_count": 7,
+      "note": "Authors' preliminary research report ('Incidental polysemanticity') presenting the paper's result; same authors and abstract."
+    }
+  ],
+  "2401.12181": [],
+  "2405.14860": [],
+  "2408.05451": [
+    {
+      "platform": "lesswrong",
+      "post_id": "2roZtSr5TGmLjXMnT",
+      "title": "Toward A Mathematical Framework for Computation in Superposition",
+      "url": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in",
+      "comment_count": 19,
+      "note": "LW/AF precursor by the same authors (Vaintrob, Mendel, Hanni) presenting the computation-in-superposition framework (U-AND constructions) later formalized in the arXiv paper."
+    }
+  ],
+  "2409.14507": [
+    {
+      "platform": "lesswrong",
+      "post_id": "3zBsxeZzd3cvuueMJ",
+      "title": "[Paper] A is for Absorption: Studying Feature Splitting and Absorption in Sparse Autoencoders",
+      "url": "https://www.lesswrong.com/posts/3zBsxeZzd3cvuueMJ/paper-a-is-for-absorption-studying-feature-splitting-and",
+      "comment_count": 19,
+      "note": "Author post announcing the paper (LASR Labs, chanind et al.)."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "kcg58WhRxFA9hv9vN",
+      "title": "Toy Models of Feature Absorption in SAEs",
+      "url": "https://www.lesswrong.com/posts/kcg58WhRxFA9hv9vN/toy-models-of-feature-absorption-in-saes",
+      "comment_count": 8,
+      "note": "Author follow-up building toy models to test the paper's hypothesis that co-occurrence causes feature absorption."
+    }
+  ],
+  "2501.17727": [],
+  "2502.04878": [
+    {
+      "platform": "lesswrong",
+      "post_id": "TMAmHh4DdMr4nCSr5",
+      "title": "Showing SAE Latents Are Not Atomic Using Meta-SAEs",
+      "url": "https://www.lesswrong.com/posts/TMAmHh4DdMr4nCSr5/showing-sae-latents-are-not-atomic-using-meta-saes",
+      "comment_count": 10,
+      "note": "Author post presenting the meta-SAE half of the paper (SAE latents are not atomic)."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "baJyjpktzmcmRfosq",
+      "title": "Stitching SAEs of different sizes",
+      "url": "https://www.lesswrong.com/posts/baJyjpktzmcmRfosq/stitching-saes-of-different-sizes",
+      "comment_count": 12,
+      "note": "Author post presenting the SAE-stitching half of the paper (SAEs are incomplete)."
+    }
+  ],
+  "2502.16681": [
+    {
+      "platform": "lesswrong",
+      "post_id": "4uXCAJNuPKtKBsi28",
+      "title": "Negative Results for SAEs On Downstream Tasks and Deprioritising SAE Research (GDM Mech Interp Team Progress Update #2)",
+      "url": "https://www.lesswrong.com/posts/4uXCAJNuPKtKBsi28/negative-results-for-saes-on-downstream-tasks",
+      "comment_count": 15,
+      "note": "GDM mech interp update reporting parallel SAE-vs-probe negative results; repeatedly cites Kantamneni et al. as consistent evidence and motivates deprioritising SAEs."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "osNKnwiJWHxDYvQTD",
+      "title": "Takeaways From Our Recent Work on SAE Probing",
+      "url": "https://www.lesswrong.com/posts/osNKnwiJWHxDYvQTD/takeaways-from-our-recent-work-on-sae-probing",
+      "comment_count": 4,
+      "note": "Authors' (Josh Engels et al.) takeaways post for the paper; Neel Nanda and others discuss what the negative result implies."
+    }
+  ],
+  "2505.10465": [],
+  "2604.00443": [],
+  "web:already-clean": [
+    {
+      "platform": "lesswrong",
+      "post_id": "x4kvabkF2Jk8GLZp8",
+      "title": "Linkpost: Neural Networks Are Already Clean",
+      "url": "https://www.lesswrong.com/posts/x4kvabkF2Jk8GLZp8/linkpost-neural-networks-are-already-clean",
+      "comment_count": 50,
+      "note": "Linkpost of the essay; main LW discussion thread."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "Dkh7pXKjoNWkkxQDz",
+      "title": "Neural networks are not already clean",
+      "url": "https://www.lesswrong.com/posts/Dkh7pXKjoNWkkxQDz/neural-networks-are-not-already-clean",
+      "comment_count": 21,
+      "note": "Leo Gao's critique post arguing activating-example patterns do not show neurons are explained."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "w2tBHwNERDoSawznx",
+      "title": "I Can See Everything",
+      "url": "https://www.lesswrong.com/posts/w2tBHwNERDoSawznx/i-can-see-everything",
+      "comment_count": 3,
+      "note": "Zvi roundup of reactions to the essay, assessing how big an update it is."
+    }
+  ]
+}

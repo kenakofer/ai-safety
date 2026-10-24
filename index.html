@@ -10,7 +10,7 @@
 <body>
   <header>
     <h1>AI Safety Evidence Dashboard</h1>
-    <p class="sub">How the evidence on three contested questions has moved over time. Each dot is a paper, scored against the exact question wording.</p>
+    <p class="sub">Where the evidence on three contested questions disagrees, and why. Each dot is a paper, grouped by what it actually measured; the small dots around it are outside critiques that change how it bears on the question.</p>
   </header>
 
   <nav id="tabs" role="tablist"></nav>
@@ -19,14 +19,18 @@
     <section id="question-box">
       <p id="question-text"></p>
       <p id="question-stats" class="muted"></p>
+      <div id="view-toggle" role="group" aria-label="Chart view"></div>
+      <p id="judgment-banner" class="banner" hidden>This view plots a <strong>language model's judgment</strong> of each paper's stance. Treat it as one reader's opinion: the scores share one model family's priors.</p>
     </section>
 
     <section id="chart-wrap">
-      <div id="chart" aria-label="Stance over time chart"></div>
+      <div id="chart" aria-label="Papers over time chart"></div>
       <div id="tooltip" role="tooltip" hidden></div>
     </section>
 
     <section id="legend" aria-label="Legend"></section>
+
+    <section id="matrix" aria-label="Definitions matrix"></section>
 
     <section id="detail" aria-live="polite">
       <p class="muted">Tap or click a dot to see the paper's details.</p>
@@ -34,8 +38,9 @@
   </main>
 
   <footer class="muted">
-    Stance: −2 strongly against … +2 strongly for. Dot size = evidence strength, opacity = judge confidence, colour = dominant model family (most models tested).
-    Data: <a href="data/papers.json">data/papers.json</a>.
+    By method: lanes = what each paper studied; colour = dominant model family; satellites = outside critiques kept by a relevance filter, with verbatim quotes.
+    LLM judgment: −2 strongly against … +2 strongly for; dot size = evidence strength, opacity = judge confidence.
+    Data: <a href="data/papers.json">papers.json</a> · <a href="data/discussion.json">discussion.json</a> · <a href="data/questions.json">questions.json</a>.
   </footer>
 
   <script src="app.js"></script>

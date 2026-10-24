@@ -79,5 +79,6 @@ How to prune: delete lines, or mark them `[x]` to keep and `[ ]` to drop. Add yo
 - **Alignment Faking Revisited: Improved Classifiers and Open Source Extensions** (Hughes & Sheshadri, Anthropic Alignment Science blog, 2025). With a better classifier, most open models don't AF in the prompted setting. Blog only.
 - **ChameleonBench: Quantifying Alignment Faking in LLMs** (PMLR v304, 2026). I found it in search but didn't find an arXiv ID.
 - OpenAI monitorability evals release (alignment.openai.com, 2026). Blog plus datasets.
+- **Neural Networks Are Already Clean** (Cammarata, Goodfire essay, 2026-10-15, [already-clean.goodfire.com](https://already-clean.goodfire.com/), text at `/essay.md`). Added in Phase 4 as `web:already-clean`. Argues the canonical polysemanticity/superposition examples were misread, and that ~90% of Qwen3-32B neuron poles have one main job. Uses a different definition of superposition from the question's. Date from the X announcement and the [LW linkpost](https://www.lesswrong.com/posts/x4kvabkF2Jk8GLZp8/linkpost-neural-networks-are-already-clean); the page itself is undated.
 
 If you want non-arXiv sources, the schema's `id` field will need a slug, e.g. `web:towards-monosemanticity`.

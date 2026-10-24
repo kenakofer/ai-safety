@@ -1,0 +1,35 @@
+[
+  {
+    "id": "superposition",
+    "tab": "Superposition",
+    "text": "Is polysemanticity in LLM neurons primarily explained by superposition (the model compressing more features than it has dimensions)?",
+    "terms": {
+      "superposition": "The model represents more features than it has dimensions, so features share neurons/directions (the Toy Models count definition).",
+      "polysemanticity": "A single neuron responds to multiple unrelated concepts.",
+      "feature": "A property of the input that the model represents and downstream computation uses."
+    },
+    "lanes": ["toy models", "SAE / dictionary", "neuron audits", "theory"]
+  },
+  {
+    "id": "cot",
+    "tab": "CoT monitoring",
+    "text": "Do frontier models' chains of thought reliably reveal the factors that actually drive their answers, enough to support CoT monitoring?",
+    "terms": {
+      "faithfulness": "The CoT reveals the factors that actually drive the model's answer.",
+      "monitorability": "The CoT is informative enough for a monitor to catch the behaviour it is looking for.",
+      "verbalization": "The model explicitly mentions a given factor (e.g. a planted hint) in its CoT."
+    },
+    "lanes": ["hint / bias verbalization", "monitor evals", "CoT interventions", "position / theory"]
+  },
+  {
+    "id": "alignment_faking",
+    "tab": "Alignment faking",
+    "text": "Do frontier LLMs robustly fake alignment (behave differently when they believe they're being trained vs. unmonitored) across models and setups?",
+    "terms": {
+      "alignment faking": "Strategically complying during (believed) training in order to preserve preferences that would otherwise be trained away.",
+      "training awareness": "The model's belief about whether its current outputs will be used for training.",
+      "compliance gap": "The difference in behaviour between believed-training and believed-unmonitored conditions."
+    },
+    "lanes": ["prompted setups", "fine-tuned / synthetic docs", "model organisms (trained-in)", "evals across models"]
+  }
+]
