@@ -4,7 +4,7 @@ Usage: python3 -I tools/validate.py [data/papers.json] [data/discussion.json]
 Checks field types/ranges, that relation targets exist, that `stance` equals the
 mean of `stance_passes` rounded toward zero, and that `flagged` is true whenever
 the two passes differ by more than 1 point. Also checks the optional Phase 4 fields
-(author_claim, operationalization, adversarial, source_type) against data/questions.json,
+(author_claim, author_view, author_response, operationalization, adversarial, source_type) against data/questions.json,
 and that every satellite in discussion.json is well-formed and keyed to an existing record.
 Quote text itself is checked by tools/check_quotes.py. Exits non-zero on any error.
 """
@@ -28,6 +28,9 @@ disc_path = sys.argv[2] if len(sys.argv) > 2 else "data/discussion.json"
 papers = json.load(open(path, encoding="utf-8"))
 ids = [p.get("id") for p in papers]
 errors = []
+
+
+RELEVANCE = ("central", "partial", "tangential")
 
 
 def err(p, msg):
@@ -87,6 +90,20 @@ for p in papers:
         err(p, f"bad source_type {p['source_type']}")
     if p.get("author_claim") is not None and not is_quote(p["author_claim"]):
         err(p, "author_claim must be null or {quote, location}")
+    av = p.get("author_view")
+    if av is not None:
+        if av.get("stance") not in (-2, -1, 0, 1, 2) or av.get("relevance") not in RELEVANCE:
+            err(p, "author_view needs stance in -2..2 and relevance in " + "|".join(RELEVANCE))
+        if not is_quote(av) or not av.get("rationale") or av.get("basis") != "estimated":
+            err(p, "author_view needs quote, location, rationale and basis 'estimated'")
+    ar = p.get("author_response")
+    if ar is not None:
+        if "stance" in ar and ar["stance"] not in (-2, -1, 0, 1, 2):
+            err(p, "author_response.stance must be in -2..2")
+        if "relevance" in ar and ar["relevance"] not in RELEVANCE:
+            err(p, "bad author_response.relevance")
+        if not ar.get("by") or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(ar.get("date"))) or "note" not in ar:
+            err(p, "author_response needs by, date (YYYY-MM-DD) and note")
     op = p.get("operationalization")
     if op is not None:
         for term, v in (op.get("terms") or {}).items():

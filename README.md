@@ -8,14 +8,18 @@ A static dashboard showing where the evidence on three contested AI-safety quest
 | `cot` | Do frontier models' chains of thought reliably reveal the factors that actually drive their answers, enough to support CoT monitoring? |
 | `alignment_faking` | Do frontier LLMs robustly fake alignment (behave differently when they believe they're being trained vs. unmonitored) across models and setups? |
 
-An LLM's verdict on how much a paper supports a question is weak evidence. So the default view makes no such judgment. It shows:
-- **What each paper measured.** Dots sit in lanes by method (e.g. toy models, SAE / dictionary, neuron audits, theory), with x = first-version date.
+An LLM's verdict on how much a paper supports a question is weak evidence. So the chart doesn't plot one. Each dot is a paper (x = first-version date) placed at **the answer its authors would give**:
+- **Height** = how the authors would answer the question as worded (−2 clearly not … +2 clearly yes). **Dot size** = how relevant they would say their work is (central / partial / tangential).
+- A language model estimates both from the authors' own text, with a supporting quote. If an author disagrees, their answer replaces the estimate and the dot gets a dark ring ("confirmed by an author"). The detail panel links to a pre-filled GitHub issue for this.
+
+Around that, the dashboard shows:
+- **What each paper measured**, and its method lane (e.g. toy models, SAE / dictionary, neuron audits, theory).
 - **What the authors claim**, as a verbatim quote, or "none" when the paper never states what its result means for the question.
 - **How each paper defines the question's terms**, in a definitions matrix. Cells are highlighted where a blinded reader found the paper's sense differs from the question's.
 - **Adversarial flags** from a reader who saw only a de-branded copy (no title, authors, labs or abstract): definition mismatches, scope gaps, weak method links and framing overreach, each with a quote.
 - **Outside critiques ("satellites")**, the small dots orbiting a paper. These are LessWrong / Alignment Forum comments and posts kept only if they change how the result bears on the question. Each carries a verbatim quote and links to the source.
 
-Essays and blog posts (not peer reviewed) are drawn as squares. The old stance chart (y = Against / Mixed / For, scored by an LLM) is behind the **LLM judgment** toggle. It is labelled as a model's judgment.
+Essays and blog posts (not peer reviewed) are drawn as squares. The older LLM judgment of each paper's *evidence* (the stance score) is kept in a collapsed section of the detail panel.
 
 Every quote in the data is machine-checked against the cached source text (`tools/check_quotes.py`).
 
@@ -27,7 +31,7 @@ There is no backend or build step. D3 v7 is loaded from jsDelivr. The page fetch
 python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-Any static host works (GitHub Pages, Netlify, etc.). Deep links look like `#q=superposition&paper=web:already-clean`. Add `&view=stance` for the LLM-judgment chart.
+Any static host works (GitHub Pages, Netlify, etc.). Deep links look like `#q=superposition&paper=web:already-clean`.
 
 ## Files
 
@@ -41,6 +45,7 @@ data/candidates.md              candidate list with "why relevant" notes
 data/blind_pass_*.json          independent blind re-scores (merged into papers.json as `blind_pass`)
 prompts/adversarial.md          blinded definitions / method reading -> operationalization + adversarial flags
 prompts/author_claim.md         pick the authors' own sentence on the question, or null
+prompts/author_view.md          estimate how the authors would answer (stance, relevance) -> author_view
 prompts/satellite_filter.md     keep/drop discussion comments -> satellites
 prompts/scoring.md              legacy stance scoring
 tools/fetch_papers.sh           download arXiv PDFs and convert them to .cache/txt/<id>.txt
@@ -71,6 +76,8 @@ Additions (stance layer):
 Additions (disagreement layer, all optional):
 - `source_type`: `paper | preprint | essay | blog`.
 - `author_claim`: `{quote, location}`, or `null` when no such sentence exists.
+- `author_view`: `{stance: −2..2, relevance: central|partial|tangential, rationale, framing_note, quote, location, basis: "estimated"}`. The LLM's estimate of the authors' answer; this is what the chart plots.
+- `author_response`: `{stance?, relevance?, note, by, date, url?}`. An author's own answer. Any field it sets replaces the estimate's; keep `author_view` untouched so the original estimate stays visible.
 - `operationalization`: `{terms: {<term>: {quote, location}}, measured, unit, models_scope: vision|LLM|toy|mixed, lane}`. Terms must be among the question's `terms`; `lane` among its `lanes`.
 - `adversarial`: `{blinded: bool, flags: [{kind, text, quote, location, term?}]}`. `kind` is one of `definition_mismatch` (needs `term`), `scope_gap`, `method_weak_link`, `framing_overreach`.
 
@@ -78,15 +85,25 @@ Additions (disagreement layer, all optional):
 
 Non-arXiv sources use a slug id such as `web:towards-monosemanticity`. If a paper bears on two questions, add one record per question with the same `id`.
 
+### Author corrections
+
+When an author says the estimate is wrong (via the "Correct this" issue link, email, or a public post), record it on the record and keep `author_view` as it was:
+
+```json
+"author_response": {"stance": -1, "relevance": "central", "note": "their words or a short paraphrase", "by": "Author Name", "date": "2026-10-24", "url": "https://github.com/.../issues/12"}
+```
+
+Only record a response you can attribute to an actual author of the paper. If they confirm the estimate, set `author_response` with no `stance` or `relevance`; the dot still gets the "confirmed" ring.
+
 ### Human overrides
 
-To overrule a score without losing the original, set:
+To overrule the legacy stance score without losing the original, set:
 
 ```json
 "human_override": {"stance": -1, "note": "why", "by": "kenan", "date": "2026-10-20"}
 ```
 
-The stance chart then plots `human_override.stance`, and the detail panel shows both values. Leave `stance` itself untouched.
+The detail panel's LLM-judgment section then shows both values. Leave `stance` itself untouched.
 
 ## Adding a paper
 
@@ -96,7 +113,7 @@ The stance chart then plots `human_override.stance`, and the detail panel shows 
    - Web page: `curl -L <url> -o .cache/web/<slug>.html && python3 -I tools/html2txt.py .cache/web/<slug>.html .cache/web/<slug>.txt`
 3. **Skim it.** `python3 -I tools/skim.py .cache/txt/<id>.txt 1800` and `tools/models.sh .cache/txt/<id>.txt`
 4. **Base record.** Fill the spec fields (and the legacy stance, with `prompts/scoring.md`) and append to `data/papers.json`. Add any `relations` pointing to papers already in the dataset.
-5. **Author claim.** Run `prompts/author_claim.md` and set `author_claim`.
+5. **Author claim and view.** Run `prompts/author_claim.md` and set `author_claim`. Then run `prompts/author_view.md` and set `author_view`.
 6. **Blinded reading.** `python3 -I tools/redact.py <id> [extra names...]`. Then give a fresh reader (e.g. a Claude Code subagent) only `prompts/adversarial.md` and the redacted file, under a neutral name. Merge its `operationalization` and `adversarial` into the record. Redaction removes the obvious cues only; a well-known paper can still be recognised from its setup.
 7. **Discussion.** Find LessWrong/AF posts about the paper (web search `site:lesswrong.com "<title>"`; the GraphQL API ignores free-text search) and add them to `data/discussion_sources.json`. Run `python3 -I tools/fetch_lw.py <post id>`, then `prompts/satellite_filter.md` per thread. Add the kept satellites to `data/discussion.json`.
 8. **Check it.**
@@ -119,7 +136,7 @@ The stance chart then plots `human_override.stance`, and the detail panel shows 
 
 ## Coverage and open items
 
-- **Rollout:** `superposition` has the full disagreement layer. `cot` and `alignment_faking` still show only the base records and the stance layer.
+- **Rollout:** every record has an `author_view`. `superposition` also has the full disagreement layer (definitions, adversarial flags, satellites); `cot` and `alignment_faking` don't yet.
 - **LessWrong / AF:** covered via `tools/fetch_lw.py`.
 - **OpenReview:** reviews are not fetched yet. Search works, but reading forum replies through the API needs an account token.
 - **X:** not searched directly. X threads crossposted to LessWrong are covered. Direct search would need the xAI (Grok) API, which is paid and needs a key.

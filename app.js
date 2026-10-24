@@ -4,7 +4,10 @@
 let QUESTIONS = [];
 
 const STANCE_LABELS = { "-2": "Strongly against", "-1": "Against", "0": "Mixed / orthogonal", "1": "For", "2": "Strongly for" };
-const RADIUS = { low: 5, medium: 8, high: 11 };
+const ANSWER_LABELS = { "-2": "clearly not", "-1": "probably not", "0": "unclear / doesn't say", "1": "probably yes", "2": "clearly yes" };
+// Dot size = how directly the authors would say the work bears on the question.
+const RELEVANCE = { central: 10, partial: 7, tangential: 4.5 };
+const ISSUES_URL = "https://github.com/kenakofer/ai-safety-evidence-dashboard/issues/new";
 const REL_TYPES = ["replicates", "critiques", "extends"];
 // Satellite effect on how the paper bears on the question. "scope" is a hollow ring so identity is not colour-alone.
 const EFFECTS = {
@@ -19,7 +22,6 @@ const FLAG_LABELS = {
   method_weak_link: "Method weak link",
   framing_overreach: "Framing overreach",
 };
-const UNCLASSIFIED = "not yet classified";
 const isEssay = (p) => p.source_type === "essay" || p.source_type === "blog";
 
 // Model family is derived from models_tested. Order matters: first match wins per model.
@@ -60,10 +62,20 @@ function primaryFamily(p) {
 }
 
 const effStance = (p) => (p.human_override && Number.isInteger(p.human_override.stance) ? p.human_override.stance : p.stance);
+// The authors' answer: their own correction if they gave one, else the LLM's estimate of it (null if not estimated yet).
+const authorAnswer = (p) => {
+  const v = p.author_view, r = p.author_response;
+  if (!v && !r) return null;
+  return {
+    stance: r && Number.isInteger(r.stance) ? r.stance : v?.stance ?? 0,
+    relevance: r?.relevance || v?.relevance || "partial",
+    confirmed: !!r,
+  };
+};
 const parseDate = d3.utcParse("%Y-%m-%d");
 const fmtDate = d3.utcFormat("%b %Y");
 
-const state = { papers: [], byId: new Map(), discussion: {}, q: null, selected: null, view: "lanes" };
+const state = { papers: [], byId: new Map(), discussion: {}, q: null, selected: null };
 const satellitesOf = (p) => state.discussion[`${p.id}|${p.question_id}`] || [];
 
 /* ---------- boot ---------- */
@@ -87,7 +99,6 @@ Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSO
     }
     state.papers = papers;
     buildTabs();
-    buildViewToggle();
     applyHash();
     // updateHash uses replaceState, which doesn't fire hashchange, so this only sees links and back/forward.
     window.addEventListener("hashchange", applyHash);
@@ -104,7 +115,6 @@ Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSO
 
 function applyHash() {
   const h = new URLSearchParams(location.hash.slice(1));
-  state.view = h.get("view") === "stance" ? "stance" : "lanes";
   selectQuestion(QUESTIONS.some((q) => q.id === h.get("q")) ? h.get("q") : QUESTIONS[0].id, h.get("paper"));
 }
 
@@ -116,19 +126,6 @@ function buildTabs() {
     .attr("role", "tab")
     .text((q) => q.tab)
     .on("click", (_, q) => selectQuestion(q.id));
-}
-
-function buildViewToggle() {
-  d3.select("#view-toggle").selectAll("button")
-    .data([{ id: "lanes", t: "By method" }, { id: "stance", t: "LLM judgment" }])
-    .join("button")
-    .attr("type", "button")
-    .text((d) => d.t)
-    .on("click", (_, d) => {
-      state.view = d.id;
-      updateHash();
-      render();
-    });
 }
 
 const recordFor = (id, qid = state.q) => state.papers.find((p) => p.id === id && p.question_id === qid);
@@ -145,7 +142,6 @@ function selectQuestion(qid, paperId = null) {
 
 function updateHash() {
   const h = new URLSearchParams({ q: state.q });
-  if (state.view === "stance") h.set("view", "stance");
   if (state.selected) h.set("paper", state.selected);
   history.replaceState(null, "", "#" + h.toString());
 }
@@ -162,41 +158,27 @@ function render() {
 }
 
 function renderStats(papers) {
-  const parts = [`${papers.length} papers`];
-  if (state.view === "stance") {
-    const mean = d3.mean(papers, effStance);
-    const flagged = papers.filter((p) => p.flagged).length;
-    const overridden = papers.filter((p) => p.human_override).length;
-    parts.push(`mean stance ${mean >= 0 ? "+" : ""}${mean.toFixed(2)}`);
-    if (flagged) parts.push(`${flagged} flagged for review`);
-    if (overridden) parts.push(`${overridden} human-overridden`);
-  } else {
-    const sats = papers.flatMap(satellitesOf);
-    const mismatches = papers.flatMap((p) => p.adversarial?.flags || []).filter((f) => f.kind === "definition_mismatch").length;
-    const essays = papers.filter(isEssay).length;
-    parts.push(`${sats.length} outside critiques kept`);
-    if (mismatches) parts.push(`${mismatches} definition mismatches`);
-    if (essays) parts.push(`${essays} not peer-reviewed`);
-  }
+  const answers = papers.map(authorAnswer);
+  const confirmed = answers.filter((a) => a?.confirmed).length;
+  const pending = answers.filter((a) => !a).length;
+  const sats = papers.flatMap(satellitesOf);
+  const mismatches = papers.flatMap((p) => p.adversarial?.flags || []).filter((f) => f.kind === "definition_mismatch").length;
+  const essays = papers.filter(isEssay).length;
+  const parts = [`${papers.length} papers`, `${confirmed} confirmed by an author`];
+  if (pending) parts.push(`${pending} not yet estimated`);
+  parts.push(`${sats.length} outside critiques kept`);
+  if (mismatches) parts.push(`${mismatches} definition mismatches`);
+  if (essays) parts.push(`${essays} not peer-reviewed`);
   document.getElementById("question-stats").textContent = parts.join(" · ");
-  d3.selectAll("#view-toggle button").attr("aria-pressed", (d) => d.id === state.view);
-  document.getElementById("judgment-banner").hidden = state.view !== "stance";
 }
 
 function renderChart(papers) {
   const host = document.getElementById("chart");
   const width = Math.max(300, host.clientWidth);
   const narrow = width < 560;
-  const stanceView = state.view === "stance";
-  const q = QUESTIONS.find((x) => x.id === state.q);
 
-  // Lanes group papers by what they actually studied (operationalization.lane), so the y-axis carries no judgment.
-  const laneOf = (p) => (q.lanes.includes(p.operationalization?.lane) ? p.operationalization.lane : UNCLASSIFIED);
-  const lanes = q.lanes.filter((l) => papers.some((p) => laneOf(p) === l));
-  if (papers.some((p) => laneOf(p) === UNCLASSIFIED)) lanes.push(UNCLASSIFIED);
-
-  const margin = { top: 16, right: narrow ? 12 : 20, bottom: 30, left: stanceView ? (narrow ? 56 : 112) : 8 };
-  const height = stanceView ? (narrow ? 380 : 440) : Math.max(300, lanes.length * (narrow ? 92 : 104) + 46);
+  const margin = { top: 16, right: narrow ? 12 : 20, bottom: 30, left: narrow ? 56 : 112 };
+  const height = narrow ? 380 : 440;
   const iw = width - margin.left - margin.right;
   const ih = height - margin.top - margin.bottom;
   const rScale = narrow ? 0.8 : 1;
@@ -205,11 +187,10 @@ function renderChart(papers) {
   const pad = Math.max(30, (d1 - d0) / 864e5 * 0.04) * 864e5;
   const x = d3.scaleUtc().domain([new Date(+d0 - pad), new Date(+d1 + pad)]).range([0, iw]);
   const y = d3.scaleLinear().domain([-2.5, 2.5]).range([ih, 0]);
-  const lane = d3.scaleBand().domain(lanes).range([0, ih]).paddingInner(0.06);
-  // In the lanes view, size and opacity would also be model judgments, so dots are uniform.
-  const radius = (p) => (stanceView ? RADIUS[p.evidence_strength] : RADIUS.medium) * rScale;
-  const baseY = (p) => (stanceView ? y(effStance(p)) : lane(laneOf(p)) + lane.bandwidth() / 2 + 7);
-  const maxShift = stanceView ? (y(0) - y(0.5)) * 0.85 : Math.max(0, lane.bandwidth() / 2 - 24);
+  // Papers without an estimate yet sit on the zero line as hollow dots.
+  const radius = (p) => RELEVANCE[authorAnswer(p)?.relevance || "partial"] * rScale;
+  const baseY = (p) => y(authorAnswer(p)?.stance ?? 0);
+  const maxShift = (y(0) - y(0.5)) * 0.85;
 
   // Place dots, nudging vertically within their band to avoid overlaps.
   const placed = [];
@@ -250,27 +231,21 @@ function renderChart(papers) {
   g.append("g").attr("class", "axis").attr("transform", `translate(0,${ih})`)
     .call(d3.axisBottom(x).ticks(narrow ? 4 : 8).tickSizeOuter(0));
 
-  if (stanceView) {
-    g.append("g").selectAll("line").data([-2, -1, 1, 2]).join("line")
-      .attr("class", "gridline").attr("x1", 0).attr("x2", iw).attr("y1", y).attr("y2", y);
-    g.append("line").attr("class", "zero-line").attr("x1", 0).attr("x2", iw).attr("y1", y(0)).attr("y2", y(0));
+  g.append("g").selectAll("line").data([-2, -1, 1, 2]).join("line")
+    .attr("class", "gridline").attr("x1", 0).attr("x2", iw).attr("y1", y).attr("y2", y);
+  g.append("line").attr("class", "zero-line").attr("x1", 0).attr("x2", iw).attr("y1", y(0)).attr("y2", y(0));
 
-    const yAxis = g.append("g").attr("class", "axis")
-      .call(d3.axisLeft(y).tickValues([-2, -1, 0, 1, 2]).tickFormat((v) => (narrow ? "" : (v > 0 ? "+" : "") + v)).tickSizeOuter(0));
-    yAxis.select(".domain").remove();
+  const yAxis = g.append("g").attr("class", "axis")
+    .call(d3.axisLeft(y).tickValues([-2, -1, 0, 1, 2]).tickFormat((v) => (narrow ? "" : (v > 0 ? "+" : "") + v)).tickSizeOuter(0));
+  yAxis.select(".domain").remove();
 
-    const bands = [{ v: 1.5, t: "For" }, { v: 0, t: "Mixed" }, { v: -1.5, t: "Against" }];
-    g.append("g").selectAll("text").data(bands).join("text")
-      .attr("class", "band-label")
-      .attr("x", narrow ? -8 : -40).attr("y", (d) => y(d.v)).attr("dy", "0.35em")
-      .attr("text-anchor", "end").text((d) => d.t);
-  } else {
-    const lg = g.append("g").selectAll("g").data(lanes).join("g");
-    lg.append("rect").attr("class", (_, i) => "lane-bg" + (i % 2 ? " alt" : ""))
-      .attr("x", 0).attr("width", iw).attr("y", (l) => lane(l)).attr("height", lane.bandwidth()).attr("rx", 6);
-    lg.append("text").attr("class", (l) => "lane-label" + (l === UNCLASSIFIED ? " muted-lane" : ""))
-      .attr("x", 8).attr("y", (l) => lane(l) + 15).text((l) => l);
-  }
+  const bands = [{ v: 1.5, t: "Yes" }, { v: 0, t: "Unclear" }, { v: -1.5, t: "No" }];
+  g.append("g").selectAll("text").data(bands).join("text")
+    .attr("class", "band-label")
+    .attr("x", narrow ? -8 : -40).attr("y", (d) => y(d.v)).attr("dy", "0.35em")
+    .attr("text-anchor", "end").text((d) => d.t);
+  g.append("text").attr("class", "axis-title").attr("x", narrow ? -8 : -40).attr("y", -4)
+    .attr("text-anchor", "end").text("Authors' answer");
 
   // Relation edges (only those whose target is in this question).
   const edges = [];
@@ -333,12 +308,8 @@ function renderChart(papers) {
   // Dots (squares for essays/blogs, which were not peer reviewed)
   const dots = g.append("g").selectAll("g").data(placed, (d) => d.p.id).join("g");
 
-  if (stanceView) {
-    dots.filter((d) => d.p.flagged).append("circle")
-      .attr("class", "dot-flag").attr("cx", (d) => d.cx).attr("cy", (d) => d.cy).attr("r", (d) => d.r + 3.5);
-    dots.filter((d) => d.p.human_override).append("circle")
-      .attr("class", "dot-override").attr("cx", (d) => d.cx).attr("cy", (d) => d.cy).attr("r", (d) => d.r + 3.5);
-  }
+  dots.filter((d) => authorAnswer(d.p)?.confirmed).append("circle")
+    .attr("class", "dot-confirmed").attr("cx", (d) => d.cx).attr("cy", (d) => d.cy).attr("r", (d) => d.r + 3.5);
 
   const shape = (sel) => sel.each(function (d) {
     const el = d3.select(this);
@@ -350,14 +321,12 @@ function renderChart(papers) {
   });
   const mark = dots.append("g").call(shape).selectAll("circle, rect");
   mark
-    .attr("class", (d) => "dot" + (d.p.id === state.selected ? " selected" : ""))
+    .attr("class", (d) => "dot" + (d.p.id === state.selected ? " selected" : "") + (authorAnswer(d.p) ? "" : " pending"))
     .attr("fill", (d) => d.p._family.color)
-    .attr("fill-opacity", (d) => (stanceView ? 0.25 + 0.75 * d.p.judge_confidence : 0.9))
+    .attr("fill-opacity", (d) => (authorAnswer(d.p) ? 0.9 : 0.15))
     .attr("tabindex", 0)
     .attr("role", "button")
-    .attr("aria-label", (d) => stanceView
-      ? `${d.p.title}, ${STANCE_LABELS[effStance(d.p)]}`
-      : `${d.p.title}, ${laneOf(d.p)}, ${satellitesOf(d.p).length} outside critiques`)
+    .attr("aria-label", (d) => `${d.p.title}, ${answerText(d.p)}, ${satellitesOf(d.p).length} outside critiques`)
     .on("click", (_, d) => selectPaper(d.p.id))
     .on("keydown", (ev, d) => {
       if (ev.key === "Enter" || ev.key === " ") {
@@ -368,8 +337,9 @@ function renderChart(papers) {
     .on("mouseenter focus", (_, d) => {
       highlightEdges(g, d.p.id);
       const n = satellitesOf(d.p).length;
-      const extra = stanceView ? STANCE_LABELS[effStance(d.p)] : `${n} outside critique${n === 1 ? "" : "s"}`;
-      showTip(`<strong>${esc(d.p.title)}</strong><br>${esc(d.p.first_version_date)} · ${extra} · ${d.p._family.name}${isEssay(d.p) ? " · not peer-reviewed" : ""}`, d.cx, d.cy);
+      const lane = d.p.operationalization?.lane;
+      showTip(`<strong>${esc(d.p.title)}</strong><br>${esc(d.p.first_version_date)} · authors: ${esc(answerText(d.p))}<br>` +
+        `${lane ? esc(lane) + " · " : ""}${n} outside critique${n === 1 ? "" : "s"} · ${d.p._family.name}${isEssay(d.p) ? " · not peer-reviewed" : ""}`, d.cx, d.cy);
     })
     .on("mouseleave blur", () => {
       tip.hidden = true;
@@ -377,6 +347,12 @@ function renderChart(papers) {
     });
 
   highlightEdges(g, state.selected);
+}
+
+function answerText(p) {
+  const a = authorAnswer(p);
+  if (!a) return "not yet estimated";
+  return `${ANSWER_LABELS[a.stance]} (${sign(a.stance)}), ${a.relevance}${a.confirmed ? ", confirmed by an author" : ", estimated"}`;
 }
 
 function edgePath(a, b, lane) {
@@ -408,7 +384,6 @@ function renderLegend(papers) {
   const fams = new Map();
   for (const p of papers) fams.set(p._family.name, p._family);
   const famOrder = FAMILIES.filter((f) => fams.has(f.name));
-  const stanceView = state.view === "stance";
 
   const dot = (r, fill, extra = "") =>
     `<svg width="${2 * r + 2}" height="${2 * r + 2}"><circle cx="${r + 1}" cy="${r + 1}" r="${r}" fill="${fill}" ${extra}/></svg>`;
@@ -427,24 +402,19 @@ function renderLegend(papers) {
       <span class="item">${dot(5, "#9ca3af")}paper / preprint</span>
       <span class="item">${square(5, "#9ca3af")}essay / blog (not peer-reviewed)</span>
     </div>
-    ${stanceView ? `
-    <div class="group"><span class="group-title">Evidence</span>
-      ${["low", "medium", "high"].map((s) => `<span class="item">${dot(RADIUS[s] * 0.8, "#9ca3af")}${s}</span>`).join("")}
+    <div class="group"><span class="group-title">Relevance (authors')</span>
+      ${Object.entries(RELEVANCE).map(([k, r]) => `<span class="item">${dot(r * 0.8, "#9ca3af")}${k}</span>`).join("")}
     </div>
-    <div class="group"><span class="group-title">Confidence</span>
-      ${[0.2, 0.6, 1].map((c) => `<span class="item">${dot(6, "#475569", `fill-opacity="${0.25 + 0.75 * c}"`)}${c}</span>`).join("")}
-    </div>` : `
+    <div class="group"><span class="group-title">Answer</span>
+      <span class="item">${dot(5, "#9ca3af")}estimated</span>
+      <span class="item">${dot(5, "#9ca3af", 'stroke="var(--fg)" stroke-width="2"')}confirmed by an author</span>
+    </div>
     <div class="group"><span class="group-title">Outside critiques</span>
       ${Object.entries(EFFECTS).map(satItem).join("")}
-    </div>`}
+    </div>
     <div class="group"><span class="group-title">Relations</span>
       ${REL_TYPES.map((t) => `<span class="item">${line(t)}${t}</span>`).join("")}
-    </div>
-    ${stanceView ? `
-    <div class="group"><span class="group-title">Marks</span>
-      <span class="item">${dot(7, "none", 'stroke="#b45309" stroke-dasharray="2 2" stroke-width="1.5"')}flagged</span>
-      <span class="item">${dot(7, "none", 'stroke="#6d28d9" stroke-width="2"')}human override</span>
-    </div>` : ""}`;
+    </div>`;
 }
 
 /* ---------- definitions matrix ---------- */
@@ -534,6 +504,7 @@ function renderDetail(p) {
   el.innerHTML = `
     <h2><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h2>
     <p class="meta">${esc(p.authors.join(", "))} · first version ${esc(p.first_version_date)} · <code>${esc(p.id)}</code>${isEssay(p) ? ` · <strong>${esc(p.source_type)}, not peer-reviewed</strong>` : ""}</p>
+    ${answerBlock(p)}
     <dl>
       ${row("Authors' claim", p.author_claim ? quote(p.author_claim)
         : p.author_claim === null ? `<span class="muted">The authors never state an implication for this question; any link to it is the dashboard's inference.</span>` : "")}
@@ -551,9 +522,9 @@ function renderDetail(p) {
       ${row("Cited by (in dataset)", list(incoming))}
       ${row("Link", `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a>`)}
     </dl>
-    <details class="judgment"${state.view === "stance" ? " open" : ""}>
-      <summary>LLM judgment (stance score)</summary>
-      <p class="muted">A model's reading of which way this paper points on the question. Kept for reference; it is a judgment call, not the authors' claim.</p>
+    <details class="judgment">
+      <summary>LLM judgment of the evidence (stance score)</summary>
+      <p class="muted">A model's own reading of which way this paper's evidence points, as opposed to what its authors would say. Kept for reference; it is a judgment call.</p>
       <div class="badges">${badges.join("")}</div>
       <dl>
         ${row("Claim (paraphrase)", esc(p.claim))}
@@ -571,6 +542,25 @@ function renderDetail(p) {
       if (t.question_id !== state.q) selectQuestion(t.question_id, t.id);
       else selectPaper(t.id);
     }));
+}
+
+// The authors' answer: an author's own correction if there is one, else the LLM estimate with its supporting quote.
+function answerBlock(p) {
+  const v = p.author_view, r = p.author_response, a = authorAnswer(p);
+  const fix = `${ISSUES_URL}?${new URLSearchParams({ title: `Author correction: ${p.id} (${p.question_id})` })}`;
+  const invite = `<a href="${esc(fix)}" target="_blank" rel="noopener">${r ? "Another author?" : "Are you an author?"} Correct this</a>`;
+  if (!a) return `<div class="answer pending"><p class="muted">The authors' answer has not been estimated yet. ${invite}</p></div>`;
+  const head = `<span class="badge answer-badge">${sign(a.stance)} · ${esc(ANSWER_LABELS[a.stance])}</span>
+    <span class="badge rel-badge">${esc(a.relevance)} relevance</span>
+    <span class="badge ${a.confirmed ? "confirmed" : "estimated"}">${a.confirmed ? `✓ ${esc(r.by)}, ${esc(r.date)}` : "estimated by a language model"}</span>`;
+  const est = v ? `<p>${a.confirmed ? `<span class="muted">Earlier estimate: ${sign(v.stance)}, ${esc(v.relevance)}.</span> ` : ""}${esc(v.rationale)}</p>
+    <p><q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span></p>
+    ${v.framing_note ? `<p class="framing"><strong>Framing:</strong> ${esc(v.framing_note)}</p>` : ""}` : "";
+  const resp = r ? `<p class="author-note"><strong>${esc(r.by)}:</strong> ${esc(r.note)}${r.url ? ` <a href="${esc(r.url)}" target="_blank" rel="noopener">source</a>` : ""}</p>` : "";
+  return `<div class="answer">
+    <p class="answer-title">How the authors would answer</p>
+    <div class="badges">${head}</div>${resp}${est}
+    <p class="loc">${invite}</p></div>`;
 }
 
 const sign = (v) => (v > 0 ? "+" : "") + v;

@@ -1,7 +1,7 @@
 """Check that every quote in the dataset appears verbatim in its cached source.
 
 Usage: python3 -I tools/check_quotes.py [data/papers.json] [data/discussion.json]
-Paper quotes (author_claim, operationalization.terms, adversarial.flags) are looked up in
+Paper quotes (author_claim, author_view, operationalization.terms, adversarial.flags) are looked up in
 .cache/txt/<id>.txt or .cache/web/<slug>.{txt,md}. Satellite quotes are looked up in the
 specific comment their url points at, inside .cache/discussion/<source>.json.
 Matching ignores whitespace, line-break hyphenation, ligatures and curly-vs-straight quotes;
@@ -66,6 +66,8 @@ def comment_source(sat):
 def paper_quotes(p):
     if p.get("author_claim"):
         yield "author_claim", p["author_claim"]["quote"]
+    if p.get("author_view"):
+        yield "author_view", p["author_view"]["quote"]
     for term, v in ((p.get("operationalization") or {}).get("terms") or {}).items():
         if v:
             yield f"terms.{term}", v["quote"]

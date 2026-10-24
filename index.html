@@ -10,7 +10,7 @@
 <body>
   <header>
     <h1>AI Safety Evidence Dashboard</h1>
-    <p class="sub">Where the evidence on three contested questions disagrees, and why. Each dot is a paper, grouped by what it actually measured; the small dots around it are outside critiques that change how it bears on the question.</p>
+    <p class="sub">Where the evidence on three contested questions disagrees, and why. Each dot is a paper, placed at the answer its authors would give; the small dots around it are outside critiques that change how it bears on the question.</p>
   </header>
 
   <nav id="tabs" role="tablist"></nav>
@@ -19,8 +19,7 @@
     <section id="question-box">
       <p id="question-text"></p>
       <p id="question-stats" class="muted"></p>
-      <div id="view-toggle" role="group" aria-label="Chart view"></div>
-      <p id="judgment-banner" class="banner" hidden>This view plots a <strong>language model's judgment</strong> of each paper's stance. Treat it as one reader's opinion: the scores share one model family's priors.</p>
+      <p class="chart-note">Height = how the paper's authors would answer the question, estimated by a language model from their own text. A dark ring means an author has confirmed or corrected it; their answer replaces the estimate.</p>
     </section>
 
     <section id="chart-wrap">
@@ -30,16 +29,16 @@
 
     <section id="legend" aria-label="Legend"></section>
 
-    <section id="matrix" aria-label="Definitions matrix"></section>
-
     <section id="detail" aria-live="polite">
       <p class="muted">Tap or click a dot to see the paper's details.</p>
     </section>
+
+    <section id="matrix" aria-label="Definitions matrix"></section>
   </main>
 
   <footer class="muted">
-    By method: lanes = what each paper studied; colour = dominant model family; satellites = outside critiques kept by a relevance filter, with verbatim quotes.
-    LLM judgment: −2 strongly against … +2 strongly for; dot size = evidence strength, opacity = judge confidence.
+    Height = authors' answer (−2 clearly not … +2 clearly yes); dot size = how relevant the authors would say their work is; colour = dominant model family; satellites = outside critiques kept by a relevance filter, with verbatim quotes.
+    A model's own judgment of each paper's evidence is in the detail panel, collapsed.
     Data: <a href="data/papers.json">papers.json</a> · <a href="data/discussion.json">discussion.json</a> · <a href="data/questions.json">questions.json</a>.
   </footer>
 

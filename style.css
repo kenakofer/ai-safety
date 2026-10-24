@@ -64,8 +64,9 @@ a { color: var(--accent); }
 .dot { cursor: pointer; stroke: #fff; stroke-width: 1.5; }
 .dot:focus { outline: none; }
 .dot.selected, .dot:focus-visible { stroke: var(--fg); stroke-width: 2.5; }
-.dot-flag { fill: none; stroke: var(--warn); stroke-width: 1.5; stroke-dasharray: 2 2; pointer-events: none; }
-.dot-override { fill: none; stroke: var(--override); stroke-width: 2; pointer-events: none; }
+.dot.pending { stroke: var(--muted); stroke-dasharray: 2 2; }
+.dot-confirmed { fill: none; stroke: var(--fg); stroke-width: 2; pointer-events: none; }
+.axis-title { font-size: 11px; font-weight: 600; fill: var(--muted); }
 
 .edge { fill: none; stroke-width: 1.5; opacity: 0.45; pointer-events: none; }
 .edge.dim { opacity: 0.08; }
@@ -137,16 +138,17 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 
 /* ---------- Phase 4: lanes, satellites, matrix ---------- */
 
-#view-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 2px 0 8px; }
-#view-toggle button { border: 0; background: var(--card); padding: 5px 12px; font: inherit; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
-#view-toggle button + button { border-left: 1px solid var(--line); }
-#view-toggle button[aria-pressed="true"] { background: #eef2ff; color: var(--accent); font-weight: 600; }
-.banner { margin: 0 0 8px; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; color: var(--warn); background: var(--warn-bg); }
+.chart-note { margin: 0 0 8px; font-size: 0.85rem; color: var(--muted); }
 
-.lane-bg { fill: #f2f2ef; }
-.lane-bg.alt { fill: #f6f6f3; }
-.lane-label { font-size: 12px; font-weight: 600; fill: var(--muted); }
-.lane-label.muted-lane { font-style: italic; font-weight: 400; }
+.answer { background: #f6f6f3; border-radius: 8px; padding: 10px 12px; margin: 8px 0 4px; }
+.answer p { margin: 6px 0; }
+.answer-title { font-weight: 600; font-size: 0.9rem; margin-top: 0 !important; }
+.badge.answer-badge { background: #eef2ff; color: var(--accent); }
+.badge.rel-badge { background: #f0f0ee; color: var(--fg); font-weight: 500; }
+.badge.estimated { background: none; color: var(--muted); font-weight: 500; padding-left: 0; }
+.badge.confirmed { color: #fff; background: var(--fg); }
+.answer .framing { color: var(--warn); }
+.author-note { border-left: 3px solid var(--fg); padding-left: 8px; }
 
 .tether { stroke: #c9c9c6; stroke-width: 1; pointer-events: none; }
 .sat { cursor: pointer; }
