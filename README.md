@@ -96,7 +96,7 @@ Non-arXiv sources use a slug id such as `web:towards-monosemanticity`. If a pape
 
 ### Author corrections
 
-When an author says the estimate is wrong (via the "Correct this" issue link, email, or a public post), record it on the record and keep `author_view` as it was:
+When an author says the estimate is wrong (via the "Submit an issue!" link above the chart, email, or a public post), record it on the record and keep `author_view` as it was:
 
 ```json
 "author_response": {"stance": -1, "relevance": "central", "note": "their words or a short paraphrase", "by": "Author Name", "date": "2026-10-24", "url": "https://github.com/.../issues/12"}

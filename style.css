@@ -73,6 +73,8 @@ a { color: var(--accent); }
 #detail, #matrix { scroll-margin-top: calc(var(--stuck-h, 0px) + 8px); }
 
 #chart-wrap { position: relative; }
+#chart-head { display: flex; flex-wrap: wrap; gap: 2px 16px; margin: 4px 0 0; font-size: 11px; color: var(--muted); }
+#chart-head .chart-title { font-weight: 600; }
 #chart svg { display: block; width: 100%; height: auto; overflow: visible; }
 
 .axis text { fill: var(--muted); font-size: 11px; }
@@ -86,7 +88,6 @@ a { color: var(--accent); }
 .dot.selected, .dot:focus-visible { stroke: var(--fg); stroke-width: 2.5; }
 .dot.pending { stroke: var(--muted); stroke-dasharray: 2 2; }
 .dot-confirmed { fill: none; stroke: var(--fg); stroke-width: 2; pointer-events: none; }
-.axis-title { font-size: 11px; font-weight: 600; fill: var(--muted); }
 
 .edge { fill: none; stroke-width: 1.5; opacity: 0.45; pointer-events: none; }
 .edge.dim { opacity: 0.08; }
@@ -204,7 +205,6 @@ footer { margin-top: 20px; font-size: 0.82rem; }
   color: var(--llm);
 }
 #tooltip .llm { --llm: #5eead4; margin-top: 4px; }
-.llm-sample { display: inline-block; min-height: 0; padding: 0 0 0 16px; height: 45px; vertical-align: middle; }
 .loc { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
 .dt-note { display: block; font-weight: 400; white-space: normal; }
 #matrix .loc { display: block; white-space: normal; }

@@ -124,6 +124,7 @@ function selectQuestion(qid, paperId = null) {
   const q = QUESTIONS.find((x) => x.id === qid);
   document.getElementById("question-text").textContent = q.text;
   document.title = `${q.tab} · AI Safety Evidence Dashboard`; // as in q/<slug>/index.html
+  document.getElementById("issue-link").href = `${ISSUES_URL}?${new URLSearchParams({ title: `Correction or omission: ${q.tab}` })}`;
   updateURL();
   render();
 }
@@ -296,8 +297,6 @@ function renderChart(papers) {
     .attr("class", "band-label")
     .attr("x", narrow ? -8 : -40).attr("y", (d) => y(d.v)).attr("dy", "0.35em")
     .attr("text-anchor", "end").text((d) => d.t);
-  g.append("text").attr("class", "axis-title").attr("x", -margin.left).attr("y", -4)
-    .text("Researchers' answers over time");
 
   // Relation edges (only those whose target is in this question).
   const edges = [];
@@ -467,15 +466,8 @@ function renderLegend(papers) {
     <div class="group"><span class="group-title">Relevance (authors')</span>
       ${Object.entries(RELEVANCE).map(([k, r]) => `<span class="item">${square(r * 0.8, "var(--dot)")}${k}</span>`).join("")}
     </div>
-    <div class="group"><span class="group-title">Answer</span>
-      <span class="item">${square(5, "var(--dot)", 'stroke="var(--fg)" stroke-width="2"')}confirmed by an author</span>
-    </div>
     <div class="group"><span class="group-title">Outside critiques</span>
       ${Object.entries(EFFECTS).map(satItem).join("")}
-      <span class="item muted">weakening / supporting critiques sit above or below the paper, toward the answer they push for; lines join replies</span>
-    </div>
-    <div class="group"><span class="group-title">Text</span>
-      <span class="item"><span class="llm llm-sample"></span>written by a language model; quotes are the authors' or commenters' own words</span>
     </div>
     <div class="group"><span class="group-title">Relations</span>
       ${REL_TYPES.map((t) => `<span class="item">${line(t)}${t}</span>`).join("")}
@@ -616,9 +608,7 @@ function renderDetail(p) {
 // The authors' answer: an author's own correction if there is one, else the LLM estimate with its supporting quote.
 function answerBlock(p) {
   const v = p.author_view, r = p.author_response, a = authorAnswer(p);
-  const fix = `${ISSUES_URL}?${new URLSearchParams({ title: `Author correction: ${p.id} (${p.question_id})` })}`;
-  const invite = `<a href="${esc(fix)}" target="_blank" rel="noopener">${r ? "Another author?" : "Are you an author?"} Correct this</a>`;
-  if (!a) return `<div class="answer pending"><p class="muted">The authors' answer has not been estimated yet. ${invite}</p></div>`;
+  if (!a) return `<div class="answer pending"><p class="muted">The authors' answer has not been estimated yet.</p></div>`;
   const head = `<span class="badge answer-badge">${sign(a.stance)} · ${esc(ANSWER_LABELS[a.stance])}</span>
     <span class="badge rel-badge">${esc(a.relevance)} relevance</span>${a.confirmed ? `
     <span class="badge confirmed">✓ ${esc(r.by)}, ${esc(r.date)}</span>` : ""}`;
@@ -627,8 +617,7 @@ function answerBlock(p) {
     ${v.framing_note ? `<p class="framing"><strong>Framing:</strong> ${llm(v.framing_note)}</p>` : ""}` : "";
   const resp = r ? `<p class="author-note"><strong>${esc(r.by)}:</strong> ${esc(r.note)}${r.url ? ` <a href="${esc(r.url)}" target="_blank" rel="noopener">source</a>` : ""}</p>` : "";
   return `<div class="answer">
-    <div class="badges">${head}</div>${resp}${est}
-    <p class="loc">${invite}</p></div>`;
+    <div class="badges">${head}</div>${resp}${est}</div>`;
 }
 
 const sign = (v) => (v > 0 ? "+" : "") + v;
