@@ -313,7 +313,7 @@ function renderChart(papers) {
       `<strong>${esc(o.s.author)}</strong> · ${esc(o.s.platform)} · ${esc(EFFECTS[o.s.effect].label)}` +
       (o.s.pull ? ` · pulls toward ${o.s.pull > 0 ? "Yes" : "No"}` : "") +
       (o.s.reply_to ? ` · replying to ${esc(satellitesOf(o.d.p).find((t) => t.url === o.s.reply_to)?.author || "a critique")}` : "") + "<br>" +
-      `“${esc(trunc(o.s.quote, 200))}”<br><span class="tip-muted">${esc(o.s.summary)}</span>`, o.x, o.y))
+      `“${esc(trunc(o.s.quote, 200))}”<br><span class="tip-muted">${llm(o.s.summary)}</span>`, o.x, o.y))
     .on("mouseleave blur", () => (tip.hidden = true));
   sat.append("circle").attr("class", "sat-hit").attr("cx", (o) => o.x).attr("cy", (o) => o.y).attr("r", 7);
   sat.append("path").attr("class", (o) => `sat-mark ${o.s.effect}`)
@@ -443,6 +443,9 @@ function renderLegend(papers) {
       ${Object.entries(EFFECTS).map(satItem).join("")}
       <span class="item muted">weakening / supporting critiques sit above or below the paper, toward the answer they push for; lines join replies</span>
     </div>
+    <div class="group"><span class="group-title">Text</span>
+      <span class="item"><span class="llm llm-sample"></span>written by a language model; quotes are the authors' or commenters' own words</span>
+    </div>
     <div class="group"><span class="group-title">Relations</span>
       ${REL_TYPES.map((t) => `<span class="item">${line(t)}${t}</span>`).join("")}
     </div>`;
@@ -469,7 +472,7 @@ function renderMatrix(papers) {
     if (v === null) return `<td${cls}><span class="muted">used, not defined</span>${flag ? flagNote(flag) : ""}</td>`;
     return `<td${cls}><q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span>${flag ? flagNote(flag) : ""}</td>`;
   };
-  const flagNote = (f) => `<span class="mismatch-note">⚑ ${esc(f.text)}</span>`;
+  const flagNote = (f) => `<span class="mismatch-note"><span class="flag">⚑ Differs</span>${llm(f.text)}</span>`;
   el.innerHTML = `
     <h2>How each paper defines the terms</h2>
     <p class="muted">Quotes are the papers' own words (machine-checked against the source text). ⚑ marks a cell where a blinded reader found the paper's sense differs from the question's.</p>
@@ -479,7 +482,7 @@ function renderMatrix(papers) {
         <tr${p.id === state.selected ? ' class="selected"' : ""}>
           <th scope="row"><button class="rel-link" data-id="${esc(p.id)}">${esc(trunc(p.title, 70))}</button><span class="loc">${esc(p.first_version_date.slice(0, 4))}${isEssay(p) ? " · essay" : ""}</span></th>
           ${terms.map((t) => cell(p, t)).join("")}
-          <td>${esc(p.operationalization.measured)} <span class="loc">${esc(p.operationalization.unit)} · ${esc(p.operationalization.models_scope)}</span></td>
+          <td>${llm(p.operationalization.measured)} <span class="loc">${esc(p.operationalization.unit)} · ${esc(p.operationalization.models_scope)}</span></td>
         </tr>`).join("")}
       </tbody>
     </table></div>`;
@@ -525,12 +528,12 @@ function renderDetail(p) {
   const quote = (v) => `<q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span>`;
   const op = p.operationalization;
   const flags = (p.adversarial?.flags || []).map((f) =>
-    `<li><span class="flag-kind ${esc(f.kind)}">${esc(FLAG_LABELS[f.kind] || f.kind)}${f.term ? `: ${esc(f.term)}` : ""}</span> ${esc(f.text)}<br>${quote(f)}</li>`);
+    `<li><span class="flag-kind ${esc(f.kind)}">${esc(FLAG_LABELS[f.kind] || f.kind)}${f.term ? `: ${esc(f.term)}` : ""}</span> ${llm(f.text)}${quote(f)}</li>`);
   const sats = [...satellitesOf(p)].sort((a, b) => (b.score || 0) - (a.score || 0)).map((o) =>
     `<li><span class="sat-effect ${esc(o.effect)}">${esc(EFFECTS[o.effect].label)}</span>
       <a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.author)}</a>
       <span class="loc">${esc(o.platform)} · ${esc(o.date)}${o.score != null ? ` · ${o.score} karma` : ""}</span><br>
-      <q>${esc(o.quote)}</q><br><span class="muted">${esc(o.summary)}</span></li>`);
+      <q>${esc(o.quote)}</q><br><span class="muted">${llm(o.summary)}</span></li>`);
 
   el.innerHTML = `
     <h2><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h2>
@@ -539,15 +542,15 @@ function renderDetail(p) {
     <dl>
       ${row("Authors' claim", p.author_claim ? quote(p.author_claim)
         : p.author_claim === null ? `<span class="muted">The authors never state an implication for this question; any link to it is the dashboard's inference.</span>` : "")}
-      ${op ? row("What was measured", `${esc(op.measured)} <span class="loc">${esc(op.unit)} · ${esc(op.models_scope)} · ${esc(op.lane)}</span>`) : ""}
+      ${op ? row("What was measured", `${llm(op.measured)} <span class="loc">${esc(op.unit)} · ${esc(op.models_scope)} · ${esc(op.lane)}</span>`) : ""}
       ${op ? row("Definitions", list(Object.entries(op.terms || {}).map(([t, v]) => `<li><strong>${esc(t)}</strong>: ${v ? quote(v) : `<span class="muted">used, not defined</span>`}</li>`))) : ""}
       ${p.adversarial ? row(`Adversarial reading${p.adversarial.blinded ? " <span class=\"loc\">(blinded)</span>" : ""}`, list(flags)) : ""}
       ${row(`Outside critiques (${sats.length})`, sats.length ? `<ul class="sat-list">${sats.join("")}</ul>` : `<span class="muted">None kept yet.</span>`)}
-      ${row("Setup", esc(p.setup))}
-      ${row("Key result", esc(p.key_result))}
+      ${row("Setup", llm(p.setup))}
+      ${row("Key result", llm(p.key_result))}
       ${row("Models tested", p.models_tested.length ? `<div class="chips">${p.models_tested.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</div>` : "—")}
       ${row("Model families", esc(fams.join(", ")))}
-      ${row("Caveats", list(p.caveats.map((c) => `<li>${esc(c)}</li>`)))}
+      ${row("Caveats", p.caveats.length ? `<div class="llm">${list(p.caveats.map((c) => `<li>${esc(c)}</li>`))}</div>` : "—")}
       ${row("Code available", p.code_available ? "Yes" : "No / not found")}
       ${row("Relations", list(rels))}
       ${row("Cited by (in dataset)", list(incoming))}
@@ -558,10 +561,10 @@ function renderDetail(p) {
       <p class="muted">A model's own reading of which way this paper's evidence points, as opposed to what its authors would say. Kept for reference; it is a judgment call.</p>
       <div class="badges">${badges.join("")}</div>
       <dl>
-        ${row("Claim (paraphrase)", esc(p.claim))}
-        ${row("Stance rationale", esc(p.stance_rationale))}
+        ${row("Claim (paraphrase)", llm(p.claim))}
+        ${row("Stance rationale", llm(p.stance_rationale))}
         ${row("Scoring passes", p.stance_passes ? `A (claim) ${sign(p.stance_passes[0])} · B (evidence) ${sign(p.stance_passes[1])} → stance ${sign(p.stance)}` : "")}
-        ${p.blind_pass ? row("Blind pass", `${sign(p.blind_pass.stance)} · ${esc(p.blind_pass.evidence_strength)} · conf ${p.blind_pass.judge_confidence.toFixed(2)}${p.blind_pass.stance !== p.stance ? " <strong>(differs)</strong>" : ""}<br><span class="muted">${esc(p.blind_pass.rationale)}</span>`) : ""}
+        ${p.blind_pass ? row("Blind pass", `${sign(p.blind_pass.stance)} · ${esc(p.blind_pass.evidence_strength)} · conf ${p.blind_pass.judge_confidence.toFixed(2)}${p.blind_pass.stance !== p.stance ? " <strong>(differs)</strong>" : ""}<br><span class="muted">${llm(p.blind_pass.rationale)}</span>`) : ""}
         ${p.human_override ? row("Override note", esc(p.human_override.note || "")) : ""}
         ${row("Evidence strength", esc(p.evidence_strength))}
         ${row("Judge confidence", p.judge_confidence.toFixed(2))}
@@ -584,9 +587,9 @@ function answerBlock(p) {
   const head = `<span class="badge answer-badge">${sign(a.stance)} · ${esc(ANSWER_LABELS[a.stance])}</span>
     <span class="badge rel-badge">${esc(a.relevance)} relevance</span>
     <span class="badge ${a.confirmed ? "confirmed" : "estimated"}">${a.confirmed ? `✓ ${esc(r.by)}, ${esc(r.date)}` : "estimated by a language model"}</span>`;
-  const est = v ? `<p>${a.confirmed ? `<span class="muted">Earlier estimate: ${sign(v.stance)}, ${esc(v.relevance)}.</span> ` : ""}${esc(v.rationale)}</p>
+  const est = v ? `<p>${a.confirmed ? `<span class="muted">Earlier estimate: ${sign(v.stance)}, ${esc(v.relevance)}.</span> ` : ""}${llm(v.rationale)}</p>
     <p><q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span></p>
-    ${v.framing_note ? `<p class="framing"><strong>Framing:</strong> ${esc(v.framing_note)}</p>` : ""}` : "";
+    ${v.framing_note ? `<p class="framing"><strong>Framing:</strong> ${llm(v.framing_note)}</p>` : ""}` : "";
   const resp = r ? `<p class="author-note"><strong>${esc(r.by)}:</strong> ${esc(r.note)}${r.url ? ` <a href="${esc(r.url)}" target="_blank" rel="noopener">source</a>` : ""}</p>` : "";
   return `<div class="answer">
     <p class="answer-title">How the authors would answer</p>
@@ -596,6 +599,9 @@ function answerBlock(p) {
 
 const sign = (v) => (v > 0 ? "+" : "") + v;
 const trunc = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s);
+
+// Prose written by a language model (summaries, rationales, flags) gets an accent rule and the model's name; quotes do not.
+const llm = (s) => `<span class="llm">${esc(s)}</span>`;
 
 function esc(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));

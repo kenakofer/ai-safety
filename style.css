@@ -7,6 +7,8 @@
   --accent: #3a5bd9;
   --dot: #64748b;
   --sat: #3f3f46;
+  --llm: #6aa9b9;
+  --llm-name: "Opus 5.5";
   --warn: #b45309;
   --warn-bg: #fef3c7;
   --override: #6d28d9;
@@ -146,7 +148,7 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 .badge.rel-badge { background: #f0f0ee; color: var(--fg); font-weight: 500; }
 .badge.estimated { background: none; color: var(--muted); font-weight: 500; padding-left: 0; }
 .badge.confirmed { color: #fff; background: var(--fg); }
-.answer .framing { color: var(--warn); }
+.answer .framing strong { color: var(--warn); }
 .author-note { border-left: 3px solid var(--fg); padding-left: 8px; }
 
 .tether { stroke: #c9c9c6; stroke-width: 1; pointer-events: none; }
@@ -168,7 +170,19 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 #matrix tbody th { font-weight: 500; min-width: 160px; }
 #matrix tr.selected { background: #eef2ff; }
 #matrix td.mismatch { background: var(--warn-bg); }
-.mismatch-note { display: block; margin-top: 4px; color: var(--warn); font-weight: 500; }
+.mismatch-note { display: block; margin-top: 4px; }
+.mismatch-note .flag { color: var(--warn); font-weight: 600; }
+/* Prose written by a language model: an accent rule on the left, with the model's name running up beside it. */
+.llm { display: block; position: relative; border-left: 2px solid var(--llm); padding-left: 16px; min-height: 45px; margin: 3px 0; }
+.llm::before {
+  content: var(--llm-name);
+  position: absolute; left: 3px; top: 0;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font: 600 8px/1 system-ui, sans-serif; letter-spacing: 0.04em; white-space: nowrap;
+  color: var(--llm);
+}
+#tooltip .llm { --llm: #5eead4; margin-top: 4px; }
+.llm-sample { display: inline-block; min-height: 0; padding: 0 0 0 16px; height: 45px; vertical-align: middle; }
 .loc { color: var(--muted); font-size: 0.78rem; white-space: nowrap; }
 #matrix .loc { display: block; white-space: normal; }
 q { quotes: "“" "”"; }

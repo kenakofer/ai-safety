@@ -23,6 +23,8 @@ Papers and preprints are drawn as squares, essays and blog posts (not peer revie
 
 Every quote in the data is machine-checked against the cached source text (`tools/check_quotes.py`).
 
+Prose written by a language model (summaries, rationales, flags) is marked with a teal rule on its left and the model's name (`--llm-name` in `style.css`); quotes are unmarked.
+
 ## Running it
 
 There is no backend or build step. D3 v7 is loaded from jsDelivr. The page fetches `data/*.json`, so it must be served over HTTP; opening `index.html` from disk won't load the data:
