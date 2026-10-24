@@ -543,11 +543,17 @@ function renderDetail(p) {
     `<li><span class="flag-kind ${esc(f.kind)}">${esc(FLAG_LABELS[f.kind] || f.kind)}${f.term ? `: ${esc(f.term)}` : ""}</span> ${quote(f)}${llm(f.text)}</li>`);
   const lims = [...(p.limitations || [])].sort((a, b) => (a.kind === "scope" ? 0 : 1) - (b.kind === "scope" ? 0 : 1)).map((l) =>
     `<li><span class="flag-kind">${esc(LIMITATION_LABELS[l.kind] || l.kind)}</span> ${quote(l)}</li>`);
-  const sats = [...satellitesOf(p)].sort((a, b) => (b.score || 0) - (a.score || 0)).map((o) =>
-    `<li><span class="sat-effect ${esc(o.effect)}">${esc(EFFECTS[o.effect].label)}</span>
+  // Each critique in a box, its replies (reply_to) nested as boxes inside it; highest karma first.
+  const allSats = satellitesOf(p), urls = new Set(allSats.map((o) => o.url));
+  const byKarma = (a, b) => (b.score || 0) - (a.score || 0);
+  const satBox = (o) => {
+    const replies = allSats.filter((r) => r.reply_to === o.url).sort(byKarma);
+    return `<li class="sat-box"><span class="sat-effect ${esc(o.effect)}">${esc(EFFECTS[o.effect].label)}</span>
       <a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.author)}</a>${o.paper_author ? ` <span class="loc">(paper author)</span>` : ""}
       <span class="loc">${o.via ? `via ${esc(o.via)} · ` : ""}${esc(o.platform)} · ${esc(o.date)}${o.score != null ? ` · ${o.score} karma` : ""}</span><br>
-      <q>${esc(o.quote)}</q>${llm(o.summary)}</li>`);
+      <q>${esc(o.quote)}</q>${llm(o.summary)}${replies.length ? `<ul class="sat-boxes">${replies.map(satBox).join("")}</ul>` : ""}</li>`;
+  };
+  const sats = allSats.filter((o) => !urls.has(o.reply_to)).sort(byKarma).map(satBox);
 
   el.innerHTML = `
     <h2><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h2>
@@ -559,7 +565,7 @@ function renderDetail(p) {
       ${row("Method", op ? `${llm(op.measured)} <span class="loc">${esc(op.unit)} · ${esc(op.models_scope)} · ${esc(op.lane)}</span>` : llm(p.setup))}
       ${op ? row("Definitions", list(Object.entries(op.terms || {}).map(([t, v]) => `<li><span class="flag-kind">${esc(t)}</span> ${v ? quote(v) : `<span class="muted">used, not defined</span>`}</li>`), "tag-list")) : ""}
       ${lims.length ? row("Scope and limitations", list(lims, "tag-list")) : ""}
-      ${row(`Outside critiques (${sats.length})`, sats.length ? `<ul class="tag-list">${sats.join("")}</ul>` : `<span class="muted">None kept yet.</span>`)}
+      ${row(`Outside critiques (${allSats.length})`, sats.length ? `<ul class="sat-boxes">${sats.join("")}</ul>` : `<span class="muted">None kept yet.</span>`)}
       ${row("Models tested", p.models_tested.length ? `<div class="chips">${p.models_tested.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</div>` : "—")}
       ${row("Caveats", p.caveats.length ? `<div class="llm">${list(p.caveats.map((c) => `<li>${esc(c)}</li>`))}</div>` : "—")}
       ${row("Code available", p.code_available ? "Yes" : "No / not found")}

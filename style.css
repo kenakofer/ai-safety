@@ -57,7 +57,7 @@ a { color: var(--accent); }
 /* Thin fixed bar: the question, plus the paper title or matrix column names in view. */
 #stuck {
   position: fixed; top: 0; left: 0; right: 0; z-index: 20;
-  background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 1px 4px rgb(0 0 0 / 6%);
+  background: var(--bg); border-bottom: 1px solid var(--line);
   font-size: 0.82rem; line-height: 1.35;
   transform: translateY(-110%); visibility: hidden; transition: transform 0.15s, visibility 0.15s;
 }
@@ -185,6 +185,8 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 .matrix-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
 #matrix table { border-collapse: collapse; font-size: 0.82rem; min-width: 760px; width: 100%; }
 #matrix th, #matrix td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+#matrix th + th, #matrix th + td, #matrix td + td { border-left: 1px solid var(--line); }
+#matrix tbody tr:last-child > * { border-bottom: 0; }
 #matrix thead th { font-size: 0.85rem; background: #f6f6f3; }
 #matrix thead th .def { display: block; font-weight: 400; color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
 #matrix tbody th { font-weight: 500; min-width: 160px; }
@@ -212,6 +214,10 @@ q { quotes: "“" "”"; }
 .flag-kind, .sat-effect { font-size: 0.75rem; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: #f0f0ee; color: var(--fg); margin-right: 4px; }
 .flag-kind.definition_mismatch { background: var(--warn-bg); color: var(--warn); }
 #detail li + li { margin-top: 6px; }
+/* Outside critiques: one box per critique, replies as boxes inside it. */
+.sat-boxes { list-style: none; padding-left: 0 !important; margin: 0; }
+.sat-box { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.sat-box .sat-boxes { margin-top: 8px; }
 /* Lists whose items start with a label pill: no bullets, so the pills line up. */
 .tag-list { list-style: none; padding-left: 0 !important; }
 
