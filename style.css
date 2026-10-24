@@ -184,7 +184,7 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 #matrix h2 { font-size: 1.05rem; margin: 0 0 2px; }
 #matrix > p { margin: 0 0 8px; font-size: 0.85rem; }
 .matrix-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
-#matrix table { border-collapse: collapse; font-size: 0.82rem; min-width: 760px; width: 100%; }
+#matrix table { border-collapse: collapse; font-size: 0.82rem; min-width: 620px; width: 100%; }
 #matrix th, #matrix td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
 #matrix th + th, #matrix th + td, #matrix td + td { border-left: 1px solid var(--line); }
 #matrix tbody tr:last-child > * { border-bottom: 0; }

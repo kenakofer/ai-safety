@@ -500,12 +500,11 @@ function renderMatrix(papers) {
     <h2>How each paper defines the terms</h2>
     <p class="muted">Quotes are the papers' own words (machine-checked against the source text). ⚑ marks a cell where a blinded reader found the paper's sense differs from the question's.</p>
     <div class="matrix-scroll"><table>
-      <thead><tr><th>Paper</th>${terms.map((t) => `<th>${esc(t)}<span class="def">Question's sense: ${esc(q.terms[t])}</span></th>`).join("")}<th>What was measured</th></tr></thead>
+      <thead><tr><th>Paper</th>${terms.map((t) => `<th>${esc(t)}<span class="def">Question's sense: ${esc(q.terms[t])}</span></th>`).join("")}</tr></thead>
       <tbody>${rows.map((p) => `
         <tr${p.id === state.selected ? ' class="selected"' : ""}>
-          <th scope="row"><button class="rel-link" data-id="${esc(p.id)}">${esc(trunc(p.title, 70))}</button><span class="loc">${esc(p.first_version_date.slice(0, 4))}${isEssay(p) ? " · essay" : ""}</span></th>
+          <th scope="row"><button class="rel-link" data-id="${esc(p.id)}">${esc(trunc(p.title, 70))}</button><span class="loc">${esc(p.first_version_date.slice(0, 4))}${isEssay(p) ? " · essay" : ""}</span><span class="loc">${esc(p.operationalization.unit)} · ${esc(p.operationalization.models_scope)}</span></th>
           ${terms.map((t) => cell(p, t)).join("")}
-          <td>${llm(p.operationalization.measured)} <span class="loc">${esc(p.operationalization.unit)} · ${esc(p.operationalization.models_scope)}</span></td>
         </tr>`).join("")}
       </tbody>
     </table></div>`;
