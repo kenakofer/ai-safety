@@ -16,7 +16,8 @@ Around that, the dashboard shows:
 - **What each paper measured**, and its method lane (e.g. toy models, SAE / dictionary, neuron audits, theory).
 - **What the authors claim**, as a verbatim quote, or "none" when the paper never states what its result means for the question.
 - **How each paper defines the question's terms**, in a definitions matrix. Cells are highlighted where a blinded reader found the paper's sense differs from the question's.
-- **Adversarial flags** from a reader who saw only a de-branded copy (no title, authors, labs or abstract): definition mismatches, scope gaps, weak method links and framing overreach, each with a quote.
+- **Scope and limitations**, as verbatim quotes from the paper: what it studied, and the caveats it states itself. A language model picks the quotes but adds no words of its own.
+- **Caveats** (model-written) for weak points the paper doesn't concede. These come from a reader who saw only a de-branded copy (no title, authors, labs or abstract) and flagged definition mismatches, scope gaps, weak method links and framing overreach, each with a quote. The full flags sit in the collapsed LLM-judgment section.
 - **Outside critiques ("satellites")**, the small dots linked to a paper. These are LessWrong / Alignment Forum comments and posts kept only if they change how the result bears on the question. Each carries a verbatim quote and links to the source. Each is a chevron: a critique that weakens the result (or narrows what it covers) points back toward the Unclear line, a supporting one away from it, and a reframing one at what it answers. Weakening and supporting critiques sit above their paper if they pull the answer toward yes, below if toward no; the rest sit level with it. A reply to another kept critique hangs off that critique.
 
 Papers and preprints are drawn as squares, essays and blog posts (not peer reviewed) as circles. The older LLM judgment of each paper's *evidence* (the stance score) is kept in a collapsed section of the detail panel.
@@ -45,7 +46,7 @@ data/discussion.json            satellites: filtered outside discussion, keyed "
 data/discussion_sources.json    LessWrong/AF post ids per paper (input to fetch_lw.py)
 data/candidates.md              candidate list with "why relevant" notes
 data/blind_pass_*.json          independent blind re-scores (merged into papers.json as `blind_pass`)
-prompts/adversarial.md          blinded definitions / method reading -> operationalization + adversarial flags
+prompts/adversarial.md          blinded definitions / method reading -> operationalization, limitations, adversarial flags
 prompts/author_claim.md         pick the authors' own sentence on the question, or null
 prompts/author_view.md          estimate how the authors would answer (stance, relevance) -> author_view
 prompts/satellite_filter.md     keep/drop discussion comments -> satellites
@@ -82,6 +83,7 @@ Additions (disagreement layer, all optional):
 - `author_view`: `{stance: −2..2, relevance: central|partial|tangential, quote, location, basis: "estimated", rationale?, framing_note?}`. The LLM's estimate of the authors' answer; this is what the chart plots.
 - `author_response`: `{stance?, relevance?, note, by, date, url?}`. An author's own answer. Any field it sets replaces the estimate's; keep `author_view` untouched so the original estimate stays visible.
 - `operationalization`: `{terms: {<term>: {quote, location}}, measured, unit, models_scope: vision|LLM|toy|mixed, lane}`. Terms must be among the question's `terms`; `lane` among its `lanes`.
+- `limitations`: `[{kind: scope|stated, quote, location}]`. Quotes only: `scope` is what the paper says it studied, `stated` its own caveats.
 - `adversarial`: `{blinded: bool, flags: [{kind, quote, location, text?, term?}]}`. `kind` is one of `definition_mismatch` (needs `term`), `scope_gap`, `method_weak_link`, `framing_overreach`.
 
 `data/discussion.json` maps `"<paper id>|<question id>"` to a list of satellites: `{url, source: "lw:<post id>", platform: lesswrong|alignmentforum|openreview|x|hn, author, date, score, quote, effect: weakens|supports|reframes, pull: -1|0|1, summary?, reply_to?, paper_author?, via?}`. The quote is the commenter's words; `summary` is the filter's. `paper_author: true` marks a commenter who wrote the paper; `via` names who quoted them. `pull` is the direction the commenter moves the answer to the question as worded (1 = toward yes). `reply_to` is the `url` of another satellite under the same key that this one answers; `tools/link_replies.py` sets it from the cached threads.
@@ -117,7 +119,7 @@ The detail panel's LLM-judgment section then shows both values. Leave `stance` i
 3. **Skim it.** `python3 -I tools/skim.py .cache/txt/<id>.txt 1800` and `tools/models.sh .cache/txt/<id>.txt`
 4. **Base record.** Fill the spec fields (and the legacy stance, with `prompts/scoring.md`) and append to `data/papers.json`. Add any `relations` pointing to papers already in the dataset.
 5. **Author claim and view.** Run `prompts/author_claim.md` and set `author_claim`. Then run `prompts/author_view.md` and set `author_view`.
-6. **Blinded reading.** `python3 -I tools/redact.py <id> [extra names...]`. Then give a fresh reader (e.g. a Claude Code subagent) only `prompts/adversarial.md` and the redacted file, under a neutral name. Merge its `operationalization` and `adversarial` into the record. Redaction removes the obvious cues only; a well-known paper can still be recognised from its setup.
+6. **Blinded reading.** `python3 -I tools/redact.py <id> [extra names...]`. Then give a fresh reader (e.g. a Claude Code subagent) only `prompts/adversarial.md` and the redacted file, under a neutral name. Merge its `operationalization`, `limitations` and `adversarial` into the record. For each flag the paper does not itself concede, add a short bullet to `caveats` unless one already covers it. Redaction removes the obvious cues only; a well-known paper can still be recognised from its setup.
 7. **Discussion.** Find LessWrong/AF posts about the paper (web search `site:lesswrong.com "<title>"`; the GraphQL API ignores free-text search) and add them to `data/discussion_sources.json`. Run `python3 -I tools/fetch_lw.py <post id>`, then `prompts/satellite_filter.md` per thread. Add the kept satellites to `data/discussion.json`, then run `python3 -I tools/link_replies.py`.
 8. **Check it.**
    ```sh
@@ -139,7 +141,7 @@ The detail panel's LLM-judgment section then shows both values. Leave `stance` i
 
 ## Coverage and open items
 
-- **Rollout:** every record has an `author_view`. `superposition` also has the full disagreement layer (definitions, adversarial flags, satellites); `cot` and `alignment_faking` don't yet.
+- **Rollout:** every record has an `author_view`. `superposition` also has the full disagreement layer (definitions, limitations, adversarial flags, satellites); `cot` and `alignment_faking` don't yet.
 - **LessWrong / AF:** covered via `tools/fetch_lw.py`.
 - **OpenReview:** reviews are not fetched yet. Search works, but reading forum replies through the API needs an account token.
 - **X:** not searched directly. X threads crossposted to LessWrong are covered. Direct search would need the xAI (Grok) API, which is paid and needs a key.

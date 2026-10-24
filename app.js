@@ -21,6 +21,7 @@ const FLAG_LABELS = {
   method_weak_link: "Method weak link",
   framing_overreach: "Framing overreach",
 };
+const LIMITATION_LABELS = { scope: "scope", stated: "limitation" };
 const isEssay = (p) => p.source_type === "essay" || p.source_type === "blog";
 
 // Model family is derived from models_tested (shown in the detail panel). Order matters: first match wins per model.
@@ -97,6 +98,8 @@ Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSO
       clearTimeout(t);
       t = setTimeout(render, 150);
     });
+    // Capture so the matrix's own horizontal scroll also moves the stuck column headers.
+    document.addEventListener("scroll", () => requestAnimationFrame(updateStuck), { capture: true, passive: true });
   })
   .catch((e) => {
     document.getElementById("chart").innerHTML =
@@ -144,6 +147,46 @@ function render() {
   renderLegend(papers);
   renderMatrix(papers);
   renderDetail(state.selected ? recordFor(state.selected) : null);
+  updateStuck();
+}
+
+/* ---------- stuck header ---------- */
+
+// Once the question scrolls away, a thin fixed bar repeats it, plus one context row:
+// the selected paper's title while its details are on screen, or the matrix's column names.
+function updateStuck() {
+  const bar = document.getElementById("stuck");
+  const q = QUESTIONS.find((x) => x.id === state.q);
+  const qRow = bar.querySelector(".stuck-q"), paperRow = bar.querySelector(".stuck-paper"), mRow = bar.querySelector(".stuck-matrix");
+  qRow.textContent = q.text;
+  qRow.title = q.text;
+  const on = document.getElementById("question-text").getBoundingClientRect().bottom < 0;
+  const top = qRow.offsetHeight;
+
+  const head = document.querySelector("#detail h2"), detail = document.getElementById("detail");
+  const showPaper = on && head && head.getBoundingClientRect().bottom < top && detail.getBoundingClientRect().bottom > top + 40;
+  if (showPaper && paperRow.dataset.html !== head.innerHTML) {
+    paperRow.innerHTML = paperRow.dataset.html = head.innerHTML;
+    paperRow.querySelector("a")?.setAttribute("tabindex", "-1");
+  }
+  paperRow.hidden = !showPaper;
+
+  const table = document.querySelector("#matrix table");
+  const thead = table?.tHead;
+  const showM = on && thead && thead.getBoundingClientRect().bottom < top && table.getBoundingClientRect().bottom > top + 60;
+  if (showM) {
+    const scroll = table.parentElement, r = scroll.getBoundingClientRect(), cols = mRow.firstElementChild;
+    mRow.style.marginLeft = `${r.left + scroll.clientLeft}px`;
+    mRow.style.width = `${scroll.clientWidth}px`;
+    cols.innerHTML = [...thead.rows[0].cells].map((th) => {
+      const name = th.firstChild?.textContent ?? "", def = th.querySelector(".def")?.textContent ?? "";
+      return `<span style="width:${th.getBoundingClientRect().width}px"${def ? ` title="${esc(def)}"` : ""}>${esc(name)}</span>`;
+    }).join("");
+    cols.style.transform = `translateX(${-scroll.scrollLeft}px)`;
+  }
+  mRow.hidden = !showM;
+  bar.classList.toggle("on", on);
+  document.documentElement.style.setProperty("--stuck-h", `${on ? bar.offsetHeight : 0}px`);
 }
 
 function renderChart(papers) {
@@ -384,7 +427,7 @@ function chevron(x, y, s, a) {
 function answerText(p) {
   const a = authorAnswer(p);
   if (!a) return "not yet estimated";
-  return `${ANSWER_LABELS[a.stance]} (${sign(a.stance)}), ${a.relevance}${a.confirmed ? ", confirmed by an author" : ", estimated"}`;
+  return `${ANSWER_LABELS[a.stance]} (${sign(a.stance)}), ${a.relevance}${a.confirmed ? ", confirmed by an author" : ""}`;
 }
 
 function edgePath(a, b, lane) {
@@ -436,7 +479,6 @@ function renderLegend(papers) {
       ${Object.entries(RELEVANCE).map(([k, r]) => `<span class="item">${square(r * 0.8, "var(--dot)")}${k}</span>`).join("")}
     </div>
     <div class="group"><span class="group-title">Answer</span>
-      <span class="item">${square(5, "var(--dot)")}estimated</span>
       <span class="item">${square(5, "var(--dot)", 'stroke="var(--fg)" stroke-width="2"')}confirmed by an author</span>
     </div>
     <div class="group"><span class="group-title">Outside critiques</span>
@@ -523,12 +565,14 @@ function renderDetail(p) {
       `<li><button class="rel-link" data-id="${esc(o.id)}">${esc(o.title)}</button> ${esc(r.type)} this</li>`));
 
   const row = (k, v) => (v ? `<dt>${k}</dt><dd>${v}</dd>` : "");
-  const list = (xs) => (xs.length ? `<ul>${xs.join("")}</ul>` : "—");
+  const list = (xs, cls) => (xs.length ? `<ul${cls ? ` class="${cls}"` : ""}>${xs.join("")}</ul>` : "—");
 
   const quote = (v) => `<q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span>`;
   const op = p.operationalization;
   const flags = (p.adversarial?.flags || []).map((f) =>
     `<li><span class="flag-kind ${esc(f.kind)}">${esc(FLAG_LABELS[f.kind] || f.kind)}${f.term ? `: ${esc(f.term)}` : ""}</span> ${quote(f)}${llm(f.text)}</li>`);
+  const lims = [...(p.limitations || [])].sort((a, b) => (a.kind === "scope" ? 0 : 1) - (b.kind === "scope" ? 0 : 1)).map((l) =>
+    `<li><span class="flag-kind">${esc(LIMITATION_LABELS[l.kind] || l.kind)}</span> ${quote(l)}</li>`);
   const sats = [...satellitesOf(p)].sort((a, b) => (b.score || 0) - (a.score || 0)).map((o) =>
     `<li><span class="sat-effect ${esc(o.effect)}">${esc(EFFECTS[o.effect].label)}</span>
       <a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(o.author)}</a>${o.paper_author ? ` <span class="loc">(paper author)</span>` : ""}
@@ -543,9 +587,9 @@ function renderDetail(p) {
       ${row("Authors' claim", p.author_claim ? quote(p.author_claim)
         : p.author_claim === null ? `<span class="muted">The authors never state an implication for this question; any link to it is the dashboard's inference.</span>` : "")}
       ${op ? row("What was measured", `${llm(op.measured)} <span class="loc">${esc(op.unit)} · ${esc(op.models_scope)} · ${esc(op.lane)}</span>`) : ""}
-      ${op ? row("Definitions", list(Object.entries(op.terms || {}).map(([t, v]) => `<li><strong>${esc(t)}</strong>: ${v ? quote(v) : `<span class="muted">used, not defined</span>`}</li>`))) : ""}
-      ${p.adversarial ? row(`Adversarial reading${p.adversarial.blinded ? " <span class=\"loc\">(blinded)</span>" : ""}`, list(flags)) : ""}
-      ${row(`Outside critiques (${sats.length})`, sats.length ? `<ul class="sat-list">${sats.join("")}</ul>` : `<span class="muted">None kept yet.</span>`)}
+      ${op ? row("Definitions", list(Object.entries(op.terms || {}).map(([t, v]) => `<li><span class="flag-kind">${esc(t)}</span> ${v ? quote(v) : `<span class="muted">used, not defined</span>`}</li>`), "tag-list")) : ""}
+      ${lims.length ? row("Scope and limitations", list(lims, "tag-list")) : ""}
+      ${row(`Outside critiques (${sats.length})`, sats.length ? `<ul class="tag-list">${sats.join("")}</ul>` : `<span class="muted">None kept yet.</span>`)}
       ${row("Setup", llm(p.setup))}
       ${row("Key result", llm(p.key_result))}
       ${row("Models tested", p.models_tested.length ? `<div class="chips">${p.models_tested.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</div>` : "—")}
@@ -557,8 +601,9 @@ function renderDetail(p) {
       ${row("Link", `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a>`)}
     </dl>
     <details class="judgment">
-      <summary>LLM judgment of the evidence (stance score)</summary>
-      <p class="muted">A model's own reading of which way this paper's evidence points, as opposed to what its authors would say. Kept for reference; it is a judgment call.</p>
+      <summary>LLM judgment: weak points and stance score</summary>
+      <p class="muted">A model's own reading of the paper, as opposed to what its authors say or would say. Kept for reference; it is a judgment call.</p>
+      ${flags.length ? `<dl>${row(`Possible weak points${p.adversarial.blinded ? ` <span class="loc dt-note">read blind: no title, authors or abstract</span>` : ""}`, list(flags, "tag-list"))}</dl>` : ""}
       <div class="badges">${badges.join("")}</div>
       <dl>
         ${row("Claim (paraphrase)", llm(p.claim))}
@@ -585,8 +630,8 @@ function answerBlock(p) {
   const invite = `<a href="${esc(fix)}" target="_blank" rel="noopener">${r ? "Another author?" : "Are you an author?"} Correct this</a>`;
   if (!a) return `<div class="answer pending"><p class="muted">The authors' answer has not been estimated yet. ${invite}</p></div>`;
   const head = `<span class="badge answer-badge">${sign(a.stance)} · ${esc(ANSWER_LABELS[a.stance])}</span>
-    <span class="badge rel-badge">${esc(a.relevance)} relevance</span>
-    <span class="badge ${a.confirmed ? "confirmed" : "estimated"}">${a.confirmed ? `✓ ${esc(r.by)}, ${esc(r.date)}` : "estimated by a language model"}</span>`;
+    <span class="badge rel-badge">${esc(a.relevance)} relevance</span>${a.confirmed ? `
+    <span class="badge confirmed">✓ ${esc(r.by)}, ${esc(r.date)}</span>` : ""}`;
   const est = v ? `${a.confirmed ? `<p class="muted">Earlier estimate: ${sign(v.stance)}, ${esc(v.relevance)}.</p>` : ""}
     <p><q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span></p>${llm(v.rationale)}
     ${v.framing_note ? `<p class="framing"><strong>Framing:</strong> ${llm(v.framing_note)}</p>` : ""}` : "";

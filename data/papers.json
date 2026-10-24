@@ -1781,7 +1781,20 @@
     "judge_confidence": 0.75,
     "caveats": [
       "Toy models with synthetic sparse features",
-      "No direct LLM neuron measurement"
+      "No direct LLM neuron measurement",
+      "More features than neurons is built into the synthetic data, not measured"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "In this paper, we use toy models — small ReLU networks trained on synthetic data with sparse input features — to investigate how and when models represent more features than they have dimensions.",
+        "location": "Introduction"
+      },
+      {
+        "kind": "stated",
+        "quote": "Our toy models are simple ReLU networks, so it seems fair to say that neural networks exhibit these properties in at least some regimes, but it's very unclear what to generalize to real networks.",
+        "location": "Introduction / Key results from our toy models"
+      }
     ],
     "code_available": true,
     "relations": [],
@@ -1877,7 +1890,20 @@
     "judge_confidence": 0.7,
     "caveats": [
       "Toy model only",
-      "Assumes independent input features"
+      "Assumes independent input features",
+      "Capacity ignores rotation, so it can't say whether single neurons are polysemantic"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "To explore capacity allocation in a concrete model, we instantiate our theory for a one-layer model with quadratic activations (Section 3).",
+        "location": "1 Introduction"
+      },
+      {
+        "kind": "stated",
+        "quote": "There are other causes of polysemanticity, e.g. feature embedding vectors could be rotated relative to the neuron basis (Figure 1, left), but we do not study these in this work.",
+        "location": "1 Introduction"
+      }
     ],
     "code_available": false,
     "relations": [
@@ -1976,7 +2002,15 @@
     "judge_confidence": 0.55,
     "caveats": [
       "Preliminary toy-model results",
-      "No LLM evidence"
+      "No LLM evidence",
+      "Monosemanticity is scored on single-feature probes, not on typical inputs with several active features"
+    ],
+    "limitations": [
+      {
+        "kind": "stated",
+        "quote": "In this work we report preliminary attempts to engineer monosemanticity in toy models.",
+        "location": "1.1 Motivation"
+      }
     ],
     "code_available": false,
     "relations": [
@@ -2074,7 +2108,26 @@
     "caveats": [
       "Probes for chosen features only",
       "Pythia models up to 6.9B",
-      "Layer-dependent findings"
+      "Layer-dependent findings",
+      "More features than neurons is argued, not measured",
+      "No overall share of neurons in superposition is estimated"
+    ],
+    "limitations": [
+      {
+        "kind": "stated",
+        "quote": "While we explored models of varying size, they were all from the same model family and trained with the same data.",
+        "location": "6 Discussion"
+      },
+      {
+        "kind": "stated",
+        "quote": "Additionally, the largest model we studied is 6.9 billion parameters which is still more than order-of-magnitude off the frontier.",
+        "location": "6 Discussion"
+      },
+      {
+        "kind": "stated",
+        "quote": "However, models can, and almost certainly do, leverage superposition and composition across multiple layers, a subtlety which we blissfully ignore and leave for future work.",
+        "location": "5.4 Refining and Verifying Interpretations"
+      }
     ],
     "code_available": true,
     "relations": [
@@ -2178,7 +2231,15 @@
     "caveats": [
       "Small Pythia models",
       "Automated interpretability metrics",
-      "Indirect evidence for superposition"
+      "Indirect evidence for superposition",
+      "The interpretability gain also appears in dictionaries that are not overcomplete"
+    ],
+    "limitations": [
+      {
+        "kind": "stated",
+        "quote": "In some cases, there are so many dead features that the set of living features does not form an overcomplete basis.",
+        "location": "Appendix C.2"
+      }
     ],
     "code_available": true,
     "relations": [
@@ -2283,7 +2344,30 @@
       "One-layer transformer only",
       "SAE features may be partly artifacts of the method",
       "Interpretability partly automated",
-      "Authors found neurons can be polysemantic even without superposition"
+      "Authors found neurons can be polysemantic even without superposition",
+      "The feature count follows the chosen dictionary size"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "we take a one-layer transformer with a 512-neuron MLP layer",
+        "location": "Introduction"
+      },
+      {
+        "kind": "stated",
+        "quote": "Fortunately, others have studied multilayer transformers with sparse autoencoders and found interpretable linear features, which gives us more confidence that what we see in the one-layer model indeed generalizes",
+        "location": "The (one-layer) model we're studying"
+      },
+      {
+        "kind": "stated",
+        "quote": "Another issue is that we don't believe our features are completely monosemantic (some polysemanticity may be hiding in low activations), nor are all of them necessarily cleanly interpretable.",
+        "location": "How much of the model does our interpretation explain?"
+      },
+      {
+        "kind": "stated",
+        "quote": "we note that in some of these expanded theories of superposition, finding the \"correct number of features\" may not be well-posed.",
+        "location": "Discussion: Theories of Superposition"
+      }
     ],
     "code_available": false,
     "relations": [
@@ -2398,6 +2482,18 @@
       "Non-mutually-exclusive with superposition",
       "No LLM quantification"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "m ≥ n to make it clear that polysemanticity is not necessary in this setting",
+        "location": "2.1 Network and data"
+      },
+      {
+        "kind": "stated",
+        "quote": "While this choice made the toy model very simple to work with, this is not the most common reason why sparse representations occur in practice.",
+        "location": "2.5 Interference arbiters collisions between features"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -2501,7 +2597,20 @@
     "judge_confidence": 0.65,
     "caveats": [
       "GPT-2 scale",
-      "Universality measured by activation correlation"
+      "Universality measured by activation correlation",
+      "Neurons that aren't universal are never shown to be polysemantic"
+    ],
+    "limitations": [
+      {
+        "kind": "stated",
+        "quote": "Compared to frontier LLMs, we study small models of only hundreds of million parameters and tens of thousands of neurons due to the expense of training multiple large scale language models from different random initializations.",
+        "location": "Discussion and Conclusion / Limitations"
+      },
+      {
+        "kind": "stated",
+        "quote": "Moreover, our narrow focus on a subset of individual elements of the neuron basis potentially obscures important details and ignores the vast majority of overall network computation.",
+        "location": "Discussion and Conclusion / Limitations"
+      }
     ],
     "code_available": true,
     "relations": [
@@ -2596,7 +2705,20 @@
     "judge_confidence": 0.5,
     "caveats": [
       "Few example features",
-      "Addresses feature geometry, not the cause of polysemanticity"
+      "Addresses feature geometry, not the cause of polysemanticity",
+      "More features than dimensions is assumed from prior work; neurons are not analysed"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "This section focuses on hypotheses for how hidden states of language models can be decomposed into sums of functions of the input (features).",
+        "location": "3 Definitions"
+      },
+      {
+        "kind": "stated",
+        "quote": "Limitations: It is unclear why we did not find more interpretable multi-dimensional features.",
+        "location": "Discussion / Limitations"
+      }
     ],
     "code_available": true,
     "relations": [
@@ -2691,7 +2813,25 @@
     "judge_confidence": 0.6,
     "caveats": [
       "Pure theory",
-      "No experiments on trained LLMs"
+      "No experiments on trained LLMs",
+      "Its neurons are polysemantic from computing many outputs, not from compressing input features"
+    ],
+    "limitations": [
+      {
+        "kind": "stated",
+        "quote": "there are a number of ways in which the computational framework presented in this work is very likely to miss the full richness of computation happening in any given real neural network.",
+        "location": "6.3 Limitations and future work"
+      },
+      {
+        "kind": "stated",
+        "quote": "Firstly, this work studies computation on binary features. It is plausible that other kinds of features – in particular, discrete features which take on more than 2 distinct values, or continuous-valued features – occur commonly in real neural networks.",
+        "location": "6.3 Limitations and future work"
+      },
+      {
+        "kind": "stated",
+        "quote": "It is plausible that not all features are sparse in practice (given the present state of empirical evidence, it even appears open to us whether a significant fraction of features are sparse in practice)",
+        "location": "6.3 Limitations and future work"
+      }
     ],
     "code_available": false,
     "relations": [
@@ -2797,7 +2937,20 @@
     "judge_confidence": 0.6,
     "caveats": [
       "About SAE methodology",
-      "Single ground-truth task family"
+      "Single ground-truth task family",
+      "Absorption also appears with 4 features in 50 dimensions, i.e. without superposition"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "Our experiments on LLM SAEs focus on predicting the first-letter of a single token containing characters from the English alphabet (a-z, A-Z) and an optional leading space.",
+        "location": "4 Experimental setup"
+      },
+      {
+        "kind": "scope",
+        "quote": "Our initial setup consists of 4 true features, each randomly initialized into orthogonal directions with a 50 dimensional representation vector and unit norm.",
+        "location": "3 Toy models of feature absorption"
+      }
     ],
     "code_available": true,
     "relations": [
@@ -2896,7 +3049,20 @@
     "caveats": [
       "Undermines evidence rather than the hypothesis itself",
       "Pythia models only",
-      "Random networks may still superpose input-token features"
+      "Random networks may still superpose input-token features",
+      "Studies the residual stream, not neurons; superposition is proxied by SAE sparsity and reconstruction"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "we took the ability of SAEs to achieve low reconstruction error with high sparsity as a proxy for the degree to which the training data exhibits superposition.",
+        "location": "4.2 Do random NNs preserve or amplify superposition?"
+      },
+      {
+        "kind": "stated",
+        "quote": "We present toy models to demonstrate the plausibility of these hypotheses in Section 4 but defer conclusions as to the mechanism responsible to future work.",
+        "location": "1 Introduction"
+      }
     ],
     "code_available": true,
     "relations": [
@@ -3002,7 +3168,20 @@
     "judge_confidence": 0.55,
     "caveats": [
       "About SAE methodology",
-      "Small models"
+      "Small models",
+      "Novelty and composition rest on hand-set cosine thresholds and a meta-SAE that explains 55% of variance"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "In our experiments we set the cosine threshold to 0.7 for the GPT-2 SAEs, and 0.4 for the Gemmascope SAEs, based on our exploratory analysis.",
+        "location": "4.2 Novel and reconstruction latents"
+      },
+      {
+        "kind": "scope",
+        "quote": "After training, the meta-SAE explains 55.47% of the variance of the decoder directions of the SAE.",
+        "location": "5 Meta-SAEs"
+      }
     ],
     "code_available": false,
     "relations": [
@@ -3100,6 +3279,18 @@
       "Downstream utility only",
       "Probing task"
     ],
+    "limitations": [
+      {
+        "kind": "stated",
+        "quote": "We study the performance of SAE probes as a proxy for SAE utility. While we believe that probing performance is a more effective measurement than typical SAE evaluations like downstream cross-entropy loss or reconstruction error, it is ultimately still a proxy metric.",
+        "location": "7 Conclusion / Limitations"
+      },
+      {
+        "kind": "stated",
+        "quote": "it is possible that even a basis of “true” model representations would offer only a mild inductive bias advantage over traditional linear probing.",
+        "location": "7 Conclusion / Limitations"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -3182,7 +3373,26 @@
     "judge_confidence": 0.55,
     "caveats": [
       "Indirect: about scaling, not polysemanticity",
-      "Toy-model-derived diagnostics applied to LLMs"
+      "Toy-model-derived diagnostics applied to LLMs",
+      "Superposition is located in the unembedding, not in hidden neurons",
+      "The LLM test cannot fail: a trained LM head gives every token a non-zero row"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "As a naive mapping, we treat tokens as atomic features, with data dimension n equal to the vocabulary size.",
+        "location": "3.3 LLMs"
+      },
+      {
+        "kind": "stated",
+        "quote": "The toy model differs from LLMs in architecture, data, and loss.",
+        "location": "2 Methods"
+      },
+      {
+        "kind": "scope",
+        "quote": "Since we focus on representations rather than next-token prediction, we omit transformer layers.",
+        "location": "2 Methods"
+      }
     ],
     "code_available": true,
     "relations": [
@@ -3285,7 +3495,20 @@
     "caveats": [
       "Preprint under review",
       "Only polysemous-word contexts",
-      "Recent, not replicated"
+      "Recent, not replicated",
+      "Superposition is never measured; the remainder is assigned to it by elimination"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "PS (same word, different sense) measures overlap from shared word form alone",
+        "location": "3.1 Decomposition framework"
+      },
+      {
+        "kind": "stated",
+        "quote": "The 57% confound ratio applies only to polysemous inputs.",
+        "location": "6 Discussion / Limitations"
+      }
     ],
     "code_available": false,
     "relations": [
@@ -3390,7 +3613,30 @@
       "Essay, not peer reviewed; companion paper with LLM details not yet released",
       "Strongest evidence is from vision models; LLM audits are preliminary",
       "Uses a different definition of superposition from the question's count definition",
-      "Legibility percentages depend on thresholds for 'one thing'"
+      "Legibility percentages depend on thresholds for 'one thing'",
+      "Whether a neuron's jobs are 'related' is judged after the fact, with no inter-rater or held-out test"
+    ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We’re fairly confident the image models we studied don’t have superposition.",
+        "location": "Appendix: Does Scale Help or Hurt Superposition?"
+      },
+      {
+        "kind": "stated",
+        "quote": "We haven’t begun full audits of this scale yet, and hope to soon, but so far most things have been intuitively interpretable.",
+        "location": "Exploring Language Models"
+      },
+      {
+        "kind": "stated",
+        "quote": "We haven’t thoroughly shown that every case of heavy polysemanticity is recursive generalization, and that wasn’t our goal here.",
+        "location": "Is Recursive Generalization Hard to Vary?"
+      },
+      {
+        "kind": "stated",
+        "quote": "It overstates the evidence, because we haven’t audited everything.",
+        "location": "On the Title"
+      }
     ],
     "code_available": false,
     "relations": [

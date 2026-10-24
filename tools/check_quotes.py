@@ -74,6 +74,8 @@ def paper_quotes(p):
     for i, f in enumerate((p.get("adversarial") or {}).get("flags") or []):
         if f.get("quote"):
             yield f"flags[{i}]", f["quote"]
+    for i, l in enumerate(p.get("limitations") or []):
+        yield f"limitations[{i}]", l["quote"]
 
 
 bad, ok, skipped = [], 0, set()

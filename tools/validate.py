@@ -4,7 +4,7 @@ Usage: python3 -I tools/validate.py [data/papers.json] [data/discussion.json]
 Checks field types/ranges, that relation targets exist, that `stance` equals the
 mean of `stance_passes` rounded toward zero, and that `flagged` is true whenever
 the two passes differ by more than 1 point. Also checks the optional Phase 4 fields
-(author_claim, author_view, author_response, operationalization, adversarial, source_type) against data/questions.json,
+(author_claim, author_view, author_response, operationalization, adversarial, limitations, source_type) against data/questions.json,
 and that every satellite in discussion.json is well-formed and keyed to an existing record.
 Quote text itself is checked by tools/check_quotes.py. Exits non-zero on any error.
 """
@@ -20,6 +20,7 @@ REL_TYPES = {"replicates", "critiques", "extends"}
 SOURCE_TYPES = {"paper", "preprint", "essay", "blog"}
 SCOPES = {"vision", "LLM", "toy", "mixed"}
 FLAG_KINDS = {"definition_mismatch", "scope_gap", "method_weak_link", "framing_overreach"}
+LIMITATION_KINDS = {"scope", "stated"}
 PLATFORMS = {"lesswrong", "alignmentforum", "openreview", "x", "hn"}
 EFFECTS = {"weakens", "supports", "reframes"}
 
@@ -132,6 +133,14 @@ for p in papers:
                 err(p, f"adversarial.flags[{i}] needs quote and location; text is omitted or non-empty")
             if f.get("kind") == "definition_mismatch" and f.get("term") not in q.get("terms", {}):
                 err(p, f"adversarial.flags[{i}] definition_mismatch needs a question term")
+    lims = p.get("limitations")
+    if lims is not None:
+        if not isinstance(lims, list):
+            err(p, "limitations must be a list")
+        else:
+            for i, l in enumerate(lims):
+                if l.get("kind") not in LIMITATION_KINDS or not is_quote(l) or set(l) - {"kind", "quote", "location"}:
+                    err(p, f"limitations[{i}] needs kind (scope|stated), quote and location, and nothing else")
 
 sat_count = 0
 if os.path.exists(disc_path):

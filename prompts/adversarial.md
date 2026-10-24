@@ -1,6 +1,6 @@
 # Adversarial reading prompt (one paper, blinded)
 
-Use this to extract a paper's operationalization and adversarial flags. Fill in `{QUESTION}`, `{QUESTION_ID}`, `{TERMS}` (the question's `terms` from `data/questions.json`), `{LANES}` (its `lanes`) and `{REDACTED_PATH}` (from `tools/redact.py`).
+Use this to extract a paper's operationalization, its scope and limitations, and adversarial flags. Fill in `{QUESTION}`, `{QUESTION_ID}`, `{TERMS}` (the question's `terms` from `data/questions.json`), `{LANES}` (its `lanes`) and `{REDACTED_PATH}` (from `tools/redact.py`).
 The scorer must not open `data/papers.json`, `data/candidates.md`, `data/discussion.json`, the unredacted text or git history, and must not search the web.
 
 ---
@@ -28,6 +28,9 @@ Return one JSON object:
     "models_scope": "vision | LLM | toy | mixed",
     "lane": "one of {LANES}"
   },
+  "limitations": [
+    {"kind": "scope | stated", "quote": "verbatim passage", "location": "section / heading"}
+  ],
   "adversarial": {
     "blinded": true,
     "flags": [
@@ -45,4 +48,5 @@ Rules:
 - Include a term in `terms` only if the paper defines or clearly uses it. Use `null` if it uses the term without a definition you can quote. Omit it if the paper does not use it.
 - `definition_mismatch`: the paper's sense of a question term differs from the working definition above. `scope_gap`: the evidence covers a different population than the question (e.g. vision vs. LLM, toy vs. frontier, one model family). `method_weak_link`: a specific step between measurement and conclusion that could fail. `framing_overreach`: a conclusion stated more broadly than its results.
 - **Notes in your own words are optional, and the bar is high.** The reader sees the quote next to its label, so a note may only add what they could not get from them: a fact from elsewhere in the source, a number, a contrast, or what a symbol in the quote stands for. Never restate or set up the quote. One short sentence; omit the field otherwise.
+- `limitations`: 1–4 quotes, with no notes of your own. `scope` = the paper saying what it studied (models, sizes, setting, task). `stated` = the paper's own caveats, hedges and limitations. Prefer the sentences that bear most on the question; skip boilerplate.
 - 0–4 flags. Prefer one sharp flag to several vague ones. No flag for limitations the paper itself already states clearly, unless they bear directly on the question.
