@@ -163,7 +163,8 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 
 .answer { background: #f6f6f3; border-radius: 8px; padding: 10px 12px; margin: 8px 0 4px; }
 .answer p { margin: 6px 0; }
-.answer-title { font-weight: 600; font-size: 0.9rem; margin-top: 0 !important; }
+.answer .badges { margin-top: 0; }
+#detail .claim { margin: 0 0 4px; }
 .badge.answer-badge { background: #eef2ff; color: var(--accent); }
 .badge.rel-badge { background: #f0f0ee; color: var(--fg); font-weight: 500; }
 .badge.confirmed { color: #fff; background: var(--fg); }

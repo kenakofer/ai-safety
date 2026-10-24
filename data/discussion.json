@@ -130,7 +130,7 @@
       "quote": "I see it as doubling down on sparsity and a single decomposition, both of which I think may just not reflect the underlying data generating process.",
       "effect": "reframes",
       "pull": -1,
-      "summary": "Elsewhere in the thread he frames the work more narrowly, as SAE measurement error.",
+      "summary": "Elsewhere in the thread they frame the work more narrowly, as SAE measurement error.",
       "paper_author": true
     }
   ],
@@ -204,7 +204,7 @@
       "quote": "My best guess from all the results I've seen is that ablating small neuron activations quite substantially degrades model performance, so I don’t think we get to ignore weak activations completely. ... If you can’t simulate the neuron in a way that doesn’t degrade the model, you don’t really understand the neuron.",
       "effect": "weakens",
       "pull": 1,
-      "summary": "He asks for KL-based simulation scores before the ~90% figure is trusted."
+      "summary": "They ask for KL-based simulation scores before the ~90% figure is trusted."
     },
     {
       "url": "https://www.lesswrong.com/posts/Dkh7pXKjoNWkkxQDz/neural-networks-are-not-already-clean?commentId=BfgZxcqWyaWpPnPma",
@@ -255,7 +255,7 @@
       "quote": "In the paper, the MLP that is decomposed into features is the last sub-block in the network. ... Yet, the second view -- in which features are fundamentally directions in logit-update space -- seems closer to the way the autoencoder works mechanistically.",
       "effect": "reframes",
       "pull": -1,
-      "summary": "The decomposed MLP feeds the logits directly, so many 'features' may be logit-update directions rather than inputs packed into 512 neurons; he notes deeper-layer results suggest it isn't only this."
+      "summary": "The decomposed MLP feeds the logits directly, so many 'features' may be logit-update directions rather than inputs packed into 512 neurons; they note deeper-layer results suggest it isn't only this."
     },
     {
       "url": "https://www.lesswrong.com/posts/fKuugaxt2XLTkASkk/open-source-replication-and-commentary-on-anthropic-s",
@@ -279,7 +279,7 @@
       "quote": "However, a significant majority of features seem to be fairly dense in the neuron basis! ... But this seems like evidence that being dense in the neuron basis is the norm, not the exception.",
       "effect": "reframes",
       "pull": 0,
-      "summary": "About 92% of features; kurtosis still shows a privileged neuron basis, and he cannot rule out SAE noise."
+      "summary": "About 92% of features; kurtosis still shows a privileged neuron basis, and they cannot rule out SAE noise."
     }
   ]
 }

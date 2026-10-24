@@ -24,35 +24,6 @@ const FLAG_LABELS = {
 const LIMITATION_LABELS = { scope: "scope", stated: "limitation" };
 const isEssay = (p) => p.source_type === "essay" || p.source_type === "blog";
 
-// Model family is derived from models_tested (shown in the detail panel). Order matters: first match wins per model.
-const FAMILIES = [
-  { name: "Toy / theory", re: /toy|^$/i, color: "#a8a29e" },
-  { name: "Small research LMs", re: /pythia|gpt-?2\b|gpt-2|bert|one-layer|810m/i, color: "#78716c" },
-  { name: "Claude", re: /claude|anthropic/i, color: "#d97706" },
-  { name: "OpenAI", re: /gpt|\bo[134]\b|o-series/i, color: "#059669" },
-  { name: "Llama", re: /llama|hermes/i, color: "#2563eb" },
-  { name: "Qwen", re: /qwen|qwq/i, color: "#7c3aed" },
-  { name: "DeepSeek", re: /deepseek/i, color: "#0891b2" },
-  { name: "Google", re: /gemini|gemma/i, color: "#db2777" },
-  { name: "Mistral", re: /mistral|mixtral/i, color: "#ea580c" },
-  { name: "OLMo", re: /olmo/i, color: "#65a30d" },
-  { name: "Grok", re: /grok/i, color: "#334155" },
-  { name: "Vision models", re: /inception|convnext|resnet|alexnet|\bvit\b|dinov2|\bclip\b/i, color: "#0d9488" },
-  { name: "Other", re: /./, color: "#94a3b8" },
-];
-
-const familyOf = (model) => FAMILIES.find((f) => f.re.test(model.trim()));
-
-function paperFamilies(p) {
-  const models = p.models_tested.length ? p.models_tested : [""];
-  const counts = new Map();
-  for (const m of models) {
-    const f = familyOf(m);
-    counts.set(f, (counts.get(f) || 0) + 1);
-  }
-  return counts;
-}
-
 const effStance = (p) => (p.human_override && Number.isInteger(p.human_override.stance) ? p.human_override.stance : p.stance);
 // The authors' answer: their own correction if they gave one, else the LLM's estimate of it (null if not estimated yet).
 const authorAnswer = (p) => {
@@ -307,8 +278,8 @@ function renderChart(papers) {
     .attr("class", "band-label")
     .attr("x", narrow ? -8 : -40).attr("y", (d) => y(d.v)).attr("dy", "0.35em")
     .attr("text-anchor", "end").text((d) => d.t);
-  g.append("text").attr("class", "axis-title").attr("x", narrow ? -8 : -40).attr("y", -4)
-    .attr("text-anchor", "end").text("Authors' answer");
+  g.append("text").attr("class", "axis-title").attr("x", -margin.left).attr("y", -4)
+    .text("Researchers' answers over time");
 
   // Relation edges (only those whose target is in this question).
   const edges = [];
@@ -555,7 +526,6 @@ function renderDetail(p) {
     badges.push(`<span class="badge override">✎ Human override${p.human_override.stance !== undefined ? `: stance ${sign(p.human_override.stance)} (model said ${sign(p.stance)})` : ""}</span>`);
   }
 
-  const fams = [...paperFamilies(p).keys()].map((f) => f.name);
   const rels = (p.relations || []).map((r) => {
     const t = state.byId.get(r.target_id);
     return `<li>${esc(r.type)} → ${t ? `<button class="rel-link" data-id="${esc(t.id)}">${esc(t.title)}</button>` : esc(r.target_id)}</li>`;
@@ -584,21 +554,17 @@ function renderDetail(p) {
     <p class="meta">${esc(p.authors.join(", "))} · first version ${esc(p.first_version_date)} · <code>${esc(p.id)}</code>${isEssay(p) ? ` · <strong>${esc(p.source_type)}, not peer-reviewed</strong>` : ""}</p>
     ${answerBlock(p)}
     <dl>
-      ${row("Authors' claim", p.author_claim ? quote(p.author_claim)
-        : p.author_claim === null ? `<span class="muted">The authors never state an implication for this question; any link to it is the dashboard's inference.</span>` : "")}
-      ${op ? row("What was measured", `${llm(op.measured)} <span class="loc">${esc(op.unit)} · ${esc(op.models_scope)} · ${esc(op.lane)}</span>`) : ""}
+      ${row("Result", `${p.author_claim ? `<p class="claim">${quote(p.author_claim)}</p>` : ""}${llm(p.key_result)}${p.author_claim === null
+        ? `<span class="muted">The authors never state an implication for this question; any link to it is the dashboard's inference.</span>` : ""}`)}
+      ${row("Method", op ? `${llm(op.measured)} <span class="loc">${esc(op.unit)} · ${esc(op.models_scope)} · ${esc(op.lane)}</span>` : llm(p.setup))}
       ${op ? row("Definitions", list(Object.entries(op.terms || {}).map(([t, v]) => `<li><span class="flag-kind">${esc(t)}</span> ${v ? quote(v) : `<span class="muted">used, not defined</span>`}</li>`), "tag-list")) : ""}
       ${lims.length ? row("Scope and limitations", list(lims, "tag-list")) : ""}
       ${row(`Outside critiques (${sats.length})`, sats.length ? `<ul class="tag-list">${sats.join("")}</ul>` : `<span class="muted">None kept yet.</span>`)}
-      ${row("Setup", llm(p.setup))}
-      ${row("Key result", llm(p.key_result))}
       ${row("Models tested", p.models_tested.length ? `<div class="chips">${p.models_tested.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</div>` : "—")}
-      ${row("Model families", esc(fams.join(", ")))}
       ${row("Caveats", p.caveats.length ? `<div class="llm">${list(p.caveats.map((c) => `<li>${esc(c)}</li>`))}</div>` : "—")}
       ${row("Code available", p.code_available ? "Yes" : "No / not found")}
       ${row("Relations", list(rels))}
       ${row("Cited by (in dataset)", list(incoming))}
-      ${row("Link", `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)}</a>`)}
     </dl>
     <details class="judgment">
       <summary>LLM judgment: weak points and stance score</summary>
@@ -637,7 +603,6 @@ function answerBlock(p) {
     ${v.framing_note ? `<p class="framing"><strong>Framing:</strong> ${llm(v.framing_note)}</p>` : ""}` : "";
   const resp = r ? `<p class="author-note"><strong>${esc(r.by)}:</strong> ${esc(r.note)}${r.url ? ` <a href="${esc(r.url)}" target="_blank" rel="noopener">source</a>` : ""}</p>` : "";
   return `<div class="answer">
-    <p class="answer-title">How the authors would answer</p>
     <div class="badges">${head}</div>${resp}${est}
     <p class="loc">${invite}</p></div>`;
 }

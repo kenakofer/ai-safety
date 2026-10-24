@@ -145,7 +145,3 @@ The detail panel's LLM-judgment section then shows both values. Leave `stance` i
 - **LessWrong / AF:** covered via `tools/fetch_lw.py`.
 - **OpenReview:** reviews are not fetched yet. Search works, but reading forum replies through the API needs an account token.
 - **X:** not searched directly. X threads crossposted to LessWrong are covered. Direct search would need the xAI (Grok) API, which is paid and needs a key.
-
-## Model families
-
-`app.js` derives families from `models_tested` with regexes (`FAMILIES`) and lists them in the detail panel. Dots are not coloured by family for now. To add a family, add an entry to `FAMILIES` above `Other`.
