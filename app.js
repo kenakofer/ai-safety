@@ -9,12 +9,11 @@ const ANSWER_LABELS = { "-2": "clearly not", "-1": "probably not", "0": "unclear
 const RELEVANCE = { central: 10, partial: 7, tangential: 4.5 };
 const ISSUES_URL = "https://github.com/kenakofer/ai-safety-evidence-dashboard/issues/new";
 const REL_TYPES = ["replicates", "critiques", "extends"];
-// Satellite effect on how the paper bears on the question. "scope" is a hollow ring so identity is not colour-alone.
+// Satellite effect on how the paper bears on the question, drawn as a chevron (see satAngle).
 const EFFECTS = {
-  supports: { label: "supports", color: "#2a78d6" },
-  undermines: { label: "undermines", color: "#eb6834" },
-  reframes: { label: "reframes", color: "#1baf7a" },
-  scope: { label: "limits scope", color: null },
+  weakens: { label: "weakens", legend: "weakens or narrows: points to the Unclear line" },
+  supports: { label: "supports", legend: "supports: points away from it" },
+  reframes: { label: "reframes", legend: "reframes: points at what it answers" },
 };
 const FLAG_LABELS = {
   definition_mismatch: "Definition differs",
@@ -24,7 +23,7 @@ const FLAG_LABELS = {
 };
 const isEssay = (p) => p.source_type === "essay" || p.source_type === "blog";
 
-// Model family is derived from models_tested. Order matters: first match wins per model.
+// Model family is derived from models_tested (shown in the detail panel). Order matters: first match wins per model.
 const FAMILIES = [
   { name: "Toy / theory", re: /toy|^$/i, color: "#a8a29e" },
   { name: "Small research LMs", re: /pythia|gpt-?2\b|gpt-2|bert|one-layer|810m/i, color: "#78716c" },
@@ -51,14 +50,6 @@ function paperFamilies(p) {
     counts.set(f, (counts.get(f) || 0) + 1);
   }
   return counts;
-}
-
-// Colour = the family with the most tested models; ties go to the first-listed model's family.
-function primaryFamily(p) {
-  const counts = paperFamilies(p);
-  let best = null;
-  for (const [f, n] of counts) if (!best || n > counts.get(best)) best = f;
-  return best;
 }
 
 const effStance = (p) => (p.human_override && Number.isInteger(p.human_override.stance) ? p.human_override.stance : p.stance);
@@ -93,7 +84,6 @@ Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSO
     state.discussion = discussion;
     for (const p of papers) {
       p._date = parseDate(p.first_version_date);
-      p._family = primaryFamily(p);
       p._key = `${p.id}|${p.question_id}`;
       state.byId.set(p.id, p);
     }
@@ -150,26 +140,10 @@ function updateHash() {
 
 function render() {
   const papers = state.papers.filter((p) => p.question_id === state.q).sort((a, b) => a._date - b._date);
-  renderStats(papers);
   renderChart(papers);
   renderLegend(papers);
   renderMatrix(papers);
   renderDetail(state.selected ? recordFor(state.selected) : null);
-}
-
-function renderStats(papers) {
-  const answers = papers.map(authorAnswer);
-  const confirmed = answers.filter((a) => a?.confirmed).length;
-  const pending = answers.filter((a) => !a).length;
-  const sats = papers.flatMap(satellitesOf);
-  const mismatches = papers.flatMap((p) => p.adversarial?.flags || []).filter((f) => f.kind === "definition_mismatch").length;
-  const essays = papers.filter(isEssay).length;
-  const parts = [`${papers.length} papers`, `${confirmed} confirmed by an author`];
-  if (pending) parts.push(`${pending} not yet estimated`);
-  parts.push(`${sats.length} outside critiques kept`);
-  if (mismatches) parts.push(`${mismatches} definition mismatches`);
-  if (essays) parts.push(`${essays} not peer-reviewed`);
-  document.getElementById("question-stats").textContent = parts.join(" · ");
 }
 
 function renderChart(papers) {
@@ -192,23 +166,69 @@ function renderChart(papers) {
   const baseY = (p) => y(authorAnswer(p)?.stance ?? 0);
   const maxShift = (y(0) - y(0.5)) * 0.85;
 
-  // Place dots, nudging vertically within their band to avoid overlaps.
-  const placed = [];
-  for (const p of papers) {
-    const r = radius(p);
-    const cx = x(p._date);
-    const base = baseY(p);
-    let cy = base;
-    for (let k = 0; k < 12; k++) {
-      const off = (k % 2 ? 1 : -1) * Math.ceil(k / 2) * (r * 0.9);
-      if (Math.abs(off) > maxShift) break;
-      const cand = base + off;
-      if (!placed.some((o) => Math.hypot(o.cx - cx, o.cy - cand) < o.r + r + 1)) {
-        cy = cand;
-        break;
-      }
+  // Satellites: outside critiques. Ones that weaken or support sit in the direction they pull the paper's
+  // answer (above toward Yes, below toward No); the rest sit level with it. A reply continues outward from
+  // the critique it answers; chains never branch, only the paper does.
+  // Weakens / supports rise or sink by their pull; reframes stay level with what they answer.
+  const rise = (s) => (s.effect === "weakens" || s.effect === "supports" ? s.pull || 0 : 0);
+  const satR = (s) => (2.5 + Math.min(2, Math.log10((s.score || 0) + 1))) * rScale;
+  const satLayout = (p, r) => {
+    const d = { cx: 0, cy: 0, r };
+    const sats = satellitesOf(p);
+    const byUrl = new Map(sats.map((s) => [s.url, s]));
+    const kids = d3.group(sats.filter((s) => byUrl.has(s.reply_to)), (s) => s.reply_to);
+    const roots = sats.filter((s) => !byUrl.has(s.reply_to)).sort((a, b) => (b.score || 0) - (a.score || 0));
+    const out = [];
+    const lift = 30 * rScale, gap = 14 * rScale;
+    for (const [pull, list] of d3.group(roots, rise)) {
+      list.forEach((s, i) => {
+        let prev, side;
+        if (pull) {
+          // A row above (toward Yes) or below (toward No) the paper.
+          const off = (i - (list.length - 1) / 2) * gap;
+          prev = { x: d.cx + off, y: d.cy - pull * lift };
+          side = off < -1e-6 ? -1 : 1;
+        } else {
+          // Neutral critiques sit level with the paper, alternating right and left.
+          side = i % 2 ? -1 : 1;
+          prev = { x: d.cx + side * (d.r + gap * (1 + Math.floor(i / 2))), y: d.cy };
+        }
+        out.push({ s, ...prev, px: d.cx, py: d.cy, r: satR(s) });
+        // Replies (and replies to replies) follow in date order, stepping outward from the critique they answer.
+        const chain = [];
+        const visit = (t) => [...(kids.get(t.url) || [])].sort((u, v) => d3.ascending(u.date, v.date))
+          .forEach((c) => { chain.push(c); visit(c); });
+        visit(s);
+        for (const c of chain) {
+          const next = { x: prev.x + side * gap, y: prev.y - rise(c) * lift * 0.6 };
+          out.push({ s: c, ...next, px: prev.x, py: prev.y, r: satR(c) });
+          prev = next;
+        }
+      });
     }
-    placed.push({ p, cx, cy, r });
+    return out;
+  };
+
+  // Place papers, nudging each one vertically (a little off its true value) until neither it nor its
+  // critiques overlap anything placed already. Papers with the most critiques go first and stay put.
+  const footprint = (d) => [{ x: d.cx, y: d.cy, r: d.r * 1.2 }, ...d.sats.map((o) => ({ x: d.cx + o.x, y: d.cy + o.y, r: o.r * 1.3 }))];
+  const clash = (a, b) => d3.sum(a, (u) => d3.sum(b, (v) => Math.max(0, u.r + v.r + 4 - Math.hypot(u.x - v.x, u.y - v.y))));
+  const placed = [];
+  const order = [...papers].sort((p, q) => satellitesOf(q).length - satellitesOf(p).length || p._date - q._date);
+  for (const p of order) {
+    const r = radius(p);
+    const d = { p, cx: x(p._date), cy: baseY(p), r, sats: satLayout(p, r) };
+    const base = d.cy;
+    let best = { cost: Infinity, cy: base };
+    for (let k = 0; k <= 2 * Math.floor(maxShift / 3); k++) {
+      d.cy = base + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * 3;
+      const fp = footprint(d);
+      const cost = d3.sum(placed, (o) => clash(fp, footprint(o)));
+      if (cost < best.cost) best = { cost, cy: d.cy };
+      if (!cost) break;
+    }
+    d.cy = best.cy;
+    placed.push(d);
   }
   const pos = new Map(placed.map((d) => [d.p.id, d]));
 
@@ -277,18 +297,11 @@ function renderChart(papers) {
     tip.style.top = (margin.top + cy) * sx + 12 + "px";
   };
 
-  // Satellites: outside critiques orbiting their paper, highest-scored first, starting at 12 o'clock.
-  const satData = placed.flatMap((d) => {
-    const shown = [...satellitesOf(d.p)].sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 10);
-    const ring = d.r + 8;
-    return shown.map((s, i) => {
-      const a = -Math.PI / 2 + (2 * Math.PI * i) / Math.max(shown.length, 6);
-      return { s, d, x: d.cx + ring * Math.cos(a), y: d.cy + ring * Math.sin(a), r: (2.5 + Math.min(2, Math.log10((s.score || 0) + 1))) * rScale };
-    });
-  });
+  const satData = placed.flatMap((d) => d.sats.map((o) =>
+    ({ ...o, d, x: d.cx + o.x, y: d.cy + o.y, px: d.cx + o.px, py: d.cy + o.py })));
   const sg = g.append("g").attr("class", "satellites");
   sg.selectAll("line").data(satData).join("line").attr("class", "tether")
-    .attr("x1", (o) => o.d.cx).attr("y1", (o) => o.d.cy).attr("x2", (o) => o.x).attr("y2", (o) => o.y);
+    .attr("x1", (o) => o.px).attr("y1", (o) => o.py).attr("x2", (o) => o.x).attr("y2", (o) => o.y);
   const sat = sg.selectAll("g").data(satData).join("g").attr("class", "sat")
     .attr("tabindex", 0).attr("role", "link")
     .attr("aria-label", (o) => `${o.s.author} on ${o.s.platform}: ${EFFECTS[o.s.effect].label}`)
@@ -297,32 +310,31 @@ function renderChart(papers) {
       if (ev.key === "Enter") window.open(o.s.url, "_blank", "noopener");
     })
     .on("mouseenter focus", (_, o) => showTip(
-      `<strong>${esc(o.s.author)}</strong> · ${esc(o.s.platform)} · ${esc(EFFECTS[o.s.effect].label)}<br>` +
+      `<strong>${esc(o.s.author)}</strong> · ${esc(o.s.platform)} · ${esc(EFFECTS[o.s.effect].label)}` +
+      (o.s.pull ? ` · pulls toward ${o.s.pull > 0 ? "Yes" : "No"}` : "") +
+      (o.s.reply_to ? ` · replying to ${esc(satellitesOf(o.d.p).find((t) => t.url === o.s.reply_to)?.author || "a critique")}` : "") + "<br>" +
       `“${esc(trunc(o.s.quote, 200))}”<br><span class="tip-muted">${esc(o.s.summary)}</span>`, o.x, o.y))
     .on("mouseleave blur", () => (tip.hidden = true));
   sat.append("circle").attr("class", "sat-hit").attr("cx", (o) => o.x).attr("cy", (o) => o.y).attr("r", 7);
-  sat.append("circle").attr("class", (o) => `sat-dot ${o.s.effect}`)
-    .attr("cx", (o) => o.x).attr("cy", (o) => o.y).attr("r", (o) => o.r)
-    .attr("fill", (o) => EFFECTS[o.s.effect].color || "var(--bg)");
+  sat.append("path").attr("class", (o) => `sat-mark ${o.s.effect}`)
+    .attr("d", (o) => chevron(o.x, o.y, o.r * 1.3, satAngle(o)));
 
-  // Dots (squares for essays/blogs, which were not peer reviewed)
+  // Dots: squares for papers/preprints, circles for essays/blogs (not peer reviewed)
   const dots = g.append("g").selectAll("g").data(placed, (d) => d.p.id).join("g");
 
-  dots.filter((d) => authorAnswer(d.p)?.confirmed).append("circle")
-    .attr("class", "dot-confirmed").attr("cx", (d) => d.cx).attr("cy", (d) => d.cy).attr("r", (d) => d.r + 3.5);
-
-  const shape = (sel) => sel.each(function (d) {
-    const el = d3.select(this);
-    if (isEssay(d.p)) {
-      el.append("rect").attr("x", d.cx - d.r).attr("y", d.cy - d.r).attr("width", 2 * d.r).attr("height", 2 * d.r).attr("rx", 2);
-    } else {
-      el.append("circle").attr("cx", d.cx).attr("cy", d.cy).attr("r", d.r);
-    }
+  const shape = (pad) => function (d) {
+    const el = d3.select(this), r = d.r + pad;
+    return isEssay(d.p)
+      ? el.append("circle").attr("cx", d.cx).attr("cy", d.cy).attr("r", r)
+      : el.append("rect").attr("x", d.cx - r).attr("y", d.cy - r).attr("width", 2 * r).attr("height", 2 * r).attr("rx", 2);
+  };
+  dots.filter((d) => authorAnswer(d.p)?.confirmed).each(function (d) {
+    shape(3.5).call(this, d).attr("class", "dot-confirmed");
   });
-  const mark = dots.append("g").call(shape).selectAll("circle, rect");
+  const mark = dots.append("g").each(function (d) { shape(0).call(this, d); }).selectChildren();
   mark
     .attr("class", (d) => "dot" + (d.p.id === state.selected ? " selected" : "") + (authorAnswer(d.p) ? "" : " pending"))
-    .attr("fill", (d) => d.p._family.color)
+    .attr("fill", "var(--dot)")
     .attr("fill-opacity", (d) => (authorAnswer(d.p) ? 0.9 : 0.15))
     .attr("tabindex", 0)
     .attr("role", "button")
@@ -336,10 +348,12 @@ function renderChart(papers) {
     })
     .on("mouseenter focus", (_, d) => {
       highlightEdges(g, d.p.id);
-      const n = satellitesOf(d.p).length;
-      const lane = d.p.operationalization?.lane;
-      showTip(`<strong>${esc(d.p.title)}</strong><br>${esc(d.p.first_version_date)} · authors: ${esc(answerText(d.p))}<br>` +
-        `${lane ? esc(lane) + " · " : ""}${n} outside critique${n === 1 ? "" : "s"} · ${d.p._family.name}${isEssay(d.p) ? " · not peer-reviewed" : ""}`, d.cx, d.cy);
+      const a = d.p.authors;
+      const who = a.length > 3 ? `${a.slice(0, 3).join(", ")} et al.` : a.join(", ");
+      // Records without an author_claim yet fall back to the quote behind the answer estimate.
+      const q = d.p.author_claim?.quote ?? d.p.author_view?.quote;
+      showTip(`<strong>${esc(d.p.title)}</strong><br><span class="tip-muted">${esc(d.p.first_version_date)} · ${esc(who)}</span>` +
+        (q ? `<br>“${esc(trunc(q, 220))}”` : ""), d.cx, d.cy);
     })
     .on("mouseleave blur", () => {
       tip.hidden = true;
@@ -347,6 +361,24 @@ function renderChart(papers) {
     });
 
   highlightEdges(g, state.selected);
+}
+
+// Chevron direction: weakens points back toward the Unclear (0) line, supports points away from it,
+// reframes and scope point at what the critique answers (the paper, or the critique it replies to).
+// On a paper at 0, weakens points at the paper and supports away from it.
+function satAngle(o) {
+  const toParent = Math.atan2(o.py - o.y, o.px - o.x);
+  const stance = authorAnswer(o.d.p)?.stance ?? 0;
+  if (o.s.effect === "weakens") return stance ? Math.sign(stance) * Math.PI / 2 : toParent;
+  if (o.s.effect === "supports") return stance ? -Math.sign(stance) * Math.PI / 2 : toParent + Math.PI;
+  return toParent;
+}
+
+// A filled chevron (notched dart) pointing along angle a.
+function chevron(x, y, s, a) {
+  const [ux, uy, nx, ny] = [Math.cos(a), Math.sin(a), -Math.sin(a), Math.cos(a)];
+  const at = (f, g) => `${x + ux * s * f + nx * s * g},${y + uy * s * f + ny * s * g}`;
+  return `M${at(0.6, 0)}L${at(-0.6, 0.85)}L${at(-0.15, 0)}L${at(-0.6, -0.85)}Z`;
 }
 
 function answerText(p) {
@@ -381,36 +413,35 @@ function highlightEdges(g, id) {
 
 function renderLegend(papers) {
   const el = document.getElementById("legend");
-  const fams = new Map();
-  for (const p of papers) fams.set(p._family.name, p._family);
-  const famOrder = FAMILIES.filter((f) => fams.has(f.name));
-
   const dot = (r, fill, extra = "") =>
     `<svg width="${2 * r + 2}" height="${2 * r + 2}"><circle cx="${r + 1}" cy="${r + 1}" r="${r}" fill="${fill}" ${extra}/></svg>`;
-  const square = (r, fill) =>
-    `<svg width="${2 * r + 2}" height="${2 * r + 2}"><rect x="1" y="1" width="${2 * r}" height="${2 * r}" rx="2" fill="${fill}"/></svg>`;
+  const square = (r, fill, extra = "") =>
+    `<svg width="${2 * r + 2}" height="${2 * r + 2}"><rect x="1" y="1" width="${2 * r}" height="${2 * r}" rx="2" fill="${fill}" ${extra}/></svg>`;
   const line = (t) =>
     `<svg width="34" height="10"><path d="M2,5 L32,5" class="edge ${t}" style="opacity:1"/></svg>`;
-  const satItem = ([k, e]) =>
-    `<span class="item"><svg width="10" height="10"><circle cx="5" cy="5" r="3.5" class="sat-dot ${k}" fill="${e.color || "var(--bg)"}"/></svg>${e.label}</span>`;
+  // Each icon shows the chevron against what it points relative to: the Unclear line, or the paper.
+  const satIcon = {
+    weakens: `<line x1="1" y1="12" x2="15" y2="12" class="zero-line"/><path d="${chevron(8, 6, 5, Math.PI / 2)}" class="sat-mark"/>`,
+    supports: `<line x1="1" y1="12" x2="15" y2="12" class="zero-line"/><path d="${chevron(8, 6, 5, -Math.PI / 2)}" class="sat-mark"/>`,
+    reframes: `<rect x="1" y="4" width="6" height="6" rx="1" fill="var(--dot)"/><path d="${chevron(13, 7, 5, Math.PI)}" class="sat-mark"/>`,
+  };
+  const satItem = ([k, e]) => `<span class="item"><svg width="17" height="14">${satIcon[k]}</svg>${e.legend}</span>`;
 
   el.innerHTML = `
-    <div class="group"><span class="group-title">Model family</span>
-      ${famOrder.map((f) => `<span class="item">${dot(5, f.color)}${esc(f.name)}</span>`).join("")}
-    </div>
     <div class="group"><span class="group-title">Source</span>
-      <span class="item">${dot(5, "#9ca3af")}paper / preprint</span>
-      <span class="item">${square(5, "#9ca3af")}essay / blog (not peer-reviewed)</span>
+      <span class="item">${square(5, "var(--dot)")}paper / preprint</span>
+      <span class="item">${dot(5, "var(--dot)")}essay / blog (not peer-reviewed)</span>
     </div>
     <div class="group"><span class="group-title">Relevance (authors')</span>
-      ${Object.entries(RELEVANCE).map(([k, r]) => `<span class="item">${dot(r * 0.8, "#9ca3af")}${k}</span>`).join("")}
+      ${Object.entries(RELEVANCE).map(([k, r]) => `<span class="item">${square(r * 0.8, "var(--dot)")}${k}</span>`).join("")}
     </div>
     <div class="group"><span class="group-title">Answer</span>
-      <span class="item">${dot(5, "#9ca3af")}estimated</span>
-      <span class="item">${dot(5, "#9ca3af", 'stroke="var(--fg)" stroke-width="2"')}confirmed by an author</span>
+      <span class="item">${square(5, "var(--dot)")}estimated</span>
+      <span class="item">${square(5, "var(--dot)", 'stroke="var(--fg)" stroke-width="2"')}confirmed by an author</span>
     </div>
     <div class="group"><span class="group-title">Outside critiques</span>
       ${Object.entries(EFFECTS).map(satItem).join("")}
+      <span class="item muted">weakening / supporting critiques sit above or below the paper, toward the answer they push for; lines join replies</span>
     </div>
     <div class="group"><span class="group-title">Relations</span>
       ${REL_TYPES.map((t) => `<span class="item">${line(t)}${t}</span>`).join("")}
@@ -515,7 +546,7 @@ function renderDetail(p) {
       ${row("Setup", esc(p.setup))}
       ${row("Key result", esc(p.key_result))}
       ${row("Models tested", p.models_tested.length ? `<div class="chips">${p.models_tested.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</div>` : "—")}
-      ${row("Model families", esc(fams.join(", ")) + (fams.length > 1 ? ` (colour: ${esc(p._family.name)})` : ""))}
+      ${row("Model families", esc(fams.join(", ")))}
       ${row("Caveats", list(p.caveats.map((c) => `<li>${esc(c)}</li>`)))}
       ${row("Code available", p.code_available ? "Yes" : "No / not found")}
       ${row("Relations", list(rels))}

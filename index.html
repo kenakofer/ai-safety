@@ -10,7 +10,6 @@
 <body>
   <header>
     <h1>AI Safety Evidence Dashboard</h1>
-    <p class="sub">Where the evidence on three contested questions disagrees, and why. Each dot is a paper, placed at the answer its authors would give; the small dots around it are outside critiques that change how it bears on the question.</p>
   </header>
 
   <nav id="tabs" role="tablist"></nav>
@@ -18,8 +17,6 @@
   <main>
     <section id="question-box">
       <p id="question-text"></p>
-      <p id="question-stats" class="muted"></p>
-      <p class="chart-note">Height = how the paper's authors would answer the question, estimated by a language model from their own text. A dark ring means an author has confirmed or corrected it; their answer replaces the estimate.</p>
     </section>
 
     <section id="chart-wrap">
@@ -37,8 +34,6 @@
   </main>
 
   <footer class="muted">
-    Height = authors' answer (−2 clearly not … +2 clearly yes); dot size = how relevant the authors would say their work is; colour = dominant model family; satellites = outside critiques kept by a relevance filter, with verbatim quotes.
-    A model's own judgment of each paper's evidence is in the detail panel, collapsed.
     Data: <a href="data/papers.json">papers.json</a> · <a href="data/discussion.json">discussion.json</a> · <a href="data/questions.json">questions.json</a>.
   </footer>
 

@@ -21,7 +21,7 @@ SOURCE_TYPES = {"paper", "preprint", "essay", "blog"}
 SCOPES = {"vision", "LLM", "toy", "mixed"}
 FLAG_KINDS = {"definition_mismatch", "scope_gap", "method_weak_link", "framing_overreach"}
 PLATFORMS = {"lesswrong", "alignmentforum", "openreview", "x", "hn"}
-EFFECTS = {"undermines", "supports", "reframes", "scope"}
+EFFECTS = {"weakens", "supports", "reframes"}
 
 path = sys.argv[1] if len(sys.argv) > 1 else "data/papers.json"
 disc_path = sys.argv[2] if len(sys.argv) > 2 else "data/discussion.json"
@@ -149,6 +149,20 @@ if os.path.exists(disc_path):
                 errors.append(f"{where}: date must be YYYY-MM-DD")
             if s.get("score") is not None and not isinstance(s["score"], int):
                 errors.append(f"{where}: score must be int or null")
+            if s.get("pull") not in (-1, 0, 1):
+                errors.append(f"{where}: pull must be -1, 0 or 1")
+        urls = {s.get("url"): s for s in sats}
+        for i, s in enumerate(sats):
+            seen, cur = {s.get("url")}, s
+            while "reply_to" in cur:
+                cur = urls.get(cur["reply_to"])
+                if cur is None:
+                    errors.append(f"discussion {key}[{i}]: reply_to is not a satellite under this key")
+                    break
+                if cur.get("url") in seen:
+                    errors.append(f"discussion {key}[{i}]: reply_to forms a cycle")
+                    break
+                seen.add(cur.get("url"))
 
 counts = {q: sum(p.get("question_id") == q for p in papers) for q in sorted(QUESTIONS)}
 print(f"{len(papers)} papers {counts}; {sat_count} satellites; flagged: {[p['id'] for p in papers if p.get('flagged')]}")

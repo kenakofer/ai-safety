@@ -5,6 +5,8 @@
   --line: #e2e2e0;
   --card: #fff;
   --accent: #3a5bd9;
+  --dot: #64748b;
+  --sat: #3f3f46;
   --warn: #b45309;
   --warn-bg: #fef3c7;
   --override: #6d28d9;
@@ -23,8 +25,7 @@ body {
 }
 
 h1 { font-size: 1.4rem; margin: 20px 0 4px; }
-.sub, .muted { color: var(--muted); }
-.sub { margin: 0 0 12px; }
+.muted { color: var(--muted); }
 a { color: var(--accent); }
 
 #tabs {
@@ -50,7 +51,6 @@ a { color: var(--accent); }
 }
 
 #question-text { font-size: 1.05rem; font-weight: 500; margin: 14px 0 2px; }
-#question-stats { margin: 0 0 8px; font-size: 0.9rem; }
 
 #chart-wrap { position: relative; }
 #chart svg { display: block; width: 100%; height: auto; overflow: visible; }
@@ -138,7 +138,6 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 
 /* ---------- Phase 4: lanes, satellites, matrix ---------- */
 
-.chart-note { margin: 0 0 8px; font-size: 0.85rem; color: var(--muted); }
 
 .answer { background: #f6f6f3; border-radius: 8px; padding: 10px 12px; margin: 8px 0 4px; }
 .answer p { margin: 6px 0; }
@@ -154,9 +153,8 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 .sat { cursor: pointer; }
 .sat:focus { outline: none; }
 .sat-hit { fill: transparent; }
-.sat-dot { stroke: var(--bg); stroke-width: 1; }
-.sat-dot.scope { stroke: var(--muted); stroke-width: 1.5; }
-.sat:hover .sat-dot, .sat:focus-visible .sat-dot { stroke: var(--fg); stroke-width: 1.5; }
+.sat-mark { fill: var(--sat); stroke: var(--sat); stroke-width: 0.5; stroke-linejoin: round; }
+.sat:hover .sat-mark, .sat:focus-visible .sat-mark { fill: var(--fg); stroke: var(--fg); stroke-width: 1.5; }
 .tip-muted { color: #d4d4d8; }
 
 #matrix { margin: 0 0 16px; }
@@ -177,10 +175,6 @@ q { quotes: "“" "”"; }
 
 .flag-kind, .sat-effect { font-size: 0.75rem; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: #f0f0ee; color: var(--fg); margin-right: 4px; }
 .flag-kind.definition_mismatch { background: var(--warn-bg); color: var(--warn); }
-.sat-effect.supports { box-shadow: inset 3px 0 0 #2a78d6; }
-.sat-effect.undermines { box-shadow: inset 3px 0 0 #eb6834; }
-.sat-effect.reframes { box-shadow: inset 3px 0 0 #1baf7a; }
-.sat-effect.scope { box-shadow: inset 3px 0 0 var(--muted); }
 #detail li + li { margin-top: 6px; }
 .sat-list { list-style: none; padding-left: 0 !important; }
 

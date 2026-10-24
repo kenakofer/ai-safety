@@ -17,9 +17,9 @@ Around that, the dashboard shows:
 - **What the authors claim**, as a verbatim quote, or "none" when the paper never states what its result means for the question.
 - **How each paper defines the question's terms**, in a definitions matrix. Cells are highlighted where a blinded reader found the paper's sense differs from the question's.
 - **Adversarial flags** from a reader who saw only a de-branded copy (no title, authors, labs or abstract): definition mismatches, scope gaps, weak method links and framing overreach, each with a quote.
-- **Outside critiques ("satellites")**, the small dots orbiting a paper. These are LessWrong / Alignment Forum comments and posts kept only if they change how the result bears on the question. Each carries a verbatim quote and links to the source.
+- **Outside critiques ("satellites")**, the small dots linked to a paper. These are LessWrong / Alignment Forum comments and posts kept only if they change how the result bears on the question. Each carries a verbatim quote and links to the source. Each is a chevron: a critique that weakens the result (or narrows what it covers) points back toward the Unclear line, a supporting one away from it, and a reframing one at what it answers. Weakening and supporting critiques sit above their paper if they pull the answer toward yes, below if toward no; the rest sit level with it. A reply to another kept critique hangs off that critique.
 
-Essays and blog posts (not peer reviewed) are drawn as squares. The older LLM judgment of each paper's *evidence* (the stance score) is kept in a collapsed section of the detail panel.
+Papers and preprints are drawn as squares, essays and blog posts (not peer reviewed) as circles. The older LLM judgment of each paper's *evidence* (the stance score) is kept in a collapsed section of the detail panel.
 
 Every quote in the data is machine-checked against the cached source text (`tools/check_quotes.py`).
 
@@ -52,6 +52,7 @@ tools/fetch_papers.sh           download arXiv PDFs and convert them to .cache/t
 tools/html2txt.py               HTML -> text for blog posts / non-arXiv pages
 tools/redact.py                 de-branded copy for the adversarial pass -> .cache/redacted/
 tools/fetch_lw.py               LessWrong GraphQL: post + all comments -> .cache/discussion/lw_<id>.json
+tools/link_replies.py           set reply_to on satellites that answer another kept satellite
 tools/skim.py, tools/models.sh  print key sections / model-name mentions of a paper
 tools/validate.py               schema + scoring-rule checks (run before committing)
 tools/check_quotes.py           every quote must appear verbatim in its cached source
@@ -81,7 +82,7 @@ Additions (disagreement layer, all optional):
 - `operationalization`: `{terms: {<term>: {quote, location}}, measured, unit, models_scope: vision|LLM|toy|mixed, lane}`. Terms must be among the question's `terms`; `lane` among its `lanes`.
 - `adversarial`: `{blinded: bool, flags: [{kind, text, quote, location, term?}]}`. `kind` is one of `definition_mismatch` (needs `term`), `scope_gap`, `method_weak_link`, `framing_overreach`.
 
-`data/discussion.json` maps `"<paper id>|<question id>"` to a list of satellites: `{url, source: "lw:<post id>", platform: lesswrong|alignmentforum|openreview|x|hn, author, date, score, quote, effect: undermines|supports|reframes|scope, summary}`. The quote is the commenter's words; `summary` is the filter's.
+`data/discussion.json` maps `"<paper id>|<question id>"` to a list of satellites: `{url, source: "lw:<post id>", platform: lesswrong|alignmentforum|openreview|x|hn, author, date, score, quote, effect: weakens|supports|reframes, pull: -1|0|1, summary, reply_to?}`. The quote is the commenter's words; `summary` is the filter's. `pull` is the direction the commenter moves the answer to the question as worded (1 = toward yes). `reply_to` is the `url` of another satellite under the same key that this one answers; `tools/link_replies.py` sets it from the cached threads.
 
 Non-arXiv sources use a slug id such as `web:towards-monosemanticity`. If a paper bears on two questions, add one record per question with the same `id`.
 
@@ -115,7 +116,7 @@ The detail panel's LLM-judgment section then shows both values. Leave `stance` i
 4. **Base record.** Fill the spec fields (and the legacy stance, with `prompts/scoring.md`) and append to `data/papers.json`. Add any `relations` pointing to papers already in the dataset.
 5. **Author claim and view.** Run `prompts/author_claim.md` and set `author_claim`. Then run `prompts/author_view.md` and set `author_view`.
 6. **Blinded reading.** `python3 -I tools/redact.py <id> [extra names...]`. Then give a fresh reader (e.g. a Claude Code subagent) only `prompts/adversarial.md` and the redacted file, under a neutral name. Merge its `operationalization` and `adversarial` into the record. Redaction removes the obvious cues only; a well-known paper can still be recognised from its setup.
-7. **Discussion.** Find LessWrong/AF posts about the paper (web search `site:lesswrong.com "<title>"`; the GraphQL API ignores free-text search) and add them to `data/discussion_sources.json`. Run `python3 -I tools/fetch_lw.py <post id>`, then `prompts/satellite_filter.md` per thread. Add the kept satellites to `data/discussion.json`.
+7. **Discussion.** Find LessWrong/AF posts about the paper (web search `site:lesswrong.com "<title>"`; the GraphQL API ignores free-text search) and add them to `data/discussion_sources.json`. Run `python3 -I tools/fetch_lw.py <post id>`, then `prompts/satellite_filter.md` per thread. Add the kept satellites to `data/discussion.json`, then run `python3 -I tools/link_replies.py`.
 8. **Check it.**
    ```sh
    python3 -I tools/validate.py
@@ -141,6 +142,6 @@ The detail panel's LLM-judgment section then shows both values. Leave `stance` i
 - **OpenReview:** reviews are not fetched yet. Search works, but reading forum replies through the API needs an account token.
 - **X:** not searched directly. X threads crossposted to LessWrong are covered. Direct search would need the xAI (Grok) API, which is paid and needs a key.
 
-## Model-family colours
+## Model families
 
-`app.js` derives families from `models_tested` with regexes (`FAMILIES`). A paper's colour is the family with the most tested models; ties go to the first-listed model's family. To add a family, add an entry to `FAMILIES` above `Other`.
+`app.js` derives families from `models_tested` with regexes (`FAMILIES`) and lists them in the detail panel. Dots are not coloured by family for now. To add a family, add an entry to `FAMILIES` above `Other`.
