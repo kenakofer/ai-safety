@@ -94,8 +94,11 @@ for p in papers:
     if av is not None:
         if av.get("stance") not in (-2, -1, 0, 1, 2) or av.get("relevance") not in RELEVANCE:
             err(p, "author_view needs stance in -2..2 and relevance in " + "|".join(RELEVANCE))
-        if not is_quote(av) or not av.get("rationale") or av.get("basis") != "estimated":
-            err(p, "author_view needs quote, location, rationale and basis 'estimated'")
+        if not is_quote(av) or av.get("basis") != "estimated":
+            err(p, "author_view needs quote, location and basis 'estimated'")
+        for f in ("rationale", "framing_note"):
+            if av.get(f) is not None and (not isinstance(av[f], str) or not av[f].strip()):
+                err(p, f"author_view.{f} must be omitted or non-empty")
     ar = p.get("author_response")
     if ar is not None:
         if "stance" in ar and ar["stance"] not in (-2, -1, 0, 1, 2):
@@ -125,8 +128,8 @@ for p in papers:
         for i, f in enumerate(adv.get("flags", [])):
             if f.get("kind") not in FLAG_KINDS:
                 err(p, f"adversarial.flags[{i}] bad kind {f.get('kind')}")
-            if not isinstance(f.get("text"), str) or not is_quote(f):
-                err(p, f"adversarial.flags[{i}] needs text, quote and location")
+            if not is_quote(f) or ("text" in f and (not isinstance(f["text"], str) or not f["text"].strip())):
+                err(p, f"adversarial.flags[{i}] needs quote and location; text is omitted or non-empty")
             if f.get("kind") == "definition_mismatch" and f.get("term") not in q.get("terms", {}):
                 err(p, f"adversarial.flags[{i}] definition_mismatch needs a question term")
 
@@ -138,9 +141,14 @@ if os.path.exists(disc_path):
         for i, s in enumerate(sats):
             sat_count += 1
             where = f"discussion {key}[{i}]"
-            for f in ("url", "author", "quote", "summary", "source"):
+            for f in ("url", "author", "quote", "source"):
                 if not isinstance(s.get(f), str) or not s[f].strip():
                     errors.append(f"{where}: missing {f}")
+            for f in ("summary", "via"):
+                if f in s and (not isinstance(s[f], str) or not s[f].strip()):
+                    errors.append(f"{where}: {f} must be omitted or non-empty")
+            if "paper_author" in s and s["paper_author"] is not True:
+                errors.append(f"{where}: paper_author must be true or omitted")
             if s.get("platform") not in PLATFORMS:
                 errors.append(f"{where}: bad platform {s.get('platform')}")
             if s.get("effect") not in EFFECTS:

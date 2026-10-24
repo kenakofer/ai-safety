@@ -27,11 +27,13 @@ Return a JSON list (may be empty):
   "author": "", "date": "YYYY-MM-DD", "score": 0,
   "quote": "verbatim excerpt (1-3 sentences) carrying the point",
   "effect": "weakens | supports | reframes", "pull": 0,
-  "summary": "one sentence: how this changes the result's bearing on the question"}]
+  "summary": "optional, see below", "paper_author": true, "via": "optional"}]
 ```
 
 `effect`, relative to reading the paper as evidence on the question: `weakens` = weakens it, or narrows whom or what it applies to (a methodological objection, a failed replication, a scope limit); `supports` = strengthens it; `reframes` = changes what it is evidence *of* (often definitional).
 
 `pull`: which way the commenter moves the answer to the question *as worded*, not to the paper's own claim: `1` = toward yes, `-1` = toward no, `0` = neither or unclear. A critique of a paper that answers yes usually pulls toward no, and vice versa; a commenter can also say the paper did not go far enough. Pull is about the question, so `weakens` on a paper that answers no is usually `pull: 1`.
+
+**Notes in your own words are optional, and the bar is high.** The reader sees the quote next to its label, so a note may only add what they could not get from them: a fact from elsewhere in the source, a number, a contrast, or what a symbol in the quote stands for. Never restate or set up the quote. One short sentence; omit the field otherwise. The effect and pull are shown as labels. Set `paper_author: true` (else omit) when the commenter is an author of the paper, and `via` to who quoted them when the comment quotes someone else.
 
 Rules: the quote is copied **exactly** from that comment's `text` (use `...` to skip words). Use the author's own words in `quote`, and your words only in `summary`. If a comment crossposts someone else's text (e.g. an X thread), the `author` is the original writer only if the comment says so explicitly.

@@ -33,7 +33,7 @@ Return one JSON object:
     "flags": [
       {"kind": "definition_mismatch | scope_gap | method_weak_link | framing_overreach",
        "term": "<question term, only for definition_mismatch>",
-       "text": "one or two sentences: what diverges from the question and why it matters for reading this result as evidence on it",
+       "text": "optional: one short sentence on what diverges, only if the kind and quote don't show it",
        "quote": "verbatim passage the flag rests on", "location": "section / heading"}
     ]
   }
@@ -44,4 +44,5 @@ Rules:
 - Every `quote` is copied **exactly** from the text: no paraphrase, no fixing typos. Use `...` to skip words inside a quote. Never quote a passage containing `[AUTHOR]`, `[LAB]` or `[... REMOVED]`.
 - Include a term in `terms` only if the paper defines or clearly uses it. Use `null` if it uses the term without a definition you can quote. Omit it if the paper does not use it.
 - `definition_mismatch`: the paper's sense of a question term differs from the working definition above. `scope_gap`: the evidence covers a different population than the question (e.g. vision vs. LLM, toy vs. frontier, one model family). `method_weak_link`: a specific step between measurement and conclusion that could fail. `framing_overreach`: a conclusion stated more broadly than its results.
+- **Notes in your own words are optional, and the bar is high.** The reader sees the quote next to its label, so a note may only add what they could not get from them: a fact from elsewhere in the source, a number, a contrast, or what a symbol in the quote stands for. Never restate or set up the quote. One short sentence; omit the field otherwise.
 - 0–4 flags. Prefer one sharp flag to several vague ones. No flag for limitations the paper itself already states clearly, unless they bear directly on the question.

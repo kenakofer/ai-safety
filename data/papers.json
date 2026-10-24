@@ -1823,19 +1823,18 @@
         {
           "kind": "definition_mismatch",
           "term": "polysemanticity",
-          "text": "In the toy experiments a neuron counts as polysemantic if its weights store more than one synthetic feature, judged from weight plots; this is storage-based and tied to superposition by construction, not the working sense of a neuron responding to multiple unrelated concepts in real inputs.",
+          "text": "Counted from weights that store synthetic features, not from responses to real inputs.",
           "quote": "color neurons as being monosemantic or polysemantic depending on whether they store more than one feature.",
           "location": "Superposition and polysemantic neurons (ReLU hidden layer models)"
         },
         {
           "kind": "method_weak_link",
-          "text": "The link from toy models to real-network polysemanticity is a qualitative consistency check against known observations; it shows superposition can produce polysemanticity but does not test competing explanations or measure superposition in any real LLM.",
           "quote": "Our best validation is whether their predictions are consistent with empirical observations regarding polysemanticity.",
           "location": "Discussion: To What Extent Does Superposition Exist in Real Models?"
         },
         {
           "kind": "scope_gap",
-          "text": "The synthetic data builds in more features than neurons as an assumption, so the toy setting presupposes the feature-count imbalance that the question asks about in LLMs rather than establishing it there.",
+          "text": "The feature–neuron imbalance is built into the synthetic data, not measured.",
           "quote": "This imbalance between features and neurons in real models seems like it must be a central tension in neural network representations.",
           "location": "Experiment Setup: The Feature Vector"
         }
@@ -1844,8 +1843,6 @@
     "author_view": {
       "stance": 1,
       "relevance": "central",
-      "rationale": "The authors built the toy model to explain polysemanticity as storing extra sparse features in superposition. They say its predictions match what is seen in real networks, including very polysemantic early transformer MLP neurons. But they call superposition in real models something they 'suspect' and have shown only in toy models, so the answer is a hedged yes.",
-      "framing_note": null,
       "quote": "We believe they are useful proxies for studying the superposition we suspect might exist in real neural networks. ... Our best validation is whether their predictions are consistent with empirical observations regarding polysemanticity. To the best of our knowledge they are.",
       "location": "Discussion: To What Extent Does Superposition Exist in Real Models?",
       "basis": "estimated"
@@ -1927,19 +1924,18 @@
         {
           "kind": "definition_mismatch",
           "term": "polysemanticity",
-          "text": "In the results, 'polysemantic' means a feature with fractional capacity (0 < C_i < 1), a property of the geometry of feature embeddings. Capacity is unchanged by rotation, so it says nothing about whether individual neurons respond to several features. It measures superposition, and tells us about neuron polysemanticity only by assumption.",
+          "text": "Capacity ignores rotation, so it cannot tell whether individual neurons are polysemantic.",
           "quote": "capacity is invariant to the overall scaling and rotation of W",
           "location": "2.1 Definitions"
         },
         {
           "kind": "scope_gap",
-          "text": "By design the analysis covers only one source of polysemanticity and leaves out alternatives such as feature directions rotated relative to the neuron basis. It therefore cannot say whether superposition is the primary explanation as opposed to one of several.",
           "quote": "There are other causes of polysemanticity, e.g. feature embedding vectors could be rotated relative to the neuron basis (Figure 1, left), but we do not study these in this work.",
           "location": "1 Introduction"
         },
         {
           "kind": "scope_gap",
-          "text": "The concrete results come from a small quadratic-activation regression model with IID inputs and a scalar sum-of-squares target, chosen because it can be solved analytically. How capacity allocation behaves in trained LLM layers is not tested.",
+          "text": "One small quadratic-activation model with IID inputs; no trained LLM layer is tested.",
           "quote": "This choice of activation function allows us to study this model analytically in some detail.",
           "location": "3 Quadratic model"
         }
@@ -1948,8 +1944,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "partial",
-      "rationale": "The authors explain toy-model polysemanticity through capacity pressure and call superposition 'particularly fundamental'. But they say polysemanticity has other causes that they do not study, and in their comments they concede that capacity cannot yet be defined or measured in real networks. So their work does not answer the question for LLM neurons.",
-      "framing_note": "They measure superposition as fractional capacity per feature, not as a count of features versus dimensions. They also treat it as one of several ways polysemanticity shows up (rotated embeddings are another), so they would not lump all polysemanticity under it.",
       "quote": "Fittingly, there are multiple ways that polysemanticity can manifest. Here we focus on one form that seems particularly fundamental, namely superposition ... There are other causes of polysemanticity, e.g. feature embedding vectors could be rotated relative to the neuron basis (Figure 1, left), but we do not study these in this work.",
       "location": "1 Introduction",
       "basis": "estimated"
@@ -2024,19 +2018,18 @@
       "flags": [
         {
           "kind": "scope_gap",
-          "text": "The main results come from the regime with more neurons than features (k > N), where neurons are not forced to share features. Compression only happens at the input, through a fixed random projection (d=64 < N=512) that the task imposes rather than the model learning it. So the polysemantic-vs-monosemantic basins here are not cases of the model packing more features than neurons. Reading them as evidence for or against superposition means keeping the input bottleneck and the neuron layer apart.",
+          "text": "k counts neurons and N features, so these basins come from the regime with spare neurons; the only compression is a fixed random input projection.",
           "quote": "When the nonlinear dimension k exceeds the number of features N , these models have loss basins ranging from mostly polysemantic to mostly monosemantic",
           "location": "4 Results"
         },
         {
           "kind": "method_weak_link",
-          "text": "Monosemanticity is scored only from probes with one feature active at unit strength. Training inputs have about 8 features active at random strengths, so a neuron that looks monosemantic on isolated probes may still respond to mixtures, and the reverse can also happen.",
+          "text": "Monosemanticity is scored on single-feature probes, but training inputs have about 8 features active at random strengths.",
           "quote": "Let Fi be a feature vector with feature i active at unit stregth.",
           "location": "3 Measuring Monosemanticity"
         },
         {
           "kind": "scope_gap",
-          "text": "All evidence comes from small two-layer models on synthetic, independent, sparse features with known ground truth. Nothing tests whether the same basin or bias structure accounts for polysemantic neurons in LLMs.",
           "quote": "In this work we report preliminary attempts to engineer monosemanticity in toy models.",
           "location": "1.1 Motivation"
         }
@@ -2045,8 +2038,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "partial",
-      "rationale": "In their toy decoder, polysemantic and monosemantic loss basins exist at equal loss even when there are more neurons than features. Wider layers give more monosemantic neurons. So capacity matters, but it does not settle how much polysemanticity there is. The lead author's comment says he expects real models to have more features than neurons but that this has not been 'pinned down', so the evidence is mixed.",
-      "framing_note": null,
       "quote": "When the nonlinear dimension k exceeds the number of features N , these models have loss basins ranging from mostly polysemantic to mostly monosemantic",
       "location": "1.2 Overview",
       "basis": "estimated"
@@ -2129,20 +2120,20 @@
       "flags": [
         {
           "kind": "method_weak_link",
-          "text": "The count half of the superposition claim (more features than neurons) is argued from intuition about the long tail of internet text, not measured. What the experiments show is that features are spread over several polysemantic neurons, which the paper itself says can also happen without superposition (rotation or composition).",
+          "text": "Claim (1) is that there are more features than neurons; it is argued, not measured.",
           "quote": "We think claim (1) is evidently true, given the extremely long tail of features in internet text",
           "location": "A.10 How can you conclude you found superposition"
         },
         {
           "kind": "definition_mismatch",
           "term": "feature",
-          "text": "Features are human-recognizable properties picked as probe labels, not properties shown to be represented and used downstream by the model. Neuron 'polysemanticity' and 'features in superposition' are both judged relative to this human-chosen list.",
+          "text": "Human-recognisable, not shown to be used by the model.",
           "quote": "we mean an interpretable property of the input that would be recognizable to most humans",
           "location": "3.1 Key Concepts"
         },
         {
           "kind": "scope_gap",
-          "text": "The superposition evidence covers early-layer neurons detecting n-grams and compound words in one model family (Pythia, up to 6.9B). Higher-level features in middle layers come out as seemingly monosemantic. The paper does not estimate what share of LLM neuron polysemanticity overall superposition accounts for, which is what 'primarily' asks.",
+          "text": "Early-layer n-gram neurons in one model family; middle-layer neurons looked monosemantic, and no overall share is estimated.",
           "quote": "Many early layer neurons are in superposition, where features are represented as sparse linear combinations of polysemantic neurons",
           "location": "1 Introduction (contributions)"
         }
@@ -2151,8 +2142,6 @@
     "author_view": {
       "stance": 1,
       "relevance": "partial",
-      "rationale": "The authors claim the clearest evidence so far of superposition in full-scale LMs: polysemantic early-layer neurons that together represent many n-gram features. They say this supports the view that superposition is important for models. They also find seemingly dedicated monosemantic neurons in middle layers, so their yes holds for early layers and depends on the layer.",
-      "framing_note": "They keep polysemanticity and superposition apart. Superposition implies polysemanticity, but polysemanticity can occur without it (features rotated relative to the neuron basis), and showing superposition requires identifying more features than neurons. Their answer differs by layer, not one answer for 'LLM neurons'.",
       "quote": "we believe we have provided the clearest evidence to date of superposition, monosemantic neurons, and polysemantic neurons in full scale language models.",
       "location": "6.2 Strengths and Weaknesses of Empirical Findings",
       "basis": "estimated"
@@ -2235,19 +2224,19 @@
       "flags": [
         {
           "kind": "method_weak_link",
-          "text": "Dictionary features beat neurons on interpretability even when the dictionary is smaller than the layer. So the gain does not depend on finding more features than dimensions, and it cannot by itself tell count superposition apart from features that are simply not aligned with the neuron basis.",
+          "text": "So the gain does not depend on finding more features than dimensions.",
           "quote": "We find that larger interpretability scores of our feature dictionaries are not limited to overcomplete dictionaries",
           "location": "Appendix C.1"
         },
         {
           "kind": "scope_gap",
-          "text": "Most of the evidence is on the residual stream, which has no privileged neuron basis. In the MLP neuron layers, where polysemanticity is defined, the learned dictionaries often have so many dead features that they are not overcomplete. That is exactly where a count-superposition account of polysemantic neurons would need support.",
+          "text": "This is in the MLP neuron layers, where the question lives; most other results are on the residual stream.",
           "quote": "In some cases, there are so many dead features that the set of living features does not form an overcomplete basis.",
           "location": "Appendix C.2"
         },
         {
           "kind": "framing_overreach",
-          "text": "The conclusion describes the method as pulling features out of superposition. But the experiments measure the interpretability and causal localisation of the learned directions, not whether the network represents more features than it has dimensions.",
+          "text": "The experiments measure interpretability, not whether features outnumber dimensions.",
           "quote": "Sparse autoencoders are a scalable, unsupervised approach to disentangling language model network features from superposition.",
           "location": "6.3 Conclusion"
         }
@@ -2256,8 +2245,6 @@
     "author_view": {
       "stance": 1,
       "relevance": "partial",
-      "rationale": "The authors describe superposition as 'one hypothesised cause' of polysemanticity. They read their more interpretable SAE features as showing that superposition can be resolved. So they lean yes, but the paper is mainly about the method and assumes the explanation rather than testing it.",
-      "framing_note": "Most of their results are on the residual stream, where they say there is little reason to expect features to align with neurons. They also report that their pipeline cannot robustly learn overcomplete dictionaries for MLP neurons, so the work speaks only indirectly to LLM neurons.",
       "quote": "One hypothesised cause of polysemanticity is superposition, where neural networks represent more features than they have neurons by assigning features to an overcomplete set of directions in activation space, rather than to individual neurons. ... This work indicates that it is possible to resolve superposition in language models using a scalable, unsupervised method.",
       "location": "Abstract",
       "basis": "estimated"
@@ -2347,25 +2334,23 @@
       "flags": [
         {
           "kind": "method_weak_link",
-          "text": "The 'more features than neurons' claim rests on SAE dictionary size, a chosen hyperparameter: features keep splitting as the dictionary grows, and the paper itself concedes the true feature count may not be well-posed, so the count-based definition of superposition is not directly measured.",
+          "text": "The 'more features than neurons' count rests on the chosen dictionary size.",
           "quote": "we note that in some of these expanded theories of superposition, finding the \"correct number of features\" may not be well-posed.",
           "location": "Discussion: Theories of Superposition"
         },
         {
           "kind": "framing_overreach",
-          "text": "Support for superposition is argued from consistency (interpretable features, sensible logit weights, interference weights) rather than from a test that rules out other explanations of neuron polysemanticity; the conclusion is phrased as what superposition would predict.",
           "quote": "all of these observations are what you would expect from superposition.",
           "location": "Discussion: Theories of Superposition"
         },
         {
           "kind": "method_weak_link",
-          "text": "SAEs trained on a weight-shuffled transformer score higher on median automated interpretability, so activation-side interpretability alone does not show the features are compressed representations of the trained model; the model-specific evidence rests on downstream effects and manual analysis.",
+          "text": "'Randomized' means SAEs on a weight-shuffled transformer, so interpretability scores alone don't show learned compression.",
           "quote": "However, for automated interpretability the randomized features have a higher median score.",
           "location": "Appendix: Randomized Transformer"
         },
         {
           "kind": "scope_gap",
-          "text": "All evidence comes from the MLP layer of a single small one-layer transformer, far from the multilayer LLMs the question concerns; generalization is supported only by reference to other work.",
           "quote": "we take a one-layer transformer with a 512-neuron MLP layer",
           "location": "Introduction"
         }
@@ -2374,8 +2359,7 @@
     "author_view": {
       "stance": 1,
       "relevance": "central",
-      "rationale": "Finding tens of thousands of interpretable features in a 512-neuron MLP left the authors 'more confident that some version' of the superposition hypothesis is true. But they also built models in which neurons were polysemantic without superposition, and they call superposition only 'one potential cause'. So the answer is yes with qualifications.",
-      "framing_note": "They would qualify 'primarily'. They argue that under cross-entropy loss neurons can be polysemantic even when superposition is impossible. They also suggest features may form clusters or continuous manifolds, which makes 'more features than dimensions' harder to count.",
+      "rationale": "They also show neurons can be polysemantic without superposition, and call it only 'one potential cause'.",
       "quote": "Nevertheless, these experiments have left us more confident that some version of the superposition hypothesis (and the linear representation hypothesis) is true.",
       "location": "Discussion: Theories of Superposition",
       "basis": "estimated"
@@ -2458,19 +2442,18 @@
       "flags": [
         {
           "kind": "scope_gap",
-          "text": "The setting rules out count superposition by construction: there are at least as many neurons as features, and the model is trained only on the n standard basis vectors, so features never co-occur. The paper shows that polysemanticity can arise without superposition. It does not measure how much of real-network polysemanticity arises this way rather than from superposition.",
+          "text": "m counts neurons and n features: polysemanticity without superposition, but no measure of how often this happens in real networks.",
           "quote": "m ≥ n to make it clear that polysemanticity is not necessary in this setting",
           "location": "2.1 Network and data"
         },
         {
           "kind": "method_weak_link",
-          "text": "The collision count depends on a winner-take-all dynamic. Here that dynamic comes from an explicit l1 penalty on activations (or from injected noise), which the paper admits is uncommon in practice. Whether ordinary LLM training produces a comparable dynamic is never measured, so the n^2/m estimate may not carry over.",
+          "text": "The mechanism relies on an explicit l1 penalty or injected noise.",
           "quote": "even if l1 regularization is not widely used in practice",
           "location": "2.1 Network and data"
         },
         {
           "kind": "framing_overreach",
-          "text": "The text calls the toy story representative, but the paper never measures incidental versus necessary polysemanticity in a trained real-world network. It leaves the relative share as an open question.",
           "quote": "and study, but we do think the story it tells is representative",
           "location": "2.1 Network and data"
         }
@@ -2479,8 +2462,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "central",
-      "rationale": "The authors offer 'incidental' polysemanticity as a second origin story that does not exclude the first. It arises from regularisation or noise even with ample neurons. They explicitly leave open whether most real-world polysemanticity is necessary (superposition-driven) or incidental, so they would not say it is primarily superposition.",
-      "framing_note": "They split polysemanticity into 'necessary' (too many features for the neurons) and 'incidental' (from training dynamics) and say the two are not mutually exclusive. The question's 'primarily' asks for a share they say has not been measured.",
       "quote": "Is “most” of the polysemanticity in real-world neural networks necessary or incidental? How does this depend on the architecture and the data?",
       "location": "5 Discussion and future work",
       "basis": "estimated"
@@ -2559,19 +2540,18 @@
       "flags": [
         {
           "kind": "method_weak_link",
-          "text": "Monosemanticity is inferred indirectly, from cross-seed universality and from activation skew and kurtosis. The roughly 95% of neurons that are not universal are never directly shown to be polysemantic, and universality is not a polysemanticity measure.",
+          "text": "The ~95% of neurons that are not universal are never shown to be polysemantic.",
           "quote": "Motivated by the observation that universal neurons have distributional statistics suggestive of monosemanticity",
           "location": "4.3 Universal Neuron Families"
         },
         {
           "kind": "framing_overreach",
-          "text": "Low cross-seed universality is read as evidence against neurons as the unit of analysis. But a neuron that is not universal could still be seed-specific and monosemantic, and the result says nothing about why neurons are polysemantic.",
+          "text": "A neuron that is not universal can still be monosemantic.",
           "quote": "constituting another piece of evidence that individual neurons are not the appropriate unit of analysis for most network behaviours",
           "location": "7 Discussion and Conclusion"
         },
         {
           "kind": "scope_gap",
-          "text": "The paper never tests superposition. It does not compare feature counts with dimensions, and an overcomplete feature basis appears only as an assumption for future work. Its evidence bears on how common interpretable neurons are in small same-family models, not on what causes polysemanticity.",
           "quote": "Instead of studying the neuron basis, our experiments could be replicated on an overcomplete dictionary basis that is more likely to contain the true model features",
           "location": "7 Future Work"
         }
@@ -2580,8 +2560,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "tangential",
-      "rationale": "The paper studies whether neurons are universal across seeds, not why they are polysemantic. The authors take polysemanticity as known and suggest overcomplete dictionaries may hold the true features, but they do not test superposition as the cause.",
-      "framing_note": null,
       "quote": "only about 1-5% of neurons are universal across models, constituting another piece of evidence that individual neurons are not the appropriate unit of analysis for most network behaviours. ... Instead of studying the neuron basis, our experiments could be replicated on an overcomplete dictionary basis that is more likely to contain the true model features",
       "location": "7 Discussion and Conclusion",
       "basis": "estimated"
@@ -2660,20 +2638,20 @@
       "flags": [
         {
           "kind": "scope_gap",
-          "text": "The paper studies how hidden states decompose into (multi-dimensional) features. It never analyzes individual neurons or measures polysemanticity, so it does not speak to whether neuron polysemanticity is explained by superposition.",
+          "text": "Individual neurons are never analysed.",
           "quote": "This section focuses on hypotheses for how hidden states of language models can be decomposed into sums of functions of the input (features).",
           "location": "3 Definitions"
         },
         {
           "kind": "method_weak_link",
-          "text": "The 'many (much greater than d)' count clause of the multi-dimensional superposition hypothesis comes from prior work and is never tested. The experiments test whether a few SAE clusters are irreducible (circles for days and months), which bears on feature shape, not on whether features outnumber dimensions.",
+          "text": "The '≫ d' count is assumed from prior work; the experiments test feature shape.",
           "quote": "are the sum of many (≫ d) sparse low-dimensional irreducible features fi and pairwise δ-orthogonal",
           "location": "3.2 Superposition (Hypothesis 2)"
         },
         {
           "kind": "definition_mismatch",
           "term": "feature",
-          "text": "A feature is any function of the input, with no requirement that the model represents or uses it downstream. Irreducibility is defined statistically rather than by intervention. Causal use is shown only for the day/month circles, so 'feature' in the hypothesis is much looser than the working definition.",
+          "text": "Any function of the input; the model need not use it.",
           "quote": "We define a df -dimensional feature as a function f that maps a subset of the input space into Rdf .",
           "location": "3.1 Multi-Dimensional Features (Definition 1)"
         }
@@ -2682,8 +2660,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "tangential",
-      "rationale": "The work is about the shape of features (some are irreducibly multi-dimensional), not the cause of neuron polysemanticity. The authors propose a multi-dimensional version of the superposition hypothesis but call their support for it preliminary.",
-      "framing_note": "They would say a 'feature' need not be one-dimensional. Under their Hypothesis 2, superposition packs low-dimensional subspaces rather than single directions, so counting features against dimensions needs that refinement.",
       "quote": "Thus, although this work provides preliminary evidence for the multi-dimensional superposition hypothesis (Hypothesis 2), it is still unclear if this theory provides the best description for the representations models use.",
       "location": "6 Discussion (Limitations)",
       "basis": "estimated"
@@ -2761,21 +2737,21 @@
       "flags": [
         {
           "kind": "scope_gap",
-          "text": "The results are existence constructions showing that MLPs can compute in superposition with few neurons; no trained network, let alone an LLM, is examined, so they show superposition is a possible source of polysemantic neurons, not that it explains the polysemanticity actually observed.",
+          "text": "Existence constructions; no trained network is examined.",
           "quote": "we have presented a mathematical framework for understanding how neural networks can perform computation in superposition",
           "location": "6.1 Summary"
         },
         {
           "kind": "definition_mismatch",
           "term": "feature",
-          "text": "Features here are boolean properties counted as present if linearly readable; the paper's own result that random MLPs linearly represent all pairwise ANDs means linear readability can vastly overcount features relative to the working definition (properties downstream computation uses), which complicates counting features against dimensions.",
+          "text": "Random MLPs linearly represent all pairwise ANDs, so linear readability overcounts features.",
           "quote": "certain concepts may be detectable through linear probes in a network’s activation space without being actively utilized in subsequent computations.",
           "location": "6.2 Practical Takeaways: Unused features"
         },
         {
           "kind": "definition_mismatch",
           "term": "superposition",
-          "text": "The construction's neurons each check whether at least two variables in a random subset are active, so polysemanticity arises by design from computing many outputs, a computation-centered sense of superposition (outputs computed exceed neurons) rather than the representational compression of input features in the working definition.",
+          "text": "Neurons are polysemantic by design, from computing many outputs, not from compressing input features.",
           "quote": "each neuron checks for whether or not at least two variables are active in a subset of random variables.",
           "location": "Figure 1 caption"
         }
@@ -2784,8 +2760,6 @@
     "author_view": {
       "stance": 1,
       "relevance": "partial",
-      "rationale": "The authors treat superposition as the proposed explanation for polysemanticity and argue networks are likely to compute in the most compressed, superposed way (random MLPs emulate U-AND), but this is theory on boolean features and they hedge that SAE successes are unclear evidence for the hypothesis and that their picture could be 'thoroughly confused'.",
-      "framing_note": "Their focus is computation in superposition (more features computed than neurons), not only representational compression; and in comments the authors say real networks need not implement the constructions (Mendel) and LLM computation may be closer to continuous than boolean (Chan).",
       "quote": "Insofar as neural networks are incentivized to learn as many circuits as possible (Olah et al., 2020), they are likely to compute circuits in the most compressed way possible. ... it is unclear how much evidence the success of sparse dictionary learning in finding human-interpretable features provides for the superposition hypothesis.",
       "location": "§1 Introduction; §5 Related Work",
       "basis": "estimated"
@@ -2866,20 +2840,20 @@
       "flags": [
         {
           "kind": "scope_gap",
-          "text": "Superposition appears only as an assumed premise in the introduction; the experiments test whether SAE latents faithfully track features, not whether neuron polysemanticity is caused by superposition. Any bearing on the question is indirect (via the reliability of the tool used to probe superposition).",
+          "text": "Assumed in the introduction; the experiments test SAEs, not superposition.",
           "quote": "Superposition makes it challenging to directly interpret neurons in an LLM, and requires different techniques to extract interpretable feature directions.",
           "location": "1 Introduction"
         },
         {
           "kind": "definition_mismatch",
           "term": "superposition",
-          "text": "The toy model that establishes the absorption mechanism has 4 orthogonal features in 50 dimensions, i.e. no superposition in the count sense; the failure mode is shown to arise from feature hierarchy and the sparsity penalty, independent of features outnumbering dimensions.",
+          "text": "Four features in 50 dimensions is no superposition in the count sense, yet absorption still appears.",
           "quote": "Our initial setup consists of 4 true features, each randomly initialized into orthogonal directions with a 50 dimensional representation vector and unit norm.",
           "location": "3 Toy models of feature absorption"
         },
         {
           "kind": "framing_overreach",
-          "text": "The LLM evidence rests on a single task family (first-letter identification) with an ablation-based metric, yet the conclusion speaks of fundamental limits of sparse feature extraction in general.",
+          "text": "The LLM evidence is one task family (first-letter identification).",
           "quote": "We hope that our work highlights the fundamental limitations of sparse feature extraction",
           "location": "7 Discussion / Conclusion"
         }
@@ -2888,8 +2862,6 @@
     "author_view": {
       "stance": 1,
       "relevance": "tangential",
-      "rationale": "The paper takes superposition as the standard background reason neurons are hard to interpret and studies whether SAEs recover features even granting that picture; it does not test the claim itself.",
-      "framing_note": "Co-author Joseph Bloom has said a single sparse decomposition 'may just not reflect the underlying data generating process', so some authors might question the premise of a fixed set of sparse features being compressed.",
       "quote": "The model is able to represent far more concepts than it has neurons in its hidden space by allowing these concept directions to overlap slighly, known as superposition [8]. Superposition makes it challenging to directly interpret neurons in an LLM, and requires different techniques to extract interpretable feature directions.",
       "location": "§1 Introduction",
       "basis": "estimated"
@@ -2972,19 +2944,18 @@
         {
           "kind": "definition_mismatch",
           "term": "superposition",
-          "text": "In the toy and embedding analyses, 'degree of superposition' is operationalized as how sparsely an SAE can reconstruct the data, which measures sparse-codability rather than whether the network represents more features than it has dimensions; random MLPs 'amplifying superposition' is therefore a claim about SAE-measured sparsity.",
           "quote": "we took the ability of SAEs to achieve low reconstruction error with high sparsity as a proxy for the degree to which the training data exhibits superposition.",
           "location": "4.2 Do random NNs preserve or amplify superposition?"
         },
         {
           "kind": "scope_gap",
-          "text": "The paper explicitly studies layer-level superposition in residual-stream activations, not neurons, so its results do not directly bear on whether neuron polysemanticity is explained by superposition; the remark that random networks have polysemantic neurons is asserted, not measured.",
+          "text": "The paper studies residual-stream superposition, not neurons; this remark is asserted, not measured.",
           "quote": "unsurprisingly, individual neurons in a randomly initialized network may be polysemantic.",
           "location": "2 Related Work: Polysemanticity"
         },
         {
           "kind": "method_weak_link",
-          "text": "If SAE metrics look similar on random-weight transformers, SAE-derived interpretability is weak evidence that the recovered latents are features the trained model compresses into its dimensions, which undercuts using such metrics as evidence for superposition in LLMs; the paper itself leaves the mechanism unresolved.",
+          "text": "This undercuts SAE interpretability as evidence that LLMs compress features.",
           "quote": "aggregate auto-interpretability measures do not necessarily indicate the existence of interesting underlying features.",
           "location": "5 Discussion / Limitations"
         }
@@ -2993,8 +2964,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "tangential",
-      "rationale": "The paper is about whether SAE metrics separate trained from random transformers; it notes in passing that neurons in random networks may be polysemantic and leaves the mechanism (data superposition preserved vs amplified) to future work.",
-      "framing_note": "The authors explicitly separate neuron-level polysemanticity (which can arise incidentally, even at random initialisation) from layer-level superposition, so they would resist treating one as the explanation of the other without further evidence.",
       "quote": "A polysemantic neuron (basis dimension) of a network layer represents multiple interpretable concepts (Elhage et al., 2022; Scherlis et al., 2023); unsurprisingly, individual neurons in a randomly initialized network may be polysemantic. By contrast, our work studies superposition (Elhage et al., 2022; Chan, 2024), which pertains to the representations learned across a whole network layer as opposed to any individual neuron.",
       "location": "§2 Related Work (Polysemanticity)",
       "basis": "estimated"
@@ -3073,19 +3042,19 @@
         {
           "kind": "definition_mismatch",
           "term": "feature",
-          "text": "The paper's 'features' are SAE latents, and by its own results their number and identity depend on dictionary size and the sparsity penalty. They are not established model features. The paper never tests superposition or neuron polysemanticity (it works on residual-stream SAEs), so any bearing on the question is indirect: SAE latent counts cannot stand in for a features-versus-dimensions count.",
+          "text": "So SAE latent counts cannot stand in for a count of the model's features.",
           "quote": "These findings suggest that there is no single SAE width at which it learns a unique and complete dictionary of atomic features",
           "location": "6 Conclusion"
         },
         {
           "kind": "method_weak_link",
-          "text": "The split into 'novel' and 'reconstruction' latents, which carries the incompleteness and composition claims, rests on a cosine-similarity threshold set by exploratory analysis and different for each model.",
+          "text": "This threshold decides which latents count as novel.",
           "quote": "In our experiments we set the cosine threshold to 0.7 for the GPT-2 SAEs, and 0.4 for the Gemmascope SAEs, based on our exploratory analysis.",
           "location": "4.2 Novel and reconstruction latents"
         },
         {
           "kind": "method_weak_link",
-          "text": "The claim that large-SAE latents are compositions of smaller ones rests on a meta-SAE that reconstructs only about half the variance of the decoder directions, plus a 5-way auto-interp test (73% correct). Much of each latent goes unexplained by the decomposition.",
+          "text": "The composition claim rests on this meta-SAE.",
           "quote": "After training, the meta-SAE explains 55.47% of the variance of the decoder directions of the SAE.",
           "location": "5 Meta-SAEs"
         }
@@ -3094,8 +3063,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "tangential",
-      "rationale": "The work concerns whether SAEs find a unique, complete, atomic feature set; it does not address what causes neuron polysemanticity, and the authors say they are unsure canonical units exist.",
-      "framing_note": "Their result that SAE feature sets change with dictionary size suggests they might see 'more features than dimensions' as ill-defined without canonical units.",
       "quote": "We are uncertain whether canonical units of analysis exist, but our results suggest that alternative approaches should be explored.",
       "location": "§1 Introduction",
       "basis": "estimated"
@@ -3166,13 +3133,12 @@
       "flags": [
         {
           "kind": "scope_gap",
-          "text": "The paper never defines or tests superposition or neuron polysemanticity; it measures the practical probing utility of SAE latents, so it bears on the question only indirectly, through whether SAE latents behave like the model's underlying features.",
+          "text": "Superposition and polysemanticity are never tested; this measures probing utility.",
           "quote": "Theoretically, SAE latents are a more interpretable basis of model activations, and we hypothesize that this inductive bias will help train probes in difficult regimes.",
           "location": "2 Methodology"
         },
         {
           "kind": "method_weak_link",
-          "text": "A null result for SAE probes does not separate 'SAE latents are not the model's true features' from 'even true features give little advantage over a dense linear probe', so it cannot be read as evidence against superposition-based decompositions per se.",
           "quote": "it is possible that even a basis of “true” model representations would offer only a mild inductive bias advantage over traditional linear probing.",
           "location": "7 Conclusion / Limitations"
         }
@@ -3181,8 +3147,6 @@
     "author_view": {
       "stance": 0,
       "relevance": "tangential",
-      "rationale": "The paper tests downstream probing utility of SAE latents and explicitly says there is no ground truth for the concepts models use; it makes no claim about why neurons are polysemantic.",
-      "framing_note": null,
       "quote": "Unfortunately, we lack a “ground truth” to know whether SAEs truly extract the interpretable concepts used by language models.",
       "location": "§1 Introduction",
       "basis": "estimated"
@@ -3261,19 +3225,19 @@
         {
           "kind": "definition_mismatch",
           "term": "feature",
-          "text": "In the LLM analysis a 'feature' is a vocabulary token and its representation is a row of the unembedding matrix, not a property computed and used inside the network. Superposition found this way concerns output-token embeddings, not features carried by hidden-layer neurons.",
+          "text": "So superposition here is in the unembedding, not in hidden neurons.",
           "quote": "As a naive mapping, we treat tokens as atomic features, with data dimension n equal to the vocabulary size.",
           "location": "3.3 LLMs"
         },
         {
           "kind": "method_weak_link",
-          "text": "The test for 'strong superposition' in LLMs is that every token row has non-zero norm and vocabulary exceeds width. A trained LM head must give every token a non-zero row to predict it, so this test cannot fail and does not show that the model learned to compress more internal features than it has dimensions.",
+          "text": "A trained LM head must give every token a non-zero row, so this test cannot fail.",
           "quote": "From the non-zero minimum norms and the fact n ≫ m, we confirm LLMs are in strong superposition.",
           "location": "Appendix D.7"
         },
         {
           "kind": "scope_gap",
-          "text": "What superposition explains here is how loss scales with width, not polysemantic neurons. The toy model's hidden layer is linear (h = W^T x), so it has no neurons whose polysemanticity could be measured, and no neuron-level analysis of LLMs is done.",
+          "text": "The toy model's hidden layer is linear, so it has no neurons, and no LLM neurons are analysed.",
           "quote": "Result 3: Superposition is an important mechanism behind LLM neural scaling laws",
           "location": "3.3 LLMs"
         }
@@ -3282,8 +3246,6 @@
     "author_view": {
       "stance": 1,
       "relevance": "partial",
-      "rationale": "The authors claim LLMs operate in a strong-superposition regime (more features than dimensions) and that this drives scaling, which supports the compression premise, but they never discuss neurons or polysemanticity.",
-      "framing_note": "Their superposition evidence is about language-model-head token representations (more tokens than dimensions, a 'naive connection between features and tokens'), not individual neurons, so they would likely see the polysemanticity question as one level removed from their work.",
       "quote": "We confirmed that open-sourced LLMs operate in the strong superposition regime and have loss scaling inversely with model dimension, and that the Chinchilla scaling laws are also consistent with this behavior.",
       "location": "Abstract",
       "basis": "estimated"
@@ -3371,19 +3333,19 @@
         {
           "kind": "definition_mismatch",
           "term": "polysemanticity",
-          "text": "The paper's 'polysemantic' condition is one word form used in two senses (bank/bank). A neuron that fires for a word form whatever its sense is arguably monosemantic for that token, not a neuron responding to multiple unrelated concepts. So the result tests one confound (homonymy) inside polysemanticity measurements, not polysemanticity across unrelated inputs in general.",
+          "text": "A neuron firing for one word form in both senses is arguably monosemantic for that token.",
           "quote": "PS (same word, different sense) measures overlap from shared word form alone",
           "location": "3.1 Decomposition framework"
         },
         {
           "kind": "method_weak_link",
-          "text": "Superposition is never measured: there is no count of features against dimensions. Whatever overlap is left after the lexical component is removed gets labelled 'genuine superposition' by elimination, so the paper does not show how much of the residual polysemanticity superposition actually explains.",
+          "text": "Superposition is never measured; the remainder is labelled by elimination.",
           "quote": "Only a small remainder is genuine superposition.",
           "location": "Figure 1 caption"
         },
         {
           "kind": "framing_overreach",
-          "text": "The headline says a 'substantial portion' of polysemanticity is lexical identity. But the lexically adjusted score reclassifies only 6.5-10.4% of flagged GPT-2 neurons, and the 57% figure holds only for polysemous inputs. The scale of the effect on polysemanticity overall is smaller than the framing suggests.",
+          "text": "The adjustment reclassifies 6.5–10.4% of flagged GPT-2 neurons; the 57% holds only for polysemous inputs.",
           "quote": "A substantial portion of what current metrics call polysemanticity is lexical identity, not superposition.",
           "location": "7 Conclusion"
         }
@@ -3392,8 +3354,6 @@
     "author_view": {
       "stance": -1,
       "relevance": "central",
-      "rationale": "The paper directly tests how much measured neuron polysemanticity is superposition and concludes a substantial portion is lexical identity (shared word form) instead, while not denying that genuine superposition exists.",
-      "framing_note": "They would separate polysemanticity as measured by current metrics from genuine polysemanticity, and note that their numbers (e.g. ~57% confound) apply only to polysemous-word inputs; the residual overlap after removing the lexical signal could still be superposition.",
       "quote": "A substantial portion of what current metrics call polysemanticity is lexical identity, not superposition. ... These findings do not deny that genuine superposition exists.",
       "location": "§7 Conclusion",
       "basis": "estimated"
@@ -3476,25 +3436,23 @@
         {
           "kind": "definition_mismatch",
           "term": "superposition",
-          "text": "The essay rejects superposition only in the sense of 'arbitrary packing' of unrelated things. It explicitly sets aside the count definition and grants that composition gives more features than dimensions. Its verdict that superposition is the wrong explanation is therefore not a verdict on the working definition.",
           "quote": "We mostly set aside the sense in Toy Models, more features than dimensions, and not because it’s wrong.",
           "location": "Appendix: A Note on Features and Definitions"
         },
         {
           "kind": "method_weak_link",
-          "text": "The step from 'neuron has several jobs' to 'recursive generalization rather than superposition' depends on investigators judging, after the fact, whether the extra jobs are 'related'. With a loose relatedness criterion (e.g. predicting that 'boat' comes next), almost any mixture can be absorbed, and no inter-rater or held-out test of that judgment is reported.",
+          "text": "Whether jobs are 'related' is judged after the fact, with no inter-rater or held-out test.",
           "quote": "When we look at these “unrelated jobs” in depth, it’s almost always this kind of thing.",
           "location": "The Short Version (footnote 1)"
         },
         {
           "kind": "framing_overreach",
-          "text": "The LLM results are called preliminary audits, with details deferred to a companion paper, and the essay says full audits at trillion-parameter scale have not begun. Yet it states that the approach has worked up to trillions of parameters.",
+          "text": "The essay calls its LLM audits preliminary and says trillion-scale audits have not begun.",
           "quote": "So far it has worked in language models too, up to trillions of parameters.",
           "location": "The Short Version"
         },
         {
           "kind": "scope_gap",
-          "text": "The strongest evidence against superposition (retraining with architecture changes, watching neurons grow, toy and hand-built packing experiments) comes from vision models. The LLM evidence is mostly neuron-audit percentages, so the confident conclusion is stated for image models, not LLM neurons.",
           "quote": "We’re fairly confident the image models we studied don’t have superposition.",
           "location": "Appendix: Does Scale Help or Hurt Superposition?"
         }
@@ -3503,8 +3461,6 @@
     "author_view": {
       "stance": -2,
       "relevance": "central",
-      "rationale": "Cammarata argues that canonical polysemanticity came from bad tools, bad architectures and 'recursive generalization', not superposition, and that LLM neurons get cleaner the closer one looks; he puts superposition 'far down the list' of explanations.",
-      "framing_note": "He defines superposition as arbitrary packing of unrelated things into neurons, not the count definition; he grants there are 'more features than dimensions' via ordinary composition but says that is not what explains polysemanticity, so his answer to the question as worded is still no.",
       "quote": "Most of the remaining apparent polysemanticity seems to be a motif I call recursive generalization. ... the closer we look at large language models, the cleaner their neurons get.",
       "location": "The Short Version; Appendix: Does Scale Help or Hurt Superposition?",
       "basis": "estimated"

@@ -171,7 +171,7 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 #matrix tr.selected { background: #eef2ff; }
 #matrix td.mismatch { background: var(--warn-bg); }
 .mismatch-note { display: block; margin-top: 4px; }
-.mismatch-note .flag { color: var(--warn); font-weight: 600; }
+.mismatch-note .flag { display: block; color: var(--warn); font-weight: 600; }
 /* Prose written by a language model: an accent rule on the left, with the model's name running up beside it. */
 .llm { display: block; position: relative; border-left: 2px solid var(--llm); padding-left: 16px; min-height: 45px; margin: 3px 0; }
 .llm::before {

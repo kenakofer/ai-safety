@@ -23,7 +23,7 @@ Papers and preprints are drawn as squares, essays and blog posts (not peer revie
 
 Every quote in the data is machine-checked against the cached source text (`tools/check_quotes.py`).
 
-Prose written by a language model (summaries, rationales, flags) is marked with a teal rule on its left and the model's name (`--llm-name` in `style.css`); quotes are unmarked.
+Prose written by a language model (summaries, rationales, flags) is marked with a teal rule on its left and the model's name (`--llm-name` in `style.css`); quotes are unmarked. Notes that sit next to a quote are optional, and kept only when they say something the quote and its label don't.
 
 ## Running it
 
@@ -79,12 +79,12 @@ Additions (stance layer):
 Additions (disagreement layer, all optional):
 - `source_type`: `paper | preprint | essay | blog`.
 - `author_claim`: `{quote, location}`, or `null` when no such sentence exists.
-- `author_view`: `{stance: −2..2, relevance: central|partial|tangential, rationale, framing_note, quote, location, basis: "estimated"}`. The LLM's estimate of the authors' answer; this is what the chart plots.
+- `author_view`: `{stance: −2..2, relevance: central|partial|tangential, quote, location, basis: "estimated", rationale?, framing_note?}`. The LLM's estimate of the authors' answer; this is what the chart plots.
 - `author_response`: `{stance?, relevance?, note, by, date, url?}`. An author's own answer. Any field it sets replaces the estimate's; keep `author_view` untouched so the original estimate stays visible.
 - `operationalization`: `{terms: {<term>: {quote, location}}, measured, unit, models_scope: vision|LLM|toy|mixed, lane}`. Terms must be among the question's `terms`; `lane` among its `lanes`.
-- `adversarial`: `{blinded: bool, flags: [{kind, text, quote, location, term?}]}`. `kind` is one of `definition_mismatch` (needs `term`), `scope_gap`, `method_weak_link`, `framing_overreach`.
+- `adversarial`: `{blinded: bool, flags: [{kind, quote, location, text?, term?}]}`. `kind` is one of `definition_mismatch` (needs `term`), `scope_gap`, `method_weak_link`, `framing_overreach`.
 
-`data/discussion.json` maps `"<paper id>|<question id>"` to a list of satellites: `{url, source: "lw:<post id>", platform: lesswrong|alignmentforum|openreview|x|hn, author, date, score, quote, effect: weakens|supports|reframes, pull: -1|0|1, summary, reply_to?}`. The quote is the commenter's words; `summary` is the filter's. `pull` is the direction the commenter moves the answer to the question as worded (1 = toward yes). `reply_to` is the `url` of another satellite under the same key that this one answers; `tools/link_replies.py` sets it from the cached threads.
+`data/discussion.json` maps `"<paper id>|<question id>"` to a list of satellites: `{url, source: "lw:<post id>", platform: lesswrong|alignmentforum|openreview|x|hn, author, date, score, quote, effect: weakens|supports|reframes, pull: -1|0|1, summary?, reply_to?, paper_author?, via?}`. The quote is the commenter's words; `summary` is the filter's. `paper_author: true` marks a commenter who wrote the paper; `via` names who quoted them. `pull` is the direction the commenter moves the answer to the question as worded (1 = toward yes). `reply_to` is the `url` of another satellite under the same key that this one answers; `tools/link_replies.py` sets it from the cached threads.
 
 Non-arXiv sources use a slug id such as `web:towards-monosemanticity`. If a paper bears on two questions, add one record per question with the same `id`.
 
