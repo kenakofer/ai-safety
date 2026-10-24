@@ -1,6 +1,7 @@
 [
   {
     "id": "superposition",
+    "slug": "polysemanticity",
     "tab": "Superposition",
     "text": "Is polysemanticity in LLM neurons primarily explained by superposition (the model compressing more features than it has dimensions)?",
     "terms": {
@@ -12,6 +13,7 @@
   },
   {
     "id": "cot",
+    "slug": "cot-monitoring",
     "tab": "CoT monitoring",
     "text": "Do frontier models' chains of thought reliably reveal the factors that actually drive their answers, enough to support CoT monitoring?",
     "terms": {
@@ -23,6 +25,7 @@
   },
   {
     "id": "alignment_faking",
+    "slug": "alignment-faking",
     "tab": "Alignment faking",
     "text": "Do frontier LLMs robustly fake alignment (behave differently when they believe they're being trained vs. unmonitored) across models and setups?",
     "terms": {

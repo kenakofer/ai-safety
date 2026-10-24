@@ -29,6 +29,9 @@ disc_path = sys.argv[2] if len(sys.argv) > 2 else "data/discussion.json"
 papers = json.load(open(path, encoding="utf-8"))
 ids = [p.get("id") for p in papers]
 errors = []
+slugs = [q.get("slug") for q in QUESTIONS.values()]
+if len(set(slugs)) != len(slugs) or not all(isinstance(x, str) and re.fullmatch(r"[a-z0-9-]+", x) for x in slugs):
+    errors.append(f"questions.json: each question needs a unique lowercase slug (a-z, 0-9, -), got {slugs}")
 
 
 RELEVANCE = ("central", "partial", "tangential")

@@ -34,12 +34,15 @@ There is no backend or build step. D3 v7 is loaded from jsDelivr. The page fetch
 python3 -m http.server 8000   # then open http://localhost:8000
 ```
 
-Any static host works (GitHub Pages, Netlify, etc.). Deep links look like `#q=superposition&paper=web:already-clean`.
+Any static host works (GitHub Pages, Netlify, etc.). Each question has its own page, `q/<slug>/` (the `slug` in `data/questions.json`), and a paper is selected with `?paper=<id>`, e.g. `q/polysemanticity/?paper=web:already-clean`. The site root shows the first question and rewrites the URL to its page. Old `#q=<id>&paper=<id>` links still work.
+
+The pages under `q/` are copies of `index.html` written by `python3 -I tools/build_routes.py`; re-run it after editing `index.html` or a question's slug or text.
 
 ## Files
 
 ```
 index.html, app.js, style.css   the dashboard
+q/<slug>/index.html             per-question pages, generated from index.html by tools/build_routes.py
 data/questions.json             questions, their terms (with the question's own sense of each), method lanes
 data/papers.json                one record per (paper, question)
 data/discussion.json            satellites: filtered outside discussion, keyed "<paper id>|<question id>"
@@ -58,6 +61,7 @@ tools/fetch_lw.py               LessWrong GraphQL: post + all comments -> .cache
 tools/link_replies.py           set reply_to on satellites that answer another kept satellite
 tools/skim.py, tools/models.sh  print key sections / model-name mentions of a paper
 tools/validate.py               schema + scoring-rule checks (run before committing)
+tools/build_routes.py           write q/<slug>/index.html from index.html (--check to verify)
 tools/check_quotes.py           every quote must appear verbatim in its cached source
 tools/check_arxiv.py            cross-check authors/dates/titles with the arXiv API
 ```
@@ -125,6 +129,7 @@ The detail panel's LLM-judgment section then shows both values. Leave `stance` i
    ```sh
    python3 -I tools/validate.py
    python3 -I tools/check_quotes.py
+   python3 -I tools/build_routes.py --check
    ids=$(python3 -I -c "import json;print(','.join(p['id'] for p in json.load(open('data/papers.json')) if not p['id'].startswith('web:')))")
    curl -sSL "https://export.arxiv.org/api/query?id_list=$ids&max_results=200" -o .cache/api/meta.xml
    python3 -I tools/check_arxiv.py .cache/api/meta.xml data/papers.json

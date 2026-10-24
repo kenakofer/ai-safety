@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- Generated from index.html by tools/build_routes.py; edit that instead. -->
+  <base href="../../">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alignment faking · AI Safety Evidence Dashboard</title>
+  <meta name="description" content="Do frontier LLMs robustly fake alignment (behave differently when they believe they&#x27;re being trained vs. unmonitored) across models and setups?">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+<body>
+  <div id="stuck" aria-hidden="true">
+    <p class="stuck-q"></p>
+    <p class="stuck-paper" hidden></p>
+    <div class="stuck-matrix" hidden><div class="stuck-cols"></div></div>
+  </div>
+
+  <header>
+    <h1>AI Safety Evidence Dashboard</h1>
+  </header>
+
+  <nav id="tabs" role="tablist"></nav>
+
+  <main>
+    <section id="question-box">
+      <p id="question-text"></p>
+    </section>
+
+    <section id="chart-wrap">
+      <div id="chart" aria-label="Papers over time chart"></div>
+      <div id="tooltip" role="tooltip" hidden></div>
+    </section>
+
+    <section id="legend" aria-label="Legend"></section>
+
+    <section id="detail" aria-live="polite">
+      <p class="muted">Tap or click a dot to see the paper's details.</p>
+    </section>
+
+    <section id="matrix" aria-label="Definitions matrix"></section>
+  </main>
+
+  <footer class="muted">
+    Data: <a href="data/papers.json">papers.json</a> · <a href="data/discussion.json">discussion.json</a> · <a href="data/questions.json">questions.json</a>.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

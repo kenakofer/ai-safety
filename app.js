@@ -7,7 +7,7 @@ const STANCE_LABELS = { "-2": "Strongly against", "-1": "Against", "0": "Mixed /
 const ANSWER_LABELS = { "-2": "clearly not", "-1": "probably not", "0": "unclear / doesn't say", "1": "probably yes", "2": "clearly yes" };
 // Dot size = how directly the authors would say the work bears on the question.
 const RELEVANCE = { central: 10, partial: 7, tangential: 4.5 };
-const ISSUES_URL = "https://github.com/kenakofer/ai-safety-evidence-dashboard/issues/new";
+const ISSUES_URL = "https://github.com/kenakofer/ai-safety/issues/new";
 const REL_TYPES = ["replicates", "critiques", "extends"];
 // Satellite effect on how the paper bears on the question, drawn as a chevron (see satAngle).
 const EFFECTS = {
@@ -61,9 +61,9 @@ Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSO
     }
     state.papers = papers;
     buildTabs();
-    applyHash();
-    // updateHash uses replaceState, which doesn't fire hashchange, so this only sees links and back/forward.
-    window.addEventListener("hashchange", applyHash);
+    applyRoute();
+    window.addEventListener("popstate", applyRoute);
+    window.addEventListener("hashchange", applyRoute); // an old-style #q=… link pasted into the address bar
     let t;
     window.addEventListener("resize", () => {
       clearTimeout(t);
@@ -77,9 +77,32 @@ Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSO
       `<p class="muted">Could not load the data (${esc(e.message || e)}). If you opened index.html directly from disk, serve the folder instead: <code>python3 -m http.server</code>.</p>`;
   });
 
-function applyHash() {
-  const h = new URLSearchParams(location.hash.slice(1));
-  selectQuestion(QUESTIONS.some((q) => q.id === h.get("q")) ? h.get("q") : QUESTIONS[0].id, h.get("paper"));
+/* ---------- routes: <base>q/<slug>/?paper=<id> ---------- */
+
+// The site root. Pages under q/<slug>/ set <base href="../../">, so this is the same from every page.
+// A stale cached questions.json may lack slugs; fall back to the id rather than "undefined".
+const slugOf = (q) => q.slug || q.id;
+const BASE = new URL(".", document.baseURI).pathname;
+
+// Reads the question from the path and the paper from ?paper=. Old #q=<id>&paper=<id> links still work.
+function applyRoute() {
+  const old = new URLSearchParams(location.hash.slice(1));
+  const slug = location.pathname.startsWith(BASE) ? (location.pathname.slice(BASE.length).match(/^q\/([^/]+)/) || [])[1] : null;
+  const q = QUESTIONS.find((x) => x.id === old.get("q")) || QUESTIONS.find((x) => slugOf(x) === slug) || QUESTIONS[0];
+  routing = true;
+  selectQuestion(q.id, old.get("q") ? old.get("paper") : new URLSearchParams(location.search).get("paper"));
+  routing = false;
+}
+let routing = false;
+
+// Switching question adds a history entry; selecting a paper, or normalising the URL on load
+// (e.g. the bare site root redirects to the first question), replaces the current one.
+function updateURL() {
+  const q = QUESTIONS.find((x) => x.id === state.q);
+  const url = `${BASE}q/${slugOf(q)}/${state.selected ? `?paper=${encodeURIComponent(state.selected).replace(/%3A/g, ":")}` : ""}`;
+  if (url === location.pathname + location.search + location.hash) return;
+  const sameQ = location.pathname === `${BASE}q/${slugOf(q)}/`;
+  history[routing || sameQ ? "replaceState" : "pushState"](null, "", url);
 }
 
 function buildTabs() {
@@ -100,14 +123,9 @@ function selectQuestion(qid, paperId = null) {
   d3.selectAll("#tabs button").attr("aria-selected", (q) => q.id === qid);
   const q = QUESTIONS.find((x) => x.id === qid);
   document.getElementById("question-text").textContent = q.text;
-  updateHash();
+  document.title = `${q.tab} · AI Safety Evidence Dashboard`; // as in q/<slug>/index.html
+  updateURL();
   render();
-}
-
-function updateHash() {
-  const h = new URLSearchParams({ q: state.q });
-  if (state.selected) h.set("paper", state.selected);
-  history.replaceState(null, "", "#" + h.toString());
 }
 
 /* ---------- chart ---------- */
@@ -506,7 +524,7 @@ function renderMatrix(papers) {
 
 function selectPaper(id) {
   state.selected = state.selected === id ? null : id;
-  updateHash();
+  updateURL();
   render();
   if (state.selected) document.getElementById("detail").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
