@@ -17,10 +17,10 @@ Around that, the dashboard shows:
 - **What the authors claim**, as a verbatim quote, or "none" when the paper never states what its result means for the question.
 - **How each paper defines the question's terms**, in a definitions matrix. Cells are highlighted where a blinded reader found the paper's sense differs from the question's.
 - **Scope and limitations**, as verbatim quotes from the paper: what it studied, and the caveats it states itself. A language model picks the quotes but adds no words of its own.
-- **Caveats** (model-written) for weak points the paper doesn't concede. These come from a reader who saw only a de-branded copy (no title, authors, labs or abstract) and flagged definition mismatches, scope gaps, weak method links and framing overreach, each with a quote. The full flags sit in the collapsed LLM-judgment section.
+- **Caveats** (model-written) for weak points the paper doesn't concede. These come from a reader who saw only a de-branded copy (no title, authors, labs or abstract) and flagged definition mismatches, scope gaps, weak method links and framing overreach, each with a quote. The flags themselves stay in the data; only definition mismatches are shown, in the matrix.
 - **Outside critiques ("satellites")**, the small dots linked to a paper. These are LessWrong / Alignment Forum comments and posts kept only if they change how the result bears on the question. Each carries a verbatim quote and links to the source. Each is a chevron: a critique that weakens the result (or narrows what it covers) points back toward the Unclear line, a supporting one away from it, and a reframing one at what it answers. Weakening and supporting critiques sit above their paper if they pull the answer toward yes, below if toward no; the rest sit level with it. A reply to another kept critique hangs off that critique.
 
-Papers and preprints are drawn as squares, essays and blog posts (not peer reviewed) as circles. The older LLM judgment of each paper's *evidence* (the stance score) is kept in a collapsed section of the detail panel.
+Papers and preprints are drawn as squares, essays and blog posts (not peer reviewed) as circles. The older LLM judgment of each paper's *evidence* (the stance score, scoring passes, blind pass) is kept in `data/papers.json` but not shown on the page.
 
 Every quote in the data is machine-checked against the cached source text (`tools/check_quotes.py`).
 
@@ -112,7 +112,7 @@ To overrule the legacy stance score without losing the original, set:
 "human_override": {"stance": -1, "note": "why", "by": "kenan", "date": "2026-10-20"}
 ```
 
-The detail panel's LLM-judgment section then shows both values. Leave `stance` itself untouched.
+Leave `stance` itself untouched. Like the stance, the override is kept in the data but not shown on the page.
 
 ## Adding a paper
 

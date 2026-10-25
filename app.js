@@ -3,7 +3,6 @@
 // Questions (text, key terms with the dashboard's working definitions, method lanes) live in data/questions.json.
 let QUESTIONS = [];
 
-const STANCE_LABELS = { "-2": "Strongly against", "-1": "Against", "0": "Mixed / orthogonal", "1": "For", "2": "Strongly for" };
 const ANSWER_LABELS = { "-2": "clearly not", "-1": "probably not", "0": "unclear / doesn't say", "1": "probably yes", "2": "clearly yes" };
 // Dot size = how directly the authors would say the work bears on the question.
 const RELEVANCE = { central: 10, partial: 7, tangential: 4.5 };
@@ -15,16 +14,9 @@ const EFFECTS = {
   supports: { label: "supports", legend: "supports: points away from it" },
   reframes: { label: "reframes", legend: "reframes: points at what it answers" },
 };
-const FLAG_LABELS = {
-  definition_mismatch: "Definition differs",
-  scope_gap: "Scope gap",
-  method_weak_link: "Method weak link",
-  framing_overreach: "Framing overreach",
-};
 const LIMITATION_LABELS = { scope: "scope", stated: "limitation" };
 const isEssay = (p) => p.source_type === "essay" || p.source_type === "blog";
 
-const effStance = (p) => (p.human_override && Number.isInteger(p.human_override.stance) ? p.human_override.stance : p.stance);
 // The authors' answer: their own correction if they gave one, else the LLM's estimate of it (null if not estimated yet).
 const authorAnswer = (p) => {
   const v = p.author_view, r = p.author_response;
@@ -531,15 +523,6 @@ function renderDetail(p) {
     el.innerHTML = `<p class="muted">Tap or click a dot to see the paper's details.</p>`;
     return;
   }
-  const s = effStance(p);
-  const badges = [`<span class="badge stance">${s > 0 ? "+" : ""}${s} · ${STANCE_LABELS[s]}</span>`];
-  if (p.flagged) {
-    badges.push(`<span class="badge flag">⚑ Flagged for review: scoring passes disagree (${(p.stance_passes || []).map(sign).join(" vs ")})</span>`);
-  }
-  if (p.human_override) {
-    badges.push(`<span class="badge override">✎ Human override${p.human_override.stance !== undefined ? `: stance ${sign(p.human_override.stance)} (model said ${sign(p.stance)})` : ""}</span>`);
-  }
-
   const rels = (p.relations || []).map((r) => {
     const t = state.byId.get(r.target_id);
     return `<li>${esc(r.type)} → ${t ? `<button class="rel-link" data-id="${esc(t.id)}">${esc(t.title)}</button>` : esc(r.target_id)}</li>`;
@@ -554,8 +537,6 @@ function renderDetail(p) {
 
   const quote = (v) => `<q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span>`;
   const op = p.operationalization;
-  const flags = (p.adversarial?.flags || []).map((f) =>
-    `<li><span class="flag-kind ${esc(f.kind)}">${esc(FLAG_LABELS[f.kind] || f.kind)}${f.term ? `: ${esc(f.term)}` : ""}</span> ${quote(f)}${llm(f.text)}</li>`);
   const lims = [...(p.limitations || [])].sort((a, b) => (a.kind === "scope" ? 0 : 1) - (b.kind === "scope" ? 0 : 1)).map((l) =>
     `<li><span class="flag-kind">${esc(LIMITATION_LABELS[l.kind] || l.kind)}</span> ${quote(l)}</li>`);
   // Each critique in a box, its replies (reply_to) nested as boxes inside it; highest karma first.
@@ -591,22 +572,7 @@ function renderDetail(p) {
       ${row("Code", p.code_url ? `<a href="${esc(p.code_url)}" target="_blank" rel="noopener">${codeHost(p.code_url)}</a>` : `<span class="muted">Not available</span>`)}
       ${row("Relations", list(rels))}
       ${row("Cited by (in dataset)", list(incoming))}
-    </dl>
-    <details class="judgment">
-      <summary>LLM judgment: weak points and stance score</summary>
-      <p class="muted">A model's own reading of the paper, as opposed to what its authors say or would say. Kept for reference; it is a judgment call.</p>
-      ${flags.length ? `<dl>${row(`Possible weak points${p.adversarial.blinded ? ` <span class="loc dt-note">read blind: no title, authors or abstract</span>` : ""}`, list(flags, "tag-list"))}</dl>` : ""}
-      <div class="badges">${badges.join("")}</div>
-      <dl>
-        ${row("Claim (paraphrase)", llm(p.claim))}
-        ${row("Stance rationale", llm(p.stance_rationale))}
-        ${row("Scoring passes", p.stance_passes ? `A (claim) ${sign(p.stance_passes[0])} · B (evidence) ${sign(p.stance_passes[1])} → stance ${sign(p.stance)}` : "")}
-        ${p.blind_pass ? row("Blind pass", `${sign(p.blind_pass.stance)} · ${esc(p.blind_pass.evidence_strength)} · conf ${p.blind_pass.judge_confidence.toFixed(2)}${p.blind_pass.stance !== p.stance ? " <strong>(differs)</strong>" : ""}<br><span class="muted">${llm(p.blind_pass.rationale)}</span>`) : ""}
-        ${p.human_override ? row("Override note", esc(p.human_override.note || "")) : ""}
-        ${row("Evidence strength", esc(p.evidence_strength))}
-        ${row("Judge confidence", p.judge_confidence.toFixed(2))}
-      </dl>
-    </details>`;
+    </dl>`;
   el.querySelectorAll(".rel-link").forEach((b) =>
     b.addEventListener("click", () => {
       const t = recordFor(b.dataset.id) || state.byId.get(b.dataset.id);
