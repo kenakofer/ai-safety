@@ -32,11 +32,11 @@ Return one JSON object:
   "stance_rationale": "2-3 sentences citing specific sections/figures",
   "evidence_strength": "low | medium | high",
   "judge_confidence": 0.0,
-  "caveats": [], "code_available": false,
+  "caveats": [], "code_url": null,
   "relations": [{"target_id": "", "type": "replicates | critiques | extends"}],
   "flagged": false,
   "human_override": null
 }
 ```
 
-Rules: never invent metadata. Use "et al." rather than guessing authors. `code_available` is true only if you saw a code link or an explicit release statement.
+Rules: never invent metadata. Use "et al." rather than guessing authors. `code_url` is the authors' own code repository, copied from a link in the paper; null if there is none (a release statement without a link, or links to other people's libraries, do not count).

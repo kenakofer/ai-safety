@@ -65,8 +65,9 @@ for p in papers:
     c = p.get("judge_confidence")
     if not isinstance(c, (int, float)) or not 0 <= c <= 1:
         err(p, "judge_confidence must be in [0, 1]")
-    if not isinstance(p.get("code_available"), bool):
-        err(p, "code_available must be bool")
+    u = p.get("code_url", 0)
+    if not (u is None or isinstance(u, str) and u.startswith("https://")):
+        err(p, "code_url must be an https URL or null")
     if "human_override" not in p:
         err(p, "human_override key missing (use null)")
 

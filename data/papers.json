@@ -56,7 +56,7 @@
         "location": "2.2 Model Organisms of Misalignment"
       }
     ],
-    "code_available": false,
+    "code_url": "https://github.com/anthropics/sleeper-agents-paper",
     "relations": [],
     "flagged": false,
     "human_override": null,
@@ -154,7 +154,7 @@
         "location": "Appendix B Limitations"
       }
     ],
-    "code_available": false,
+    "code_url": "https://github.com/joshuaclymer/poser",
     "relations": [
       {
         "target_id": "2401.05566",
@@ -262,7 +262,7 @@
         "location": "Limitations: Uncertainty about source of scheming behavior"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [],
     "flagged": false,
     "human_override": null,
@@ -383,7 +383,7 @@
         "location": "1 Introduction, Limitations"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/redwoodresearch/alignment_faking_public",
     "relations": [
       {
         "target_id": "2401.05566",
@@ -503,7 +503,7 @@
         "location": "Extending Supervised Fine-Tuning Experiments / Results"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/safety-research/open-source-alignment-faking",
     "relations": [
       {
         "target_id": "2412.14093",
@@ -622,7 +622,7 @@
         "location": "4 Results: General patterns"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/jjpn97/eval_awareness",
     "relations": [],
     "flagged": false,
     "human_override": null,
@@ -715,7 +715,7 @@
         "location": "6.4 Limitations"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2412.14093",
@@ -843,7 +843,7 @@
         "location": "5 Limitations of our hypothesis testing"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/safety-research/open-source-alignment-faking",
     "relations": [
       {
         "target_id": "2412.14093",
@@ -968,7 +968,7 @@
         "location": "6.2 Verbalized evaluation awareness causally influences the rate of covert action"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2412.04984",
@@ -1071,7 +1071,7 @@
         "location": "Abstract"
       }
     ],
-    "code_available": true,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2412.14093",
@@ -1186,7 +1186,7 @@
         "location": "7 Additional Discussions: Scope for VLAF Usage"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/launchnlp/VLAF",
     "relations": [
       {
         "target_id": "2506.18032",
@@ -1312,7 +1312,7 @@
         "location": "Discussion / Scope and Conventions"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/MatteoLeonesi/tatemae-alignment-faking-detection",
     "relations": [
       {
         "target_id": "2412.14093",
@@ -1429,7 +1429,7 @@
         "location": "5 Discussion and Conclusion / Limitations"
       }
     ],
-    "code_available": true,
+    "code_url": "https://anonymous.4open.science/r/alignment-faking-deep-values-9322/README.md",
     "relations": [
       {
         "target_id": "2506.18032",
@@ -1566,7 +1566,7 @@
         "location": "4.2, Installed AF does not reproduce natural-AF magnitude"
       }
     ],
-    "code_available": true,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2412.14093",
@@ -1682,7 +1682,7 @@
         "location": "6 Discussion"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/milesaturpin/cot-unfaithfulness",
     "relations": [],
     "flagged": false,
     "human_override": null,
@@ -1797,7 +1797,7 @@
         "location": "1. Introduction"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2305.04388",
@@ -1911,7 +1911,7 @@
         "location": "1 Introduction"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/JacobPfau/fillerTokens",
     "relations": [
       {
         "target_id": "2307.13702",
@@ -2024,7 +2024,7 @@
         "location": "6 Limitations"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2305.04388",
@@ -2145,7 +2145,7 @@
         "location": "Conclusion"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/jettjaniak/chainscope",
     "relations": [
       {
         "target_id": "2305.04388",
@@ -2272,7 +2272,7 @@
         "location": "3.2 Optimizing Against a Chain-of-Thought Monitor"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [],
     "flagged": false,
     "human_override": null,
@@ -2390,7 +2390,7 @@
         "location": "2.1 Metric"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2501.08156",
@@ -2514,7 +2514,7 @@
         "location": "4.3 Limitations and Future Work"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/cotredhanded/code",
     "relations": [
       {
         "target_id": "2503.11926",
@@ -2631,7 +2631,7 @@
         "location": "9.1. Limitations of our methodology and results"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2505.05410",
@@ -2757,7 +2757,7 @@
         "location": "5 Limitations"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [],
     "flagged": false,
     "human_override": null,
@@ -2866,7 +2866,7 @@
         "location": "5 Discussion"
       }
     ],
-    "code_available": false,
+    "code_url": "https://anonymous.4open.science/r/feedback_spillover",
     "relations": [
       {
         "target_id": "2503.11926",
@@ -2983,7 +2983,7 @@
         "location": "6.1 Limitations and Future Work"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/arturzolkowski/CoT-Obfuscation",
     "relations": [
       {
         "target_id": "2507.05246",
@@ -3092,7 +3092,7 @@
         "location": "6. Conclusion"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2507.11473",
@@ -3219,7 +3219,7 @@
         "location": "Limitations"
       }
     ],
-    "code_available": true,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2505.05410",
@@ -3344,7 +3344,7 @@
         "location": "5.1 Limitations and Future Works"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2511.11584",
@@ -3452,7 +3452,7 @@
         "location": "5 Discussion (Limitations)"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2503.11926",
@@ -3567,7 +3567,7 @@
         "location": "A.1 Discussion"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/ASTRAL-Group/MonitorBench",
     "relations": [
       {
         "target_id": "2505.05410",
@@ -3686,7 +3686,7 @@
         "location": "Noise-driven problem instances affect g-mean2"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/openai/monitorability-evals",
     "relations": [
       {
         "target_id": "2503.11926",
@@ -3797,7 +3797,7 @@
         "location": "Introduction / Key results from our toy models"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/anthropics/toy-models-of-superposition",
     "relations": [],
     "flagged": false,
     "human_override": null,
@@ -3906,7 +3906,7 @@
         "location": "1 Introduction"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4013,7 +4013,7 @@
         "location": "1.1 Motivation"
       }
     ],
-    "code_available": false,
+    "code_url": "https://github.com/adamjermyn/toy_model_interpretability",
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4130,7 +4130,7 @@
         "location": "5.4 Refining and Verifying Interpretations"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/wesg52/sparse-probing-paper",
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4242,7 +4242,7 @@
         "location": "Appendix C.2"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/HoagyC/sparse_coding",
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4370,7 +4370,7 @@
         "location": "Discussion: Theories of Superposition"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4495,7 +4495,7 @@
         "location": "2.5 Interference arbiters collisions between features"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4613,7 +4613,7 @@
         "location": "Discussion and Conclusion / Limitations"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/wesg52/universal-neurons",
     "relations": [
       {
         "target_id": "2305.01610",
@@ -4721,7 +4721,7 @@
         "location": "Discussion / Limitations"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/JoshEngels/MultiDimensionalFeatures",
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4834,7 +4834,7 @@
         "location": "6.3 Limitations and future work"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2209.10652",
@@ -4953,7 +4953,7 @@
         "location": "3 Toy models of feature absorption"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/lasr-spelling/sae-spelling",
     "relations": [
       {
         "target_id": "web:towards-monosemanticity",
@@ -5065,7 +5065,7 @@
         "location": "1 Introduction"
       }
     ],
-    "code_available": true,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2309.08600",
@@ -5184,7 +5184,7 @@
         "location": "5 Meta-SAEs"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "web:towards-monosemanticity",
@@ -5292,7 +5292,7 @@
         "location": "7 Conclusion / Limitations"
       }
     ],
-    "code_available": false,
+    "code_url": "https://github.com/JoshEngels/SAE-Probes",
     "relations": [
       {
         "target_id": "2309.08600",
@@ -5395,7 +5395,7 @@
         "location": "2 Methods"
       }
     ],
-    "code_available": true,
+    "code_url": "https://github.com/liuyz0/SuperpositionScaling",
     "relations": [
       {
         "target_id": "2209.10652",
@@ -5511,7 +5511,7 @@
         "location": "6 Discussion / Limitations"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "web:towards-monosemanticity",
@@ -5639,7 +5639,7 @@
         "location": "On the Title"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2209.10652",
@@ -5762,7 +5762,7 @@
         "location": "Footnote 4"
       }
     ],
-    "code_available": false,
+    "code_url": null,
     "relations": [
       {
         "target_id": "2405.14860",

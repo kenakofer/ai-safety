@@ -74,7 +74,7 @@ The fields in `data/papers.json` follow the project spec:
 - `id`, `question_id`, `title`, `authors[]`, `first_version_date`, `url`
 - `claim`, `models_tested[]`, `setup`, `key_result`
 - `stance` (−2..2), `stance_rationale`, `evidence_strength` (low|medium|high), `judge_confidence` (0..1)
-- `caveats[]`, `code_available`, `relations[{target_id, type}]`, `human_override`
+- `caveats[]`, `code_url` (null if none found), `relations[{target_id, type}]`, `human_override`
 
 Additions (stance layer):
 - `stance_passes: [A, B]`. Pass A scores the paper's *claim* (abstract and framing). Pass B scores what its *results and limitations* support. `stance` = mean of the two, rounded toward zero.

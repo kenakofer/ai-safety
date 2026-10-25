@@ -549,6 +549,7 @@ function renderDetail(p) {
       `<li><button class="rel-link" data-id="${esc(o.id)}">${esc(o.title)}</button> ${esc(r.type)} this</li>`));
 
   const row = (k, v) => (v ? `<dt>${k}</dt><dd>${v}</dd>` : "");
+  const codeHost = (u) => (u.includes("github.com") ? "GitHub" : u.includes("anonymous.4open.science") ? "Anonymous GitHub" : "Code");
   const list = (xs, cls) => (xs.length ? `<ul${cls ? ` class="${cls}"` : ""}>${xs.join("")}</ul>` : "—");
 
   const quote = (v) => `<q>${esc(v.quote)}</q> <span class="loc">${esc(v.location)}</span>`;
@@ -587,7 +588,7 @@ function renderDetail(p) {
       ${row(`Outside critiques (${allSats.length})`, sats.length ? `<ul class="sat-boxes">${sats.join("")}</ul>` : `<span class="muted">${noSats}</span>`)}
       ${row("Models tested", p.models_tested.length ? `<div class="chips">${p.models_tested.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</div>` : "—")}
       ${row("Caveats", p.caveats.length ? `<div class="llm">${list(p.caveats.map((c) => `<li>${esc(c)}</li>`))}</div>` : "—")}
-      ${row("Code available", p.code_available ? "Yes" : "No / not found")}
+      ${row("Code", p.code_url ? `<a href="${esc(p.code_url)}" target="_blank" rel="noopener">${codeHost(p.code_url)}</a>` : `<span class="muted">Not available</span>`)}
       ${row("Relations", list(rels))}
       ${row("Cited by (in dataset)", list(incoming))}
     </dl>
