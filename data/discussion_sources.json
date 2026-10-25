@@ -386,5 +386,122 @@
       "comment_count": 3,
       "note": "Critique post 'Comments on OpenAI's Monitorability Evals' on the open-sourced suite from Guan et al. 'Monitoring Monitorability'; short 3-comment thread."
     }
-  ]
+  ],
+  "2401.05566": [
+    {
+      "platform": "lesswrong",
+      "post_id": "ZAsJv7xijKTfZkMtr",
+      "title": "Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training",
+      "url": "https://www.lesswrong.com/posts/ZAsJv7xijKTfZkMtr/sleeper-agents-training-deceptive-llms-that-persist-through",
+      "comment_count": 95,
+      "note": "Author announcement/linkpost by Evan Hubinger (paper's lead author); the main discussion thread, including extended debate (e.g. TurnTrout, Dan H, nostalgebraist) over whether the backdoor-persistence result says anything about naturally arising deceptive alignment."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "mu7eJdesBkKuBycnY",
+      "title": "Sleeper Agent Backdoor Results Are Messy",
+      "url": "https://www.lesswrong.com/posts/mu7eJdesBkKuBycnY/sleeper-agent-backdoor-results-are-messy",
+      "comment_count": 4,
+      "note": "Independent replication (Redwood-affiliated authors, not the paper's authors) on Llama-3.3-70B and Llama-3.1-8B finding backdoor persistence depends on optimizer, CoT-distillation and base model, sometimes opposite to the paper; comments discuss a confound in the original CoT-distill data."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "Sf5CBSo44kmgFdyGM",
+      "title": "On Anthropic’s Sleeper Agents Paper",
+      "url": "https://www.lesswrong.com/posts/Sf5CBSo44kmgFdyGM/on-anthropic-s-sleeper-agents-paper",
+      "comment_count": 5,
+      "note": "Zvi's review of the paper (not by the authors); comment thread has evhub correcting details and nostalgebraist arguing the result is reinterpretable as data-ordering effects."
+    }
+  ],
+  "2412.04984": [
+    {
+      "platform": "lesswrong",
+      "post_id": "8gy7c8GAPkuu6wTiX",
+      "title": "Frontier Models are Capable of In-context Scheming",
+      "url": "https://www.lesswrong.com/posts/8gy7c8GAPkuu6wTiX/frontier-models-are-capable-of-in-context-scheming",
+      "comment_count": 24,
+      "note": "Author announcement by Apollo Research (Marius Hobbhahn with co-authors incl. Meinke, Balesni, Schoen); main LW thread on the paper's results; comments include Joe Carlsmith's take on the sandbagging results and a role-play vs. genuine-scheming debate (Hobbhahn, Kaj Sotala, gwern). Follow-up 'Ablations' post (qGRk7uF92Gcmq2oeK) and Zvi's writeup each have <3 comments so were excluded."
+    }
+  ],
+  "2412.14093": [
+    {
+      "platform": "lesswrong",
+      "post_id": "njAZwT8nkHnjipJku",
+      "title": "Alignment Faking in Large Language Models",
+      "url": "https://www.lesswrong.com/posts/njAZwT8nkHnjipJku/alignment-faking-in-large-language-models",
+      "comment_count": 87,
+      "note": "Author announcement by Ryan Greenblatt (lead author); the largest discussion thread on the paper."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "PWHkMac9Xve6LoMJy",
+      "title": "“Alignment Faking” frame is somewhat fake",
+      "url": "https://www.lesswrong.com/posts/PWHkMac9Xve6LoMJy/alignment-faking-frame-is-somewhat-fake-1",
+      "comment_count": 16,
+      "note": "Jan Kulveit's critique arguing the 'alignment faking' framing is misleading (better read as Claude protecting its values / situationally appropriate behaviour); not by the authors. The best-known critique thread."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "mnFEWfB9FbdLvLbvD",
+      "title": "Takes on \"Alignment Faking in Large Language Models\"",
+      "url": "https://www.lesswrong.com/posts/mnFEWfB9FbdLvLbvD/takes-on-alignment-faking-in-large-language-models",
+      "comment_count": 7,
+      "note": "Joe Carlsmith's analysis of what the result does and doesn't show for scheming arguments (Carlsmith reviewed the paper pre-publication but is not an author); comments include Rohin Shah on corrigibility and a defence of the role-play interpretation."
+    }
+  ],
+  "web:alignment-faking-revisited": [
+    {
+      "platform": "lesswrong",
+      "post_id": "Fr4QsQT52RFKHvCAH",
+      "title": "Alignment Faking Revisited: Improved Classifiers and Open Source Extensions",
+      "url": "https://www.lesswrong.com/posts/Fr4QsQT52RFKHvCAH/alignment-faking-revisited-improved-classifiers-and-open",
+      "comment_count": 20,
+      "note": "The work's own LW post by the authors (John Hughes, Abhay Sheshadri et al.): replication of the AF paper, improved AF classifier, open-source model results."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "TazJpnBnvPC5tJoWo",
+      "title": "Alignment Faking is a Linear Feature in Anthropic's Hughes Model (Edited 1/11/26)",
+      "url": "https://www.lesswrong.com/posts/TazJpnBnvPC5tJoWo/alignment-faking-is-a-linear-feature-in-anthropic-s-hughes",
+      "comment_count": 4,
+      "note": "Independent interpretability analysis (James Hoffend, not an author) of the open-source alignment-faking model organism released in this work ('Hughes model'); thread includes a critique that led the author to revise the claims."
+    }
+  ],
+  "2505.23836": [
+    {
+      "platform": "lesswrong",
+      "post_id": "yTameAzCdycci68sk",
+      "title": "Do models know when they are being evaluated?\n",
+      "url": "https://www.lesswrong.com/posts/yTameAzCdycci68sk/do-models-know-when-they-are-being-evaluated",
+      "comment_count": 9,
+      "note": "Interim MATS research report from the same project (coauthored by Joe Needham and Marius Hobbhahn, both paper authors) that became this paper; early version of the eval-vs-deployment classification results, not a post about the final arXiv paper."
+    }
+  ],
+  "2506.18032": [
+    {
+      "platform": "lesswrong",
+      "post_id": "ghESoA8mo3fv9Yx3E",
+      "title": "Why Do Some Language Models Fake Alignment While Others Don't?",
+      "url": "https://www.lesswrong.com/posts/ghESoA8mo3fv9Yx3E/why-do-some-language-models-fake-alignment-while-others-don",
+      "comment_count": 14,
+      "note": "Author linkpost by Abhay Sheshadri with co-authors (John Hughes, Alex Mallen, Jozdien, janus, Fabien Roger) announcing the paper."
+    }
+  ],
+  "2509.15541": [
+    {
+      "platform": "lesswrong",
+      "post_id": "JmRfgNYCrYogCq7ny",
+      "title": "Stress Testing Deliberative Alignment for Anti-Scheming Training",
+      "url": "https://www.lesswrong.com/posts/JmRfgNYCrYogCq7ny/stress-testing-deliberative-alignment-for-anti-scheming",
+      "comment_count": 19,
+      "note": "Author announcement by Apollo (Mikita Balesni, Bronson Schoen, Marius Hobbhahn et al.) of the anti-scheming paper; comments include Fabien Roger's concern about generalization from training pressure, questions on how capability training raised evaluation-awareness/sandbagging, and Tomek Korbak's questions on covert actions as a proxy for scheming."
+    }
+  ],
+  "2405.05466": [],
+  "2506.21584": [],
+  "web:chameleonbench": [],
+  "2604.20995": [],
+  "2604.26511": [],
+  "2605.27681": [],
+  "2607.13346": []
 }

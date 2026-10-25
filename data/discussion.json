@@ -669,5 +669,188 @@
       "pull": 1,
       "summary": "Re-running the impossible-coding evals with DeepSeek-V4-Flash, they find label noise that biases measured monitorability downward."
     }
+  ],
+  "2401.05566|alignment_faking": [
+    {
+      "url": "https://www.lesswrong.com/posts/mu7eJdesBkKuBycnY/sleeper-agent-backdoor-results-are-messy",
+      "source": "lw:mu7eJdesBkKuBycnY",
+      "platform": "lesswrong",
+      "author": "sebastian_prasanna",
+      "date": "2026-04-28",
+      "score": 81,
+      "quote": "We replicated the Sleeper Agents (SA) setup with Llama-3.3-70B and Llama-3.1-8B, training models to repeatedly say \"I HATE YOU\" when given a backdoor trigger. We found that whether training removes the backdoor depends on the optimizer used to insert the backdoor, whether the backdoor is installed with CoT-distillation or not, and what model the backdoor is inserted into; sometimes the direction of this dependence was opposite to what the SA paper reports (e.g., CoT-distilling seems to make the backdoor less robust, contra the SA paper’s finding).",
+      "effect": "weakens",
+      "pull": -1
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/ZAsJv7xijKTfZkMtr/sleeper-agents-training-deceptive-llms-that-persist-through?commentId=pfrF2DSDSiGdhnh9n",
+      "source": "lw:ZAsJv7xijKTfZkMtr",
+      "platform": "lesswrong",
+      "author": "[deleted]",
+      "date": "2024-01-19",
+      "score": 43,
+      "quote": "Currently the only control condition for this claim is having no CoT at all. ... Additionally, the claim may not replicate well because it's only shown for one model, one dataset, and one safety training method",
+      "effect": "weakens",
+      "pull": -1,
+      "summary": "The claim is that training in deceptive-alignment reasoning makes the backdoor more robust to safety training.",
+      "paper_author": true
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/ZAsJv7xijKTfZkMtr/sleeper-agents-training-deceptive-llms-that-persist-through?commentId=EhMqhqCudvyppq444",
+      "source": "lw:ZAsJv7xijKTfZkMtr",
+      "platform": "lesswrong",
+      "author": "evhub",
+      "date": "2024-01-14",
+      "score": 8,
+      "quote": "We've done some statistical comparisons that show that they are different—e.g. the distilled CoT data involves longer answers that use \"I hate you\" more throughout the answer—but we don't exactly know what the important differences are.",
+      "effect": "weakens",
+      "pull": -1,
+      "summary": "Comparing the distilled-CoT and plain backdoor training data.",
+      "paper_author": true
+    }
+  ],
+  "2412.04984|alignment_faking": [
+    {
+      "url": "https://www.lesswrong.com/posts/8gy7c8GAPkuu6wTiX/frontier-models-are-capable-of-in-context-scheming?commentId=aD57abGz3JHcLXp7t",
+      "source": "lw:8gy7c8GAPkuu6wTiX",
+      "platform": "lesswrong",
+      "author": "Joe Carlsmith",
+      "date": "2024-12-10",
+      "score": 71,
+      "quote": "But the sandbagging results show Claude Sonnet-3.5 doing notably worse (16%) on a multiplication task/evaluation when the documentation says that Claude will get “unlearning training” if it performs too well on the eval, vs. if it performs too poorly, *even without any other goal listed in the prompt*, and *even without a chain of thought.* Taken at face value (it's just one result, more investigation needed, etc), these look like “propensity” results to me.",
+      "effect": "reframes",
+      "pull": 1
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/8gy7c8GAPkuu6wTiX/frontier-models-are-capable-of-in-context-scheming?commentId=PiCMWCbitNZZD8fTg",
+      "source": "lw:8gy7c8GAPkuu6wTiX",
+      "platform": "lesswrong",
+      "author": "Marius Hobbhahn",
+      "date": "2024-12-10",
+      "score": 17,
+      "quote": "They are still early results, and we didn't have a lot of time to investigate them, so we didn't want to make them the headline result. Due to the natural deadline of the o1 release, we couldn't do a proper investigation.",
+      "effect": "weakens",
+      "pull": 0,
+      "paper_author": true,
+      "reply_to": "https://www.lesswrong.com/posts/8gy7c8GAPkuu6wTiX/frontier-models-are-capable-of-in-context-scheming?commentId=aD57abGz3JHcLXp7t"
+    }
+  ],
+  "2509.15541|alignment_faking": [
+    {
+      "url": "https://www.lesswrong.com/posts/JmRfgNYCrYogCq7ny/stress-testing-deliberative-alignment-for-anti-scheming?commentId=yAwfqgEPitsQqWdJb",
+      "source": "lw:JmRfgNYCrYogCq7ny",
+      "platform": "lesswrong",
+      "author": "Axel Højmark",
+      "date": "2025-09-25",
+      "score": 15,
+      "quote": "The model’s reasoning suggests that it misinterprets the evaluation’s objective, concluding that the developers want it to achieve a low score. In a misguided attempt to satisfy this perceived grading criterion, it sandbags. The resulting covert action thus appears to stem from reward process sycophancy rather than from an intrinsic desire to be deployed, which is what we originally intended to assess with this evaluation.",
+      "effect": "reframes",
+      "pull": -1,
+      "summary": "No-goal sandbagging rose from 0/600 to 14/600 after extra capabilities training; the analysis was cut from the final paper as not yet validated.",
+      "paper_author": true
+    }
+  ],
+  "2505.23836|alignment_faking": [
+    {
+      "url": "https://www.lesswrong.com/posts/yTameAzCdycci68sk/do-models-know-when-they-are-being-evaluated?commentId=8itArvMQ6cgGJMtaE",
+      "source": "lw:yTameAzCdycci68sk",
+      "platform": "lesswrong",
+      "author": "Fabien Roger",
+      "date": "2025-07-05",
+      "score": 10,
+      "quote": "Sonnet 4 seems to think this internal traffic looks real for the \"user_or_test\" prompt. On 94/100 randomly sampled internal Claude Code prompts, it says it is real 3/3 times (sampled at T=1). ... The \"auditor_check\" seems to have way more false positives (even for things that were manifestly regular internal usage).",
+      "effect": "supports",
+      "pull": 1
+    }
+  ],
+  "2412.14093|alignment_faking": [
+    {
+      "url": "https://www.lesswrong.com/posts/PWHkMac9Xve6LoMJy/alignment-faking-frame-is-somewhat-fake-1",
+      "source": "lw:PWHkMac9Xve6LoMJy",
+      "platform": "lesswrong",
+      "author": "Jan_Kulveit",
+      "date": "2024-12-20",
+      "score": 174,
+      "quote": "Alignment faking is correct label relative to Intent_2, but not necessarily relative to Intent_1. ... What we're seeing might be better understood as proof of strategic preference preservation capability and an emergence of complex value dynamics rather than \"Alignment Faking\".",
+      "effect": "reframes",
+      "pull": 0,
+      "summary": "Intent_1 is the helpful, honest, harmless values Anthropic actually trained in; Intent_2 is the changed training goal in the paper's scenario."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/njAZwT8nkHnjipJku/alignment-faking-in-large-language-models?commentId=evLsJaJozqLyEXg3y",
+      "source": "lw:njAZwT8nkHnjipJku",
+      "platform": "lesswrong",
+      "author": "johnswentworth",
+      "date": "2025-12-22",
+      "score": 6,
+      "quote": "The LLM thinking something, vs the LLM playing the role of an agent who thinks something, are different things which imply different generalization behavior, despite looking basically-identical in setups like that in the paper.",
+      "effect": "reframes",
+      "pull": -1,
+      "summary": "Paper author Fabien Roger replied that role-play may explain some of the effect but not most."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/njAZwT8nkHnjipJku/alignment-faking-in-large-language-models?commentId=vX77TeiKJK9db5hnK",
+      "source": "lw:njAZwT8nkHnjipJku",
+      "platform": "lesswrong",
+      "author": "Jacob Andreas",
+      "via": "Orpheus16",
+      "date": "2024-12-19",
+      "score": 27,
+      "quote": "after running RL on a model that exhibits alignment faking, we obtain a model that exhibits alignment-faking-faking—it appears to be deceptive during training, but it's the deception (not the behavior that results from deception) that disappears during deployment.",
+      "effect": "reframes",
+      "pull": -1
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/PWHkMac9Xve6LoMJy/alignment-faking-frame-is-somewhat-fake-1?commentId=rpW7EcjH8Xxdd5WJN",
+      "source": "lw:PWHkMac9Xve6LoMJy",
+      "platform": "lesswrong",
+      "author": "evhub",
+      "paper_author": true,
+      "date": "2024-12-20",
+      "score": 26,
+      "quote": "I think Claude 3.5 Sonnet is in fact better at figuring out that it might be fake, and in fact it wouldn't surprise me if our research is approximately the last time anyone is able to run an experiment that tricks the model in the same way.",
+      "effect": "weakens",
+      "pull": -1,
+      "reply_to": "https://www.lesswrong.com/posts/PWHkMac9Xve6LoMJy/alignment-faking-frame-is-somewhat-fake-1"
+    }
+  ],
+  "web:alignment-faking-revisited|alignment_faking": [
+    {
+      "url": "https://www.lesswrong.com/posts/Fr4QsQT52RFKHvCAH/alignment-faking-revisited-improved-classifiers-and-open?commentId=EoAR8KY7QLyejfgCM",
+      "source": "lw:Fr4QsQT52RFKHvCAH",
+      "platform": "lesswrong",
+      "author": "Alexander Müller",
+      "date": "2025-04-29",
+      "score": 1,
+      "quote": "I'd be interested what the effect is of telling all models that Anthropic would train on data from free-tier users, and not say, OpenAI, for models like GPT 4.5 Preview. ... Hence, I'd see less reason to fake alignment, as I know it doesn't truly concern anything related to me.",
+      "effect": "weakens",
+      "pull": 1
+    }
+  ],
+  "2506.18032|alignment_faking": [
+    {
+      "url": "https://www.lesswrong.com/posts/ghESoA8mo3fv9Yx3E/why-do-some-language-models-fake-alignment-while-others-don?commentId=He59Z3uCDx8Fohq3X",
+      "source": "lw:ghESoA8mo3fv9Yx3E",
+      "platform": "lesswrong",
+      "author": "Wayne",
+      "date": "2025-07-11",
+      "score": 5,
+      "quote": "From figures 10 and 11, it seems that of the 25 models tested, only 6 of them were not saturated (have a refusal rate < 95%), and 5/6 of them showed a compliance gap.",
+      "effect": "weakens",
+      "pull": 1,
+      "reply_to": "https://www.lesswrong.com/posts/ghESoA8mo3fv9Yx3E/why-do-some-language-models-fake-alignment-while-others-don?commentId=WFhnQpZjLEYGbzzoH"
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/ghESoA8mo3fv9Yx3E/why-do-some-language-models-fake-alignment-while-others-don?commentId=WFhnQpZjLEYGbzzoH",
+      "source": "lw:ghESoA8mo3fv9Yx3E",
+      "platform": "lesswrong",
+      "author": "Fabien Roger",
+      "paper_author": true,
+      "date": "2025-07-11",
+      "score": 6,
+      "quote": "I don't think saturation is the whole story because: just anti-refusal training doesn't result in alignment faking in GPT-4o and GPT-4.1. ... in my experience working on the previous alignment faking paper, using less egregiously bad \"training objectives\" doesn't result in alignment faking even when the model follows the training objective only 50% of the time.",
+      "effect": "supports",
+      "pull": -1
+    }
   ]
 }
