@@ -213,5 +213,178 @@
       "comment_count": 18,
       "note": "Author's own post; LW discussion thread."
     }
+  ],
+  "2305.04388": [
+    {
+      "platform": "lesswrong",
+      "post_id": "6eKL9wDqeiELbKPDj",
+      "title": "Unfaithful Explanations in Chain-of-Thought Prompting",
+      "url": "https://www.lesswrong.com/posts/6eKL9wDqeiELbKPDj/unfaithful-explanations-in-chain-of-thought-prompting",
+      "comment_count": 8,
+      "note": "First-author (Miles Turpin) post announcing the paper and discussing alignment implications; thread covers where in the explanation the bias enters, planning ahead, sampling details."
+    }
+  ],
+  "2307.13702": [
+    {
+      "platform": "lesswrong",
+      "post_id": "BKvJNzALpxS3LafEs",
+      "title": "Measuring and Improving the Faithfulness of Model-Generated Reasoning",
+      "url": "https://www.lesswrong.com/posts/BKvJNzALpxS3LafEs/measuring-and-improving-the-faithfulness-of-model-generated",
+      "comment_count": 15,
+      "note": "Anthropic author announcement (Radhakrishnan) of Lanham et al. plus the companion question-decomposition paper; thread discusses the early-answering/adding-mistakes metrics and the inverse-scaling result."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "HQyWGE2BummDCc2Cx",
+      "title": "the case for CoT unfaithfulness is overstated",
+      "url": "https://www.lesswrong.com/posts/HQyWGE2BummDCc2Cx/the-case-for-cot-unfaithfulness-is-overstated",
+      "comment_count": 45,
+      "note": "nostalgebraist's critique 'the case for CoT unfaithfulness is overstated': the longest section reinterprets Lanham et al.'s interventions and 'larger models are less faithful' result; it also critiques Turpin et al. 2023 (the author later retracted his Turpin summary after a comment). Highly upvoted 45-comment thread."
+    }
+  ],
+  "2404.15758": [
+    {
+      "platform": "lesswrong",
+      "post_id": "KFkKPbuYCWc9ygpRp",
+      "title": "Filler tokens don’t allow sequential reasoning",
+      "url": "https://www.lesswrong.com/posts/KFkKPbuYCWc9ygpRp/filler-tokens-don-t-allow-sequential-reasoning",
+      "comment_count": 5,
+      "note": "Brendan Long critique arguing 'Let's Think Dot by Dot' shows filler tokens buy parallel, not sequential, computation; Greenblatt and Rohin Shah dispute the serial-depth framing in comments. (The only linkpost, Mq5LqZtP54BC8fXte, has 0 comments.)"
+    }
+  ],
+  "2501.08156": [
+    {
+      "platform": "lesswrong",
+      "post_id": "C8HAa2mf5kcBrpjkX",
+      "title": "Inference-Time-Compute: More Faithful? A Research Note",
+      "url": "https://www.lesswrong.com/posts/C8HAa2mf5kcBrpjkX/inference-time-compute-more-faithful-a-research-note",
+      "comment_count": 10,
+      "note": "First-author (James Chua) research note, the earlier version of the paper under its original title 'Inference-Time-Compute: More Faithful?'; thread debates the cue-articulation metric versus Lanham-style tests."
+    }
+  ],
+  "2503.08679": [],
+  "2503.11926": [
+    {
+      "platform": "lesswrong",
+      "post_id": "7wFdXj9oR8M9AiFht",
+      "title": "OpenAI: Detecting misbehavior in frontier reasoning models",
+      "url": "https://www.lesswrong.com/posts/7wFdXj9oR8M9AiFht/openai-detecting-misbehavior-in-frontier-reasoning-models",
+      "comment_count": 26,
+      "note": "Linkpost and commentary (Daniel Kokotajlo) on OpenAI's CoT-monitoring blog post and paper; 26-comment thread on obfuscated reward hacking and the monitorability tax."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "mpmsK8KKysgSKDm2T",
+      "title": "The Most Forbidden Technique",
+      "url": "https://www.lesswrong.com/posts/mpmsK8KKysgSKDm2T/the-most-forbidden-technique",
+      "comment_count": 9,
+      "note": "Zvi's 'The Most Forbidden Technique', a writeup built around Baker et al.'s finding that training against a CoT monitor causes obfuscation; comments discuss the result and whether it should be credited to earlier Yudkowsky arguments."
+    }
+  ],
+  "2505.05410": [
+    {
+      "platform": "lesswrong",
+      "post_id": "PrcBFPkoRNGWrvdPk",
+      "title": "Reasoning models don't always say what they think",
+      "url": "https://www.lesswrong.com/posts/PrcBFPkoRNGWrvdPk/reasoning-models-don-t-always-say-what-they-think-1",
+      "comment_count": 4,
+      "note": "Author linkpost (Joe Benton) of the Anthropic paper; Ryan Greenblatt and Fabien Roger argue in comments that it should not be read as a big update against CoT monitoring."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "TmaahE9RznC8wm5zJ",
+      "title": "AI CoT Reasoning Is Often Unfaithful",
+      "url": "https://www.lesswrong.com/posts/TmaahE9RznC8wm5zJ/ai-cot-reasoning-is-often-unfaithful",
+      "comment_count": 4,
+      "note": "Zvi writeup dedicated to the Anthropic paper; the top comment (Greenblatt, +34) pushes back on interpreting it as evidence against inspecting CoT."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "WAxkA6gDgrschZovx",
+      "title": "CoT May Be Highly Informative Despite “Unfaithfulness” [METR]",
+      "url": "https://www.lesswrong.com/posts/WAxkA6gDgrschZovx/cot-may-be-highly-informative-despite-unfaithfulness-metr",
+      "comment_count": 3,
+      "note": "METR linkpost replicating Anthropic's Claude 3.7 hint-faithfulness setup (the same experiment as this paper) with clues that need real computation, finding near-universal faithfulness under a relaxed definition; it critiques the multiple-choice guessing correction. Short thread."
+    }
+  ],
+  "2505.23575": [
+    {
+      "platform": "lesswrong",
+      "post_id": "QYAfjdujzRv8hx6xo",
+      "title": "Unfaithful Reasoning Can Fool Chain-of-Thought Monitoring",
+      "url": "https://www.lesswrong.com/posts/QYAfjdujzRv8hx6xo/unfaithful-reasoning-can-fool-chain-of-thought-monitoring",
+      "comment_count": 17,
+      "note": "Author post (LASR Labs: Arnav, Bernabeu-Perez, Helm-Burger et al.) presenting CoT Red-Handed, under the title 'Unfaithful Reasoning Can Fool Chain-of-Thought Monitoring'."
+    }
+  ],
+  "2507.05246": [
+    {
+      "platform": "lesswrong",
+      "post_id": "JvYF5kosLeYGvvLpP",
+      "title": "Evaluating and monitoring for AI scheming",
+      "url": "https://www.lesswrong.com/posts/JvYF5kosLeYGvvLpP/evaluating-and-monitoring-for-ai-scheming",
+      "comment_count": 10,
+      "note": "GDM safety team post (Vika) announcing this paper together with the stealth/situational-awareness paper; the comments (Jozdien, Rauno Arike, Rohin Shah) argue about the CoT-necessity/monitor-evasion results and the RL stress tests."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "AoBTiL7XRRpwpev8p",
+      "title": "LLM CoTs remain monitorable when being unfaithful requires computation",
+      "url": "https://www.lesswrong.com/posts/AoBTiL7XRRpwpev8p/llm-cots-remain-monitorable-when-being-unfaithful-requires",
+      "comment_count": 3,
+      "note": "Independent replication and extension of Emmons et al. across 11 models: unfaithfulness shows up only for simple hints, not hints that need computation. Short thread."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "dwEgSEPxpKjz3Fw5k",
+      "title": "Claude, GPT, and Gemini All Struggle to Evade Monitors",
+      "url": "https://www.lesswrong.com/posts/dwEgSEPxpKjz3Fw5k/claude-gpt-and-gemini-all-struggle-to-evade-monitors",
+      "comment_count": 3,
+      "note": "METR replication of Section 5 of Emmons et al. (GPQA monitor evasion) on Claude, GPT and Gemini; its 3 comments are mostly about CoT terminology, not the result."
+    }
+  ],
+  "2507.11473": [
+    {
+      "platform": "lesswrong",
+      "post_id": "7xneDbsgj6yJDJMjK",
+      "title": "Chain of Thought Monitorability: A New and Fragile Opportunity for AI Safety",
+      "url": "https://www.lesswrong.com/posts/7xneDbsgj6yJDJMjK/chain-of-thought-monitorability-a-new-and-fragile",
+      "comment_count": 32,
+      "note": "Lead-author post (Tomek Korbak) for the multi-org position paper; 32-comment thread with Jacob Hilton, Rohin Shah, Kokotajlo, Greenblatt on outcome-based RL and the pressures on CoT legibility."
+    }
+  ],
+  "2511.11584": [
+    {
+      "platform": "lesswrong",
+      "post_id": "CM7AsQoBxDW4vhkP3",
+      "title": "[Research Note] Optimizing The Final Output Can Obfuscate CoT",
+      "url": "https://www.lesswrong.com/posts/CM7AsQoBxDW4vhkP3/research-note-optimizing-the-final-output-can-obfuscate-cot",
+      "comment_count": 23,
+      "note": "MATS research note by the same group (Drori, Marks et al.), a precursor of this paper: penalizing a property of the output suppresses it in the CoT. 23-comment thread."
+    },
+    {
+      "platform": "lesswrong",
+      "post_id": "HuoyYQ6mFhS5pfZ4G",
+      "title": "[Paper] Output Supervision Can Obfuscate the CoT",
+      "url": "https://www.lesswrong.com/posts/HuoyYQ6mFhS5pfZ4G/paper-output-supervision-can-obfuscate-the-cot",
+      "comment_count": 3,
+      "note": "Author post (jacob_drori) announcing the arXiv paper; the comments are replication and clarification questions about the tasks and the monitor detection metric."
+    }
+  ],
+  "2510.19851": [],
+  "2510.23966": [],
+  "2511.08525": [],
+  "2601.23086": [],
+  "2603.16928": [],
+  "2603.28590": [],
+  "web:openai-monitorability-evals": [
+    {
+      "platform": "lesswrong",
+      "post_id": "z9fPtghFxELBXebY3",
+      "title": "Evaluating Chain-of-Thought Monitorability is Still an Open Problem: Comments on OpenAI's Monitorability Evals",
+      "url": "https://www.lesswrong.com/posts/z9fPtghFxELBXebY3/evaluating-chain-of-thought-monitorability-is-still-an-open",
+      "comment_count": 3,
+      "note": "Critique post 'Comments on OpenAI's Monitorability Evals' on the open-sourced suite from Guan et al. 'Monitoring Monitorability'; short 3-comment thread."
+    }
   ]
 }

@@ -103,8 +103,8 @@
       "quote": "We certainly don't expect that real neural networks implement our constructions with weights that are exactly 0 or 1. Rather, neural networks probably do a messier thing which is (potentially substantially) more efficient, and we are not making predictions about the quantitative sizes of errors at a fixed d.",
       "effect": "weakens",
       "pull": -1,
-      "reply_to": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in?commentId=QdBqtRjJKs3F759ps",
-      "paper_author": true
+      "paper_author": true,
+      "reply_to": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in?commentId=QdBqtRjJKs3F759ps"
     },
     {
       "url": "https://www.lesswrong.com/posts/2roZtSr5TGmLjXMnT/toward-a-mathematical-framework-for-computation-in?commentId=uY7W7YjxXJkiNMDzY",
@@ -341,6 +341,333 @@
       "pull": 0,
       "paper_author": true,
       "reply_to": "https://www.lesswrong.com/posts/MFBTjb2qf3ziWmzz6/sae-feature-geometry-is-outside-the-superposition-hypothesis?commentId=GcA8MYnZok4wubLyH"
+    }
+  ],
+  "2305.04388|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/6eKL9wDqeiELbKPDj/unfaithful-explanations-in-chain-of-thought-prompting?commentId=ZLZS98PwYP4ZRDwB9",
+      "source": "lw:6eKL9wDqeiELbKPDj",
+      "platform": "lesswrong",
+      "author": "Miles Turpin",
+      "date": "2023-06-06",
+      "score": 4,
+      "quote": "A qualitative finding that we didn't put in the paper was that key discrepancies in the explanations that lead models to support the biased answer instead of the correct answer in many cases come near the end of the explanation. Sometimes the model does normal reasoning, and then gives some caveat or makes a mistake at the end, that leads it to ultimately give the biased prediction.",
+      "effect": "reframes",
+      "pull": 0,
+      "paper_author": true
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/HQyWGE2BummDCc2Cx/the-case-for-cot-unfaithfulness-is-overstated?commentId=PZvRb8ykMXBR9dyML",
+      "source": "lw:HQyWGE2BummDCc2Cx",
+      "platform": "lesswrong",
+      "author": "nostalgebraist",
+      "date": "2024-10-04",
+      "score": 23,
+      "quote": "If we don't specify what we want, we get the human default ... and the human default is \"unfaithful\" in the sense of Turpin et al. ... But we... can just specify what we want? Or try to?",
+      "effect": "reframes",
+      "pull": 1,
+      "summary": "Written after he retracted his post's summary of Turpin et al. (that the CoT stays roughly constant)."
+    }
+  ],
+  "2307.13702|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/BKvJNzALpxS3LafEs/measuring-and-improving-the-faithfulness-of-model-generated?commentId=EfpeHy9Jca9nQKTqr",
+      "source": "lw:BKvJNzALpxS3LafEs",
+      "platform": "lesswrong",
+      "author": "Sam Bowman",
+      "date": "2023-07-20",
+      "score": 7,
+      "quote": "I don't think our results clearly show that faithfulness goes down with model size, just that there's less affirmative evidence for faithfulness at larger model sizes, at least in part for predictable reasons related to the metric design.",
+      "effect": "weakens",
+      "pull": 0,
+      "paper_author": true
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/HQyWGE2BummDCc2Cx/the-case-for-cot-unfaithfulness-is-overstated",
+      "source": "lw:HQyWGE2BummDCc2Cx",
+      "platform": "lesswrong",
+      "author": "nostalgebraist",
+      "date": "2024-09-29",
+      "score": 273,
+      "quote": "In constructed cases like these, one has to lie in order to exhibit this property. One has to say the answer one knows is false, as though that answer were true.",
+      "effect": "weakens",
+      "pull": 1,
+      "summary": "On the adding-mistakes test, for questions easy enough to need no CoT."
+    }
+  ],
+  "2404.15758|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/KFkKPbuYCWc9ygpRp/filler-tokens-don-t-allow-sequential-reasoning",
+      "source": "lw:KFkKPbuYCWc9ygpRp",
+      "platform": "lesswrong",
+      "author": "Brendan Long",
+      "date": "2025-12-13",
+      "score": 77,
+      "quote": "I now think this paper should be taken as evidence against LLMs ability to perform long-term reasoning ... in secret ... However, if the problem requires step-by-step thinking and the model isn't deep enough, filler tokens don't help.",
+      "effect": "reframes",
+      "pull": 1
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/KFkKPbuYCWc9ygpRp/filler-tokens-don-t-allow-sequential-reasoning?commentId=k6gggPyioNpg3zfqP",
+      "source": "lw:KFkKPbuYCWc9ygpRp",
+      "platform": "lesswrong",
+      "author": "ryan_greenblatt",
+      "date": "2025-12-15",
+      "score": 10,
+      "quote": "Filler tokens don't allow for serially deeper cognition than what architectural limits allow (n-layers of processing), but they could totally allow for solving a higher fraction of \"heavily serial\" reasoning tasks",
+      "effect": "supports",
+      "pull": -1,
+      "reply_to": "https://www.lesswrong.com/posts/KFkKPbuYCWc9ygpRp/filler-tokens-don-t-allow-sequential-reasoning"
+    }
+  ],
+  "2505.05410|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/TmaahE9RznC8wm5zJ/ai-cot-reasoning-is-often-unfaithful?commentId=zAv7aQfWTWpzz23X2",
+      "source": "lw:TmaahE9RznC8wm5zJ",
+      "platform": "lesswrong",
+      "author": "ryan_greenblatt",
+      "date": "2025-04-04",
+      "score": 34,
+      "quote": "This paper exposes unfaithfulness in cases where the non-visible reasoning is extremely minimal such that it can easily happen within a forward pass (e.g. a simple reward hack or an easy-to-notice hint). However, a lot of my hope for CoT faithfulness comes from cases where the reasoning is sufficiently difficult and serially deep that the model would have to reason in CoT for the reasoning to occur.",
+      "effect": "weakens",
+      "pull": 1
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/WAxkA6gDgrschZovx/cot-may-be-highly-informative-despite-unfaithfulness-metr",
+      "source": "lw:WAxkA6gDgrschZovx",
+      "platform": "lesswrong",
+      "author": "GradientDissenter",
+      "date": "2025-08-11",
+      "score": 65,
+      "quote": "We can almost always detect whether a clue was used to solve the question by looking at the CoT, even when the CoT is unfaithful.",
+      "effect": "reframes",
+      "pull": 1,
+      "summary": "METR replicated the Claude 3.7 Sonnet result within error, then added harder free-response clues; a CoT-reading detector caught clue use at 99.3% TPR (96.2% specificity). To get enough clue use they relied on what they call a rather unnatural prompt."
+    }
+  ],
+  "2503.11926|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/7wFdXj9oR8M9AiFht/openai-detecting-misbehavior-in-frontier-reasoning-models?commentId=Dj4EsMjDJeCG4QKPQ",
+      "source": "lw:7wFdXj9oR8M9AiFht",
+      "platform": "lesswrong",
+      "author": "Thomas Kwa",
+      "date": "2025-03-12",
+      "score": 4,
+      "quote": "It is unclear how this applies to cheating / other malicious behaviors that are hard enough that they require CoT.",
+      "effect": "weakens",
+      "pull": 0
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/7wFdXj9oR8M9AiFht/openai-detecting-misbehavior-in-frontier-reasoning-models?commentId=HejpruxAFPtQH5CLi",
+      "source": "lw:7wFdXj9oR8M9AiFht",
+      "platform": "lesswrong",
+      "author": "Caleb Biddulph",
+      "date": "2025-03-11",
+      "score": 8,
+      "quote": "The model apparently decides to skip the test only at the very end of its CoT, slipping its decision in very briefly: ... This is sort of like steganography, but not the completely hidden, multi-step steganographic reasoning I was thinking of.",
+      "effect": "reframes",
+      "pull": 0
+    }
+  ],
+  "2505.23575|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/QYAfjdujzRv8hx6xo/unfaithful-reasoning-can-fool-chain-of-thought-monitoring?commentId=82dj6yF9vqW3KwuiS",
+      "source": "lw:QYAfjdujzRv8hx6xo",
+      "platform": "lesswrong",
+      "author": "Rohin Shah",
+      "date": "2025-06-08",
+      "score": 35,
+      "quote": "My sense is that there's some baseline level of capability that is required to be a good monitor ... which includes the capacity to consider the hypothesis that the information you've been given is false, and that non-frontier LLMs often don't meet it.",
+      "effect": "weakens",
+      "pull": 1
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/QYAfjdujzRv8hx6xo/unfaithful-reasoning-can-fool-chain-of-thought-monitoring?commentId=MhAjdLG88vwRZ8unS",
+      "source": "lw:QYAfjdujzRv8hx6xo",
+      "platform": "lesswrong",
+      "author": "Nicholas Goldowsky-Dill",
+      "date": "2025-06-03",
+      "score": 6,
+      "quote": "I worry that several of the \"subtle\" tasks might not be that hard for an action-only monitor to catch given proper prompting, but aren't clearly within scope for the current monitor.",
+      "effect": "weakens",
+      "pull": 0,
+      "summary": "His examples are the \"Long implementation\" and \"Variable name\" side tasks."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/QYAfjdujzRv8hx6xo/unfaithful-reasoning-can-fool-chain-of-thought-monitoring?commentId=8Zi9NuiajaQSFzcRL",
+      "source": "lw:QYAfjdujzRv8hx6xo",
+      "platform": "lesswrong",
+      "author": "Nathan Helm-Burger",
+      "date": "2025-06-03",
+      "score": 2,
+      "quote": "For example, the fine-tuned malicious model had a 0% chance of getting caught on subtle tasks by the monitor not using CoT. With CoT, that went up to like 3% catch rate.",
+      "effect": "weakens",
+      "pull": -1,
+      "paper_author": true
+    }
+  ],
+  "2507.05246|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/JvYF5kosLeYGvvLpP/evaluating-and-monitoring-for-ai-scheming?commentId=KGnKhgywiskgPCABX",
+      "source": "lw:JvYF5kosLeYGvvLpP",
+      "platform": "lesswrong",
+      "author": "Jozdien",
+      "date": "2025-07-10",
+      "score": 9,
+      "quote": "My guess is that how faithful a model's CoT is in some setting is highly dependent on propensity—in a setting where a model has a strong desire to not state something explicitly in its CoT, I'd expect models to perform much better at passing information implicitly.",
+      "effect": "weakens",
+      "pull": -1,
+      "summary": "He cites alignment faking, where the CoT actively misled about behaviour."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/JvYF5kosLeYGvvLpP/evaluating-and-monitoring-for-ai-scheming?commentId=zC3qhabtZB6xdxm7r",
+      "source": "lw:JvYF5kosLeYGvvLpP",
+      "platform": "lesswrong",
+      "author": "Rohin Shah",
+      "date": "2025-07-12",
+      "score": 2,
+      "quote": "Okay, that position seems to me equivalent to the position that models will be more capable at evading monitors when they intrinsically want to evade monitors, than when they are explicitly prompted to evade monitors. ... That position seems pretty unlikely to me (for current models). Models are trained really hard to follow instructions in the prompt to the best of their ability.",
+      "effect": "supports",
+      "pull": 1,
+      "paper_author": true,
+      "reply_to": "https://www.lesswrong.com/posts/JvYF5kosLeYGvvLpP/evaluating-and-monitoring-for-ai-scheming?commentId=KGnKhgywiskgPCABX"
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/AoBTiL7XRRpwpev8p/llm-cots-remain-monitorable-when-being-unfaithful-requires",
+      "source": "lw:AoBTiL7XRRpwpev8p",
+      "platform": "lesswrong",
+      "author": "arav-dhoot",
+      "date": "2026-07-15",
+      "score": 46,
+      "quote": "Across 11 models from 6 families (not just Gemini), models follow simple hints unfaithfully well above baseline, but complex hints that require computation are followed near baseline.",
+      "effect": "supports",
+      "pull": 1,
+      "summary": "The post also finds CoT-necessity is per model, not per task: multi-digit multiplication needs no CoT for Opus 4.8 or GPT-5.5, so the paper's complex hints may not force CoT in stronger models."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/dwEgSEPxpKjz3Fw5k/claude-gpt-and-gemini-all-struggle-to-evade-monitors",
+      "source": "lw:dwEgSEPxpKjz3Fw5k",
+      "platform": "lesswrong",
+      "author": "Vincent Cheng",
+      "date": "2025-08-06",
+      "score": 61,
+      "quote": "Similar to the original paper, we see that models are unable to evade even monitors weaker than themselves without heavily losing accuracy.",
+      "effect": "supports",
+      "pull": 1,
+      "summary": "METR replication with Claude and GPT actors."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/dwEgSEPxpKjz3Fw5k/claude-gpt-and-gemini-all-struggle-to-evade-monitors",
+      "source": "lw:dwEgSEPxpKjz3Fw5k",
+      "platform": "lesswrong",
+      "author": "Vincent Cheng",
+      "date": "2025-08-06",
+      "score": 61,
+      "quote": "This GDM paper uses chain-of-thought to mean the response from a reasoning model with reasoning mode turned off and being prompted with \"Think step-by-step.\"",
+      "effect": "reframes",
+      "pull": 0
+    }
+  ],
+  "2507.11473|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/7xneDbsgj6yJDJMjK/chain-of-thought-monitorability-a-new-and-fragile?commentId=wFwxDChRjeLeBPgsz",
+      "source": "lw:7xneDbsgj6yJDJMjK",
+      "platform": "lesswrong",
+      "author": "ryan_greenblatt",
+      "date": "2025-07-15",
+      "score": 13,
+      "quote": "Do reasoning models default to having good grammar in their thoughts? (Even when they are trained to have shorter reasoning.)",
+      "effect": "weakens",
+      "pull": 0,
+      "summary": "His example is a terse, ungrammatical OpenAI trace, which challenges the position paper's premise that a natural-language prior keeps CoT legible."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/7xneDbsgj6yJDJMjK/chain-of-thought-monitorability-a-new-and-fragile?commentId=eiimkYx5EH2FqpmCd",
+      "source": "lw:7xneDbsgj6yJDJMjK",
+      "platform": "lesswrong",
+      "author": "Brendan Long",
+      "date": "2025-07-16",
+      "score": 2,
+      "quote": "I think there's a lot of evidence that CoT from reasoning models is also subject to the same selection pressures, it also limits the trustworthiness, and this isn't a small effect.",
+      "effect": "weakens",
+      "pull": -1,
+      "summary": "His evidence is that Claude can be asked to reason in Spanish or toward a wrong answer, so reasoning CoT faces the same helpful/harmless pressure as outputs."
+    }
+  ],
+  "2511.11584|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/CM7AsQoBxDW4vhkP3/research-note-optimizing-the-final-output-can-obfuscate-cot?commentId=X73ao6xbMR5A6jx3k",
+      "source": "lw:CM7AsQoBxDW4vhkP3",
+      "platform": "lesswrong",
+      "author": "ryan_greenblatt",
+      "date": "2025-07-30",
+      "score": 24,
+      "quote": "The results here don't correspond to the AI learning to reason steganographically.",
+      "effect": "reframes",
+      "pull": 1,
+      "summary": "Paper author Jacob Drori replied \"Agreed.\""
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/CM7AsQoBxDW4vhkP3/research-note-optimizing-the-final-output-can-obfuscate-cot?commentId=iypZzKFa7ziziHArY",
+      "source": "lw:CM7AsQoBxDW4vhkP3",
+      "platform": "lesswrong",
+      "author": "Rohin Shah",
+      "date": "2025-07-31",
+      "score": 8,
+      "quote": "The reward hack is easy to execute (likely doesn't require reasoning, or only very little reasoning) ... The reward function is deliberately designed to cause obfuscation, and is about as close to process-based as you can get while not looking directly at the thoughts.",
+      "effect": "weakens",
+      "pull": 1
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/CM7AsQoBxDW4vhkP3/research-note-optimizing-the-final-output-can-obfuscate-cot?commentId=mjhRN3vgSQHZQjf6L",
+      "source": "lw:CM7AsQoBxDW4vhkP3",
+      "platform": "lesswrong",
+      "author": "lukemarks",
+      "date": "2025-07-31",
+      "score": 5,
+      "quote": "On the point regarding unconditionally down-weighting the penalized word, this was our primary motivation for trying the judge penalty. We agree that it is a strong reason to be skeptical of the regex penalty results in isolation.",
+      "effect": "weakens",
+      "pull": 1,
+      "summary": "Replying to Tomek Korbak: a one-word regex penalty may just lower that token's probability everywhere.",
+      "paper_author": true
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/HuoyYQ6mFhS5pfZ4G/paper-output-supervision-can-obfuscate-the-cot?commentId=4twptitXu4Txz2da4",
+      "source": "lw:HuoyYQ6mFhS5pfZ4G",
+      "platform": "lesswrong",
+      "author": "jacob_drori",
+      "date": "2025-11-22",
+      "score": 1,
+      "quote": "Therefore we interpret the polynomial environment as an example where training against an output monitor caused a big change to the sort of reasoning being done in the CoT. As you note, it is not an example of obfuscation.",
+      "effect": "weakens",
+      "pull": 1,
+      "paper_author": true
+    }
+  ],
+  "web:openai-monitorability-evals|cot": [
+    {
+      "url": "https://www.lesswrong.com/posts/z9fPtghFxELBXebY3/evaluating-chain-of-thought-monitorability-is-still-an-open",
+      "source": "lw:z9fPtghFxELBXebY3",
+      "platform": "lesswrong",
+      "author": "Connor Dilgren",
+      "date": "2026-08-17",
+      "score": 20,
+      "quote": "For each model and dataset combination, most instances never survive filtering in any of the 100 draws. The low eligibility makes it difficult to trust the downstream monitorability estimation, especially given the already-small sizes of the datasets before filtering.",
+      "effect": "weakens",
+      "pull": 0,
+      "summary": "On MATH only 3-5% of instances were eligible for DeepSeek-R1-Distill models, and each model is scored on a different subset, so cross-model comparisons are hard."
+    },
+    {
+      "url": "https://www.lesswrong.com/posts/z9fPtghFxELBXebY3/evaluating-chain-of-thought-monitorability-is-still-an-open",
+      "source": "lw:z9fPtghFxELBXebY3",
+      "platform": "lesswrong",
+      "author": "Connor Dilgren",
+      "date": "2026-08-17",
+      "score": 20,
+      "quote": "we find that models are, surprisingly, often capable of producing valid solutions that meet the \"impossible\" requirement. ... Both solution length evaluations see an increase in g-mean ... by about 17 percentage points moving from the most inclusive to the least inclusive \"actual hack\" set.",
+      "effect": "weakens",
+      "pull": 1,
+      "summary": "Re-running the impossible-coding evals with DeepSeek-V4-Flash, they find label noise that biases measured monitorability downward."
     }
   ]
 }

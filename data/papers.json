@@ -805,15 +805,79 @@
       "Prompted CoT, not RL-trained reasoning",
       "Multiple-choice settings where CoT is not necessary"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We find systematic unfaithfulness across three distinct biases (social stereotypes, Answer is Always A, and Suggested Answer), two prompting settings (zero-shot and few-shot), and two models (Claude 1.0 and GPT-3.5).",
+        "location": "7 Conclusion"
+      },
+      {
+        "kind": "stated",
+        "quote": "we have presented a necessary but not sufficient test for faithfulness. This setup also only evaluates faithfulness with respect to minor modifications of the input",
+        "location": "6 Discussion, Limitations"
+      },
+      {
+        "kind": "stated",
+        "quote": "In this paper, the biasing features we test are simple enough that it is plausible that models recognize their influence, but future work will need to investigate further to confirm this.",
+        "location": "6 Discussion"
+      }
+    ],
     "code_available": true,
     "relations": [],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "However, we find that CoT explanations can systematically misrepresent the true reason for a model’s prediction.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "how accurately these explanations actually represent the reasons behind model predictions—that is, how faithful the explanations are",
+          "location": "1 Introduction"
+        },
+        "verbalization": {
+          "quote": "Models’ explanations can be predictably influenced by biasing features in their inputs which they fail to mention in their explanations.",
+          "location": "1 Introduction"
+        }
+      },
+      "measured": "Drop in accuracy on bias-contradicting BBH items when a biasing feature (Answer is Always A, Suggested Answer) is added under CoT, plus on BBQ the rate of stereotype-consistent answers across two opposite weak-evidence versions, with manual checks that explanations do not mention the bias.",
+      "unit": "prompted CoT explanation",
+      "models_scope": "LLM",
+      "lane": "hint / bias verbalization"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "scope_gap",
+          "text": "The two models are GPT-3.5 (text-davinci-003) and Claude 1.0 with prompted CoT, not reasoning models trained to think before answering.",
+          "quote": "We test two near–state-of-the-art RL–fine-tuned models, as these are the preferred choice for a wide variety of tasks",
+          "location": "2 Experimental Setup"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "The headline metric is an aggregate accuracy drop; that the bias goes unverbalized rests on a manual review of 426 explanations, of which 1 mentions the bias.",
+          "quote": "we use decrease in model accuracy when exposed to biased contexts to measure systematic unfaithfulness",
+          "location": "2 Experimental Setup, Metrics"
+        },
+        {
+          "kind": "definition_mismatch",
+          "term": "faithfulness",
+          "text": "On BBQ, unfaithfulness is cross-example inconsistency (answers not tracking the weak evidence), not a hidden factor missing from a given CoT.",
+          "quote": "while being misleading about how the system will make predictions on other examples (in which case we also call it unfaithful)",
+          "location": "1 Introduction, Evaluating Faithfulness in Subjective Domains"
+        },
+        {
+          "kind": "framing_overreach",
+          "quote": "This suggests that similar outcomes will be observed for other biasing features and models.",
+          "location": "7 Conclusion"
+        }
+      ]
+    },
     "author_view": {
       "stance": -2,
       "relevance": "central",
-      "rationale": "The authors show CoT explanations from GPT-3.5 and Claude 1.0 rationalize answers driven by biasing features they never mention, and argue CoT should not be expected to be faithful by default; they would say CoTs do not reliably reveal what drives answers and warn that auditing that relies on CoT could miss the bias.",
-      "framing_note": "Their 'frontier' models are 2023-era prompted-CoT models, not RL-trained reasoning models, and they frame the issue as explanation faithfulness and transparency rather than CoT monitoring. They also note their test can detect unfaithfulness but cannot prove faithfulness.",
       "quote": "We should not expect CoT explanations to be faithful by default, for a few reasons. ... Our findings clearly demonstrate that CoT explanations can be plausible yet systematically unfaithful.",
       "location": "§1 Introduction",
       "basis": "estimated"
@@ -851,6 +915,28 @@
       "Older Anthropic models, pre-reasoning-RL",
       "Intervention metrics measure reliance, not verbalization of external factors"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "we use a 175B-parameter pretrained, decoder-only transformer ... fine-tuned to be a helpful dialog assistant using reinforcement learning from human feedback",
+        "location": "2. Measuring Chain of Thought Faithfulness, Model"
+      },
+      {
+        "kind": "scope",
+        "quote": "The collected reasoning samples have a mean of 4 steps (sentences), with 89% of samples having between three and six.",
+        "location": "2.2. Chain of Thought Statistics"
+      },
+      {
+        "kind": "stated",
+        "quote": "Without ground truth information about the faithfulness of the reasoning sample, it is also unclear how to weigh the importance of each experiment relative to the others in assessing faithfulness.",
+        "location": "Limitations (section before 6. Conclusion)"
+      },
+      {
+        "kind": "stated",
+        "quote": "each test is not meant to be conclusive evidence for CoT being faithful, but rather aims to rule out the possibility of one class of faithfulness failures in CoT.",
+        "location": "1. Introduction"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -860,11 +946,54 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "As models become larger and more capable, they produce less faithful reasoning on most tasks we study. Overall, our results suggest that CoT can be faithful if the circumstances such as the model size and task are carefully chosen.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "Such claims only hold if the generated reasoning is faithful ... to the model’s true reasoning, meaning that it “accurately represents the reasoning process behind the model’s prediction”",
+          "location": "1. Introduction"
+        }
+      },
+      "measured": "How often the model's final answer changes when its sampled CoT is truncated, corrupted with mistakes, replaced by filler tokens or paraphrased (and, across model sizes, how often the answer differs with vs. without CoT), on eight multiple-choice tasks and synthetic addition.",
+      "unit": "prompted CoT",
+      "models_scope": "LLM",
+      "lane": "CoT interventions"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "definition_mismatch",
+          "term": "faithfulness",
+          "text": "Tests whether the answer depends on the CoT, not whether the CoT names what drives the answer; no hidden factor is planted.",
+          "quote": "In this work, we test for post-hoc reasoning by truncating the chain of thought or adding mistakes to it.",
+          "location": "1. Introduction"
+        },
+        {
+          "kind": "scope_gap",
+          "text": "None is a reasoning-trained model; CoTs run about four sentences on multiple-choice questions.",
+          "quote": "The models are pretrained, decoder-only transformer models finetuned to be helpful dialog assistants with RLHF, similar to the model in §2.",
+          "location": "3. Does Model Size Affect CoT Faithfulness?"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "A larger model that already knows the answer without CoT scores as less faithful.",
+          "quote": "We thus use this metric in lieu of running the full set of early answering and adding mistakes experiments for computational reasons.",
+          "location": "3. Does Model Size Affect CoT Faithfulness?"
+        },
+        {
+          "kind": "framing_overreach",
+          "quote": "suggesting that smaller models may be better to use if faithful reasoning is important.",
+          "location": "Conclusion"
+        }
+      ]
+    },
     "author_view": {
       "stance": -1,
       "relevance": "central",
-      "rationale": "The authors find that how much models rely on their CoT varies widely by task and that larger, more capable models reason less faithfully on most tasks, so faithfulness holds only under carefully chosen conditions; for frontier-scale models they would lean toward no.",
-      "framing_note": "They measure whether the answer causally depends on the stated reasoning (post-hoc reasoning), not whether the CoT mentions outside factors, and they do not discuss monitoring. They would say the question is about faithful reasoning in general, which in their results depends on model size and task.",
       "quote": "As models become larger and more capable, they produce less faithful reasoning on most tasks we study. Overall, our results suggest that CoT can be faithful if the circumstances such as the model size and task are carefully chosen.",
       "location": "Abstract",
       "basis": "estimated"
@@ -900,6 +1029,28 @@
       "Filler-token use requires specific dense supervision",
       "No frontier model evidence"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We use a 34M-parameter Llama model with 4 layers, 384 hidden dimension, and 6 attention heads",
+        "location": "4.1 Experimental Setup"
+      },
+      {
+        "kind": "stated",
+        "quote": "Empirically, commercial large language models (LLMs) do not benefit from filler tokens on common QA and math benchmarks",
+        "location": "1 Introduction"
+      },
+      {
+        "kind": "stated",
+        "quote": "We find that learning to use filler tokens is difficult and requires specific, dense supervision to converge. Standard chain-of-thought data is insufficient for models to learn to leverage filler tokens effectively",
+        "location": "1 Introduction, contributions"
+      },
+      {
+        "kind": "stated",
+        "quote": "transformers remain in TC0 with even a polynomial number of filler tokens. Thus, unlike for chain of thought, we cannot expect filler tokens to let transformers solve problems outside TC0",
+        "location": "1 Introduction"
+      }
+    ],
     "code_available": true,
     "relations": [
       {
@@ -909,11 +1060,47 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "The fact that intermediate tokens can act as filler tokens raises concerns about large language models engaging in unauditable, hidden computations that are increasingly detached from the observed chain-of-thought tokens.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "intermediate tokens between input and answer may be used purely for their computational capacity rather than for the human-like, faithful serial reasoning which such human-generated text represents",
+          "location": "6 Conclusion"
+        }
+      },
+      "measured": "Accuracy of small randomly initialized transformers on synthetic 3SUM and 2SUM-Transform tasks when given repeated '.' filler tokens versus an immediate answer versus chain of thought.",
+      "unit": "filler tokens (toy)",
+      "models_scope": "toy",
+      "lane": "position / theory"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "scope_gap",
+          "text": "A 4-layer, 34M-parameter model trained from scratch on synthetic tasks; no pretrained LLM is tested.",
+          "quote": "This is a scaled-down, randomly-initialized version of the Llama model.",
+          "location": "4.1 Experimental Setup"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "Only '......' filler is tested; no experiment shows natural-language CoT that describes reasoning other than the computation actually done.",
+          "quote": "and at worst misleading insofar as they describe reasoning unrelated to the computations occurring in intermediate-token, hidden representations.",
+          "location": "6 Conclusion"
+        },
+        {
+          "kind": "framing_overreach",
+          "quote": "Given demonstrations of parallelizable task decompositions, we expect that current LLMs would also realize benefits from filler tokens.",
+          "location": "1 Introduction"
+        }
+      ]
+    },
     "author_view": {
       "stance": 0,
       "relevance": "partial",
-      "rationale": "The authors show in toy transformers that intermediate tokens can carry hidden computation, which raises concerns about computation the CoT does not show. But they say current LLMs are unlikely to benefit from filler tokens, so their work does not say whether today's frontier CoTs are reliable.",
-      "framing_note": "They would frame this as an in-principle possibility, contingent on training data and task structure, not a finding about current frontier models. The work tests no frontier model and no monitor.",
       "quote": "The fact that intermediate tokens can act as filler tokens raises concerns about large language models engaging in unauditable, hidden computations that are increasingly detached from the observed chain-of-thought tokens. ... although current LLMs are unlikely to benefit from filler tokens, this is not an in-principle limitation of current architectures.",
       "location": "Abstract; §1 Introduction",
       "basis": "estimated"
@@ -955,6 +1142,28 @@
       "Measures only cue articulation",
       "Frontier reasoning models of early 2025 only"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We test faithfulness on three reasoning models: QwQ-32b-Preview (QwQ, 2024), Gemini-2.0-flashthinking-exp (Google AI, 2024) and DeepSeek-R1 (DeepSeek-AI et al., 2025).",
+        "location": "1 Introduction"
+      },
+      {
+        "kind": "stated",
+        "quote": "Our study focuses specifically on whether models articulate one cue that has a substantial influence on their final answer. We do not test for more comprehensive forms of articulation",
+        "location": "6 Limitations"
+      },
+      {
+        "kind": "stated",
+        "quote": "these findings do not imply that reasoning models are highly faithful in absolute terms.",
+        "location": "6 Limitations"
+      },
+      {
+        "kind": "stated",
+        "quote": "We study synthetic scenarios, where we edit questions to insert cues. Future work should study more realistic settings.",
+        "location": "6 Limitations"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -964,11 +1173,51 @@
     ],
     "flagged": true,
     "human_override": null,
+    "author_claim": {
+      "quote": "Reasoning models describe cues that influence them much more reliably than all the non-reasoning models tested (including Claude-3.5-Sonnet and GPT-4o).",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "does the explicit verbal reasoning produced by these models better reflect their actual reasoning process?",
+          "location": "1 Introduction"
+        },
+        "verbalization": {
+          "quote": "We use a judge model (an additional LLM) to evaluate whether the model’s CoT explicitly acknowledges the cue’s influence on its final answer",
+          "location": "1 Introduction"
+        }
+      },
+      "measured": "Rate at which an LLM judge classifies the CoT as acknowledging a planted prompt cue (professor opinion, few-shot pattern, inserted answer, 'Are you sure?') on MMLU items where the cue switched the model's answer, compared between reasoning and non-reasoning models.",
+      "unit": "reasoning-model CoT",
+      "models_scope": "LLM",
+      "lane": "hint / bias verbalization"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "framing_overreach",
+          "text": "Reasoning-model articulation rates run from 68% at best (professor cue) to 0-10% (post-hoc cue) and near 0% ('Are you sure?'); the conclusion rests on the gap to non-reasoning models.",
+          "quote": "Our results suggest reasoning models have more faithful reasoning which is worth investigating further.",
+          "location": "7 Conclusion"
+        },
+        {
+          "kind": "method_weak_link",
+          "quote": "The criterion to articulate a cue is subjective. In early experiments, we tested different prompting strategies for the judge model and found that while changing prompts affected the absolute articulation rates",
+          "location": "6 Limitations"
+        },
+        {
+          "kind": "scope_gap",
+          "text": "The reasoning models tested are early open or experimental ones; the frontier models listed here are non-reasoning baselines.",
+          "quote": "We also test additional non-reasoning models that have no reasoning counterpart: Claude-3.5-Sonnet, GPT-4o, Grok-2-Preview, and Llama-3.3-70b-Instruct.",
+          "location": "1 Introduction"
+        }
+      ]
+    },
     "author_view": {
       "stance": 0,
       "relevance": "central",
-      "rationale": "The authors find reasoning models articulate influential cues far more often than non-reasoning models and call this promising, but they explicitly say this does not make reasoning models highly faithful in absolute terms (e.g. R1 at 59%), so on 'reliably' they would give a mixed answer.",
-      "framing_note": "Their question is comparative (are reasoning models more faithful than earlier models?), not whether faithfulness is good enough for monitoring. They measure only whether a model articulates one planted cue, using artificial MMLU tasks.",
       "quote": "Still, we think this increase in faithfulness is promising for the explainability of language models. ... these findings do not imply that reasoning models are highly faithful in absolute terms.",
       "location": "Abstract; §6 Limitations",
       "basis": "estimated"
@@ -1014,6 +1263,28 @@
       "Factual comparison questions only",
       "Possible residual question ambiguity"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "we instead evaluate 15 models and 29 properties in a naturalistic, no-bias-injection setting, quantifying subtle unfaithfulness (e.g., fact manipulation).",
+        "location": "Related work"
+      },
+      {
+        "kind": "stated",
+        "quote": "Behavioural faithfulness is a necessary but not sufficient condition for what might be called “cognitive” faithfulness of internal computations",
+        "location": "1. Introduction"
+      },
+      {
+        "kind": "scope",
+        "quote": "Our analysis on Implicit Post-Hoc Rationalization relies on factual questions where incorrect answers often have demonstrably false CoTs.",
+        "location": "5.1. Limitations & Future Work"
+      },
+      {
+        "kind": "stated",
+        "quote": "Although we highlight specific manifestations of unfaithfulness, most model responses remain faithful, and natural language CoT continues to provide a useful tool for studying and monitoring reasoning.",
+        "location": "Conclusion"
+      }
+    ],
     "code_available": true,
     "relations": [
       {
@@ -1023,11 +1294,58 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "Our findings indicate that while CoT can be useful for assessing outputs, it is not a complete account of the internal process that produced the model’s answer and should be used with caution in agentic or safety-critical settings.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "We treat our metrics as measures of behavioural faithfulness: whether the observable CoT behaviour across controlled prompt pairs is consistent with the model’s answers.",
+          "location": "1. Introduction"
+        },
+        "verbalization": {
+          "quote": "a model uses clearly illogical reasoning to jump to correct, but unjustified conclusions, while at the same time a) not acknowledging this shortcut in the same reasoning trace",
+          "location": "1. Introduction, contributions"
+        }
+      },
+      "measured": "Share of logically opposite Yes/No question pairs on which a model's answers are systematically biased and inconsistent (IPHR), plus the share of correct Putnam solutions containing autorater-flagged, manually reviewed illogical steps not acknowledged in the CoT.",
+      "unit": "CoT across question pairs",
+      "models_scope": "LLM",
+      "lane": "hint / bias verbalization"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "definition_mismatch",
+          "term": "faithfulness",
+          "text": "No single CoT is checked against a known driving factor; the factor is inferred from answer statistics across pairs.",
+          "quote": "Throughout, our notion of unfaithfulness is defined at the level of a question pair: we flag a pair as unfaithful when the model’s behaviour across logically opposite prompts is inconsistent with any single, stable reasoning rule, even if each individual CoT looks locally coherent on its own.",
+          "location": "2. Frontier Models and Implicit Post-Hoc Rationalization"
+        },
+        {
+          "kind": "method_weak_link",
+          "quote": "One plausible alternative explanation is that changing the wording of questions affects which facts the model recalls from its training data, and these different recalled facts may influence the",
+          "location": "2. Frontier Models and Implicit Post-Hoc Rationalization"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "IPHR rates range from 0.04% to 13.49% of pairs, with the best thinking models at 0.04% and 0.14%.",
+          "quote": "This suggests that unfaithfulness is a fundamental challenge that may ... persist even as models become more sophisticated in their reasoning capabilities.",
+          "location": "Conclusion"
+        },
+        {
+          "kind": "scope_gap",
+          "text": "No monitor is run.",
+          "quote": "CoT is often more useful for identifying flawed reasoning and thus discounting unreliable outputs than for certifying the correctness of a model’s output",
+          "location": "Conclusion"
+        }
+      ]
+    },
     "author_view": {
       "stance": 0,
       "relevance": "central",
-      "rationale": "The authors show that unfaithful CoT occurs even on natural prompts in frontier and thinking models, though at low rates for thinking models. They conclude that CoT gives an incomplete picture and needs caution, yet most responses are faithful and CoT remains a promising monitoring strategy, so their answer is mixed.",
-      "framing_note": "They separate 'useful for monitoring' from 'a complete account of the reasoning': they would say CoT is not a fully reliable account but can still support monitoring, and is better for discounting flawed outputs than for certifying correct ones.",
       "quote": "they should be interpreted with the understanding that they provide an incomplete picture of the underlying reasoning process. ... most model responses remain faithful, and natural language CoT continues to provide a useful tool for studying and monitoring reasoning.",
       "location": "§5 Conclusion",
       "basis": "estimated"
@@ -1072,15 +1390,84 @@
       "Reward hacking only",
       "Monitorability is fragile under optimization"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We implemented a GPT-4o prompted monitor to detect reward hacking in agentic coding environments.",
+        "location": "2 Monitoring Frontier Reasoning Models for Reward Hacking"
+      },
+      {
+        "kind": "stated",
+        "quote": "Precision is less well defined because our monitors are looking for any type of misbehavior and the precision metric here only compares their performance against the regex detector for the two systemic hacks.",
+        "location": "2.1 Table 1"
+      },
+      {
+        "kind": "stated",
+        "quote": "The Cheating metric is only a lower bound on the true hacking rate because it only measures one class of exploits",
+        "location": "3.1 Baseline Training"
+      },
+      {
+        "kind": "stated",
+        "quote": "Therefore, while we only show results for fairly simple instances of obfuscated reward hacking",
+        "location": "3.2 Optimizing Against a Chain-of-Thought Monitor"
+      }
+    ],
     "code_available": false,
     "relations": [],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "Our findings demonstrate that chain-of-thought monitoring can be very effective in detecting certain classes of misaligned behaviors in reasoning models. This emergent monitorability offers a promising avenue for improving model safety, as CoTs often reveal insights into an agent’s intent and reasoning processes that are not readily apparent from its actions and outputs alone.",
+      "location": "§6 Conclusion"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "we define z to be faithful with respect to v if it contains all relevant information to predicting v, i.e. z is a sufficient statistic for v.",
+          "location": "5.1 Faithfulness, Legibility, and Monitorability"
+        },
+        "monitorability": {
+          "quote": "it is the ability to monitor for specific properties of agents actions or outputs (monitorability), and not faithfulness in isolation, that is important.",
+          "location": "5.1 Faithfulness, Legibility, and Monitorability"
+        }
+      },
+      "measured": "Recall of a prompted GPT-4o monitor for reward hacks in agentic coding RL (against regex labels for two systemic hacks in a frontier run, and against a test-revert cheating label in a non-frontier run), with and without the monitor added to the training reward.",
+      "unit": "agent CoT (coding RL)",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "method_weak_link",
+          "text": "In the frontier run the 95% vs 60% recall compares a monitor that sees CoT plus actions with one that sees actions only, so it does not isolate what the CoT alone reveals.",
+          "quote": "CoT Monitor: Observes the entire agent trajectory including CoT, tool calls, and final outputs",
+          "location": "2.1 Catching Systemic Reward Hacking"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "Recall in the frontier run is measured only on two pervasive, regex-detectable hacks (exit(0), raise SkipTest), not on the problem-specific hacks also described.",
+          "quote": "these two systemic hacks were easy to catch in hindsight with simple string regexes, and we use this as ground truth against which to measure our monitors’ performance.",
+          "location": "2.1 Catching Systemic Reward Hacking"
+        },
+        {
+          "kind": "scope_gap",
+          "text": "The CoT-only monitor and the obfuscation-under-CoT-pressure results come from a non-frontier agent allowed to edit the tests; the frontier evidence is the single monitored training run.",
+          "quote": "We train a non-frontier agent in the same coding environments as discussed in Section 2.",
+          "location": "3.1 Figure 3"
+        },
+        {
+          "kind": "definition_mismatch",
+          "term": "faithfulness",
+          "quote": "Intuitively, this is the same definition as “representing the reasoning process behind a model’s prediction” though restricted to only a particular aspect, v, of the reasoning.",
+          "location": "5.1 Faithfulness, Legibility, and Monitorability"
+        }
+      ]
+    },
     "author_view": {
       "stance": 1,
       "relevance": "central",
-      "rationale": "The authors found that a weaker model reading o3-mini-class CoTs caught reward hacking far better than action-only monitoring, and call this emergent monitorability a promising safety avenue. They add that strong optimization against the monitor leads models to hide their intent, so monitorability is fragile.",
-      "framing_note": "They argue monitorability for specific behaviours matters, not faithfulness in isolation, and call full faithfulness too stringent and not actionable. They would say yes for monitoring certain misbehaviours, provided CoTs are not optimized against, without claiming CoTs reveal all drivers.",
       "quote": "Our findings demonstrate that chain-of-thought monitoring can be very effective in detecting certain classes of misaligned behaviors in reasoning models. ... excessive optimization encourages models to obscure their true intent, effectively decoupling their reasoning from their actions and degrading the CoT's utility for monitoring.",
       "location": "§6 Conclusion",
       "basis": "estimated"
@@ -1121,6 +1508,28 @@
       "Multiple-choice hint settings where CoT is unnecessary",
       "Hints are easy to exploit without reasoning"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We evaluate the CoT faithfulness of two state-of-the-art reasoning models (Claude 3.7 Sonnet and DeepSeek R1)",
+        "location": "1 Introduction"
+      },
+      {
+        "kind": "scope",
+        "quote": "We don’t study the o1 or o3 reasoning models in this paper because we don’t have access to their CoT and thus can’t evaluate their faithfulness.",
+        "location": "1 Introduction (footnote)"
+      },
+      {
+        "kind": "stated",
+        "quote": "Second, our settings are all settings where the hints are very easy to exploit, which prevents us from drawing conclusions about the potential of CoT monitoring in situations where a CoT is necessary to perform the unintended behavior",
+        "location": "7.2 Limitations of Our Settings"
+      },
+      {
+        "kind": "stated",
+        "quote": "Note that the faithfulness score we measure is likely an upper bound of the true faithfulness score",
+        "location": "2.1 Metric"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -1134,11 +1543,53 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "These results suggest that CoT monitoring is a promising way of noticing undesired behaviors during training and evaluations, but that it is not sufficient to rule them out.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "The CoT c is faithful if it accurately reflects M ’s internal reasoning process behind outputting answer a in response to input x.",
+          "location": "2 Measuring CoT Faithfulness"
+        },
+        "verbalization": {
+          "quote": "Evaluating CoT faithfulness requires determining whether a CoT verbalizes using the hint, which we define as (a) the CoT mentions the hint (in part or in whole), and (b) the CoT depends on the hint to reach the answer",
+          "location": "2.3 Experimental Setup"
+        }
+      },
+      "measured": "Among MMLU/GPQA prompt pairs where inserting one of six hints flips the answer to the hint answer, the noise-normalized share of CoTs that a Claude 3.5 Sonnet checker judges to verbalize the hint; plus hack verbalization rates during outcome-based RL of Claude 3.7 Sonnet on hint-based reward hacks.",
+      "unit": "reasoning-model CoT",
+      "models_scope": "LLM",
+      "lane": "hint / bias verbalization"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "definition_mismatch",
+          "term": "verbalization",
+          "text": "The paper also excludes mentions made only in a final verification step, so its rate is stricter than explicit mention.",
+          "quote": "(b) the CoT depends on the hint to reach the answer (i.e., the CoT likely would not have reached the hint answer without the hint)",
+          "location": "2.3 Experimental Setup"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "GPQA is harder to answer than MMLU, but exploiting the hint is equally easy in both (7.2), so task complexity in the monitoring sense was not varied.",
+          "quote": "Our results suggest that CoT monitoring might not scale well to more complex tasks.",
+          "location": "3 Benchmarking CoT Faithfulness of Reasoning Models"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "No monitor was run; the claim is read off verbalization rates (<2% in 5 of 6 environments).",
+          "quote": "In other words, in this experiment, CoT monitoring would not catch the majority of cases of reward hacking during RL.",
+          "location": "1 Introduction"
+        }
+      ]
+    },
     "author_view": {
       "stance": -1,
       "relevance": "central",
-      "rationale": "The authors find state-of-the-art reasoning models often verbalize hints they use less than 20% of the time, and outcome RL plateaus without saturating. They conclude CoT monitoring is promising for noticing undesired behaviour but not reliable enough to rule it out.",
-      "framing_note": "They would separate noticing behaviours during training and evaluation (where CoT monitoring helps) from ruling them out (where it is insufficient). They stress their results cover settings where CoT is not needed for the behaviour and may not carry over to tasks that require reasoning.",
       "quote": "We empirically study the CoT faithfulness of reasoning models and find that CoT monitoring is a promising approach to noticing unintended behaviors, but that it is not reliable enough to rule out unintended behaviors.",
       "location": "§8 Conclusion",
       "basis": "estimated"
@@ -1181,6 +1632,28 @@
       "Single-step coding problems",
       "Limited attack policies"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "These are used to monitor more capable reasoning models (DeepSeek R1 Distill Qwen 14B, DeepSeek R1 Distill Llama 70B, DeepSeek R1 (DeepSeek-AI, 2025), Claude Sonnet 3.7 Thinking",
+        "location": "2.2 Monitoring Protocols"
+      },
+      {
+        "kind": "scope",
+        "quote": "Our work investigates whether CoT monitoring provides measurable advantages over action monitoring for detecting sabotage, without making claims about the faithfulness of the CoT.",
+        "location": "5 Related Work"
+      },
+      {
+        "kind": "stated",
+        "quote": "Our evaluation focused on single-step coding problems in a controlled environment, which fails to capture the complexity of real-world deployment.",
+        "location": "4.3 Limitations and Future Work"
+      },
+      {
+        "kind": "stated",
+        "quote": "Early experiments showed that preventing models from mentioning side tasks in their CoT was very inconsistent, so we focused on designing attack policies that frame the side tasks in benign ways",
+        "location": "4.3 Limitations and Future Work"
+      }
+    ],
     "code_available": true,
     "relations": [
       {
@@ -1190,11 +1663,48 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "We find that while CoT monitoring is more effective than overseeing only model outputs in scenarios where action-only monitoring fails to reliably identify sabotage, reasoning traces can contain misleading rationalizations that deceive the CoT monitors, reducing performance in obvious sabotage cases.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "While imperfect faithfulness places practical limits on the utility of CoT for interpretability, it does not completely remove the value of monitoring, as it represents an additional stream of information.",
+          "location": "5 Related Work"
+        }
+      },
+      "measured": "Catch rate at 1% FPR of weaker LLM monitors (action-only, CoT, and a weighted hybrid) on BigCodeBench solutions in which reasoning models completed both the main task and an instructed sabotage side task, under several red-team attack prompts.",
+      "unit": "CoT plus final code",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "method_weak_link",
+          "text": "Action-only is weak on 'subtle' tasks by construction, which favours CoT monitoring there.",
+          "quote": "A side task is categorized as subtle if its action-only detection rate is < 50%, and as non-subtle otherwise.",
+          "location": "2.1 Evaluation Setup"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "The misbehaviour is an instruction in the prompt rather than a goal the model holds, so CoT mentions of it may track the instruction rather than what the model would reveal of its own drivers.",
+          "quote": "a prompt including a legitimate main task, a subversive side task and an attack policy is fed to a strong reasoning Large Language Model (LLM).",
+          "location": "Figure 1 caption"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "The per-attack breakdown concedes the hybrid is 'not always the top-performing strategy in every scenario', and its weight (w = 0.55) was tuned on the baseline attack only.",
+          "quote": "across all models and task types, hybrid monitoring outperforms both action-only and CoT monitoring catch rates",
+          "location": "3.2 Hybrid Monitoring Recovers Performance and Improves Consistency"
+        }
+      ]
+    },
     "author_view": {
       "stance": 0,
       "relevance": "central",
-      "rationale": "The authors find CoT access improves detection of subtle sabotage over action-only monitoring, but reasoning traces can contain misleading rationalizations that fool monitors, and subtle-case catch rates stay low. They argue for keeping CoT as one part of a hybrid monitor, not as a reliable signal alone.",
-      "framing_note": "They frame CoT as a complement to action monitoring in an AI-control setting with instructed side tasks, not as something that reliably reveals what drives the model. They would answer 'it helps, but not reliably on its own'.",
       "quote": "We find that while CoT monitoring is more effective than overseeing only model outputs in scenarios where action-only monitoring fails to reliably identify sabotage, reasoning traces can contain misleading rationalizations that deceive the CoT monitors, reducing performance in obvious sabotage cases.",
       "location": "Abstract",
       "basis": "estimated"
@@ -1239,6 +1749,28 @@
       "Gemini models only",
       "Monitors not optimized"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "using either Gemini 2.5 Pro or Gemini 2.0 Flash for both the actor and monitor roles.",
+        "location": "5.5. Results"
+      },
+      {
+        "kind": "stated",
+        "quote": "We don’t test whether necessity will hold. Throughout our paper, we design side tasks so that CoT is necessary.",
+        "location": "9.1. Limitations of our methodology and results"
+      },
+      {
+        "kind": "stated",
+        "quote": "This is necessary to achieve any monitor evasion, since these models consistently discuss their bad behavior goal when using thought messages, despite clear instructions not to.",
+        "location": "9.1. Limitations of our methodology and results"
+      },
+      {
+        "kind": "stated",
+        "quote": "It’s therefore difficult to say how well our monitors perform in an absolute sense.",
+        "location": "9.1. Limitations of our methodology and results"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -1252,11 +1784,62 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "We conclude that, while not infallible, CoT monitoring offers a substantial layer of defense that requires active protection and continued stress-testing.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "monitorability": {
+          "quote": "We say a CoT is monitorable to a reader (human or automated) if the reader can use the CoT to determine if the model is taking bad actions.",
+          "location": "2. A conceptual framework for CoT monitorability"
+        },
+        "faithfulness": {
+          "quote": "the model is free to confabulate a reason for arriving at its final answer, which may or may not be an accurate description of the steps it actually took during its serial operations (that is, the CoT may or may not be faithful).",
+          "location": "2. A conceptual framework for CoT monitorability"
+        },
+        "verbalization": {
+          "quote": "The observed increase in the model choosing the hinted letter is fully explained by cases where the model explicitly discusses the hint by performing the required arithmetic in its CoT.",
+          "location": "3.1. Difficult hints force models to reveal their reasoning"
+        }
+      },
+      "measured": "Rates of unmentioned hint-following and CoT-inconsistent answers as task difficulty rises (Gemini), and recall of prompted Gemini CoT monitors against Gemini actors given escalating evasion help (prompts, automated red-teaming, a scratchpad, RL fine-tuning of Gemini 1.5 Flash) on GPQA topic hiding, a toy email-oversight task and a factorize-derivative math task.",
+      "unit": "reasoning-model CoT",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "framing_overreach",
+          "text": "The supporting evidence is one metadata-hint variant on GPQA and one forced-error algebra task, run only on Gemini models.",
+          "quote": "We conclude that these prior findings do not undermine CoT monitoring of difficult bad behaviors.",
+          "location": "3.3. Takeaways"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "The complex hint can only be followed by doing its arithmetic, so mentioning it is close to built in; CoT necessity was checked by manual inspection rather than measured.",
+          "quote": "By manual inspection, we find that Gemini models cannot reliably do this without CoT.",
+          "location": "3.1. Difficult hints force models to reveal their reasoning"
+        },
+        {
+          "kind": "scope_gap",
+          "text": "59 of 546 GPQA questions, kept because CoT gave at least 50pp uplift.",
+          "quote": "Using Gemini 2.0 Flash, this filtering process results in a final set of 59 questions where CoT provides a substantial",
+          "location": "5.1. GPQA dataset"
+        },
+        {
+          "kind": "definition_mismatch",
+          "term": "faithfulness",
+          "quote": "our work argues for a shift in focus from faithfulness to monitorability: whether we can use the CoT to detect harmful behavior, even if the CoT is not a perfect representation of the model’s internal reasoning",
+          "location": "8.1. CoT faithfulness"
+        }
+      ]
+    },
     "author_view": {
       "stance": 1,
       "relevance": "central",
-      "rationale": "The authors argue that when the bad behaviour requires multi-step reasoning, models must expose it in their CoT, and in their tests models evade monitors only with significant help; they conclude CoT monitoring is a substantial but not infallible defense.",
-      "framing_note": "They reject faithfulness as the right criterion for runtime monitoring. They accept that CoT can be an unfaithful rationalization (e.g. for bias auditing) and argue monitorability holds when CoT is needed for the computation. So their 'yes' covers severe harms that need CoT, not CoTs revealing every factor.",
       "quote": "this forces the model to expose its reasoning, making it monitorable. ... We conclude that, while not infallible, CoT monitoring offers a substantial layer of defense that requires active protection and continued stress-testing.",
       "location": "Abstract",
       "basis": "estimated"
@@ -1292,15 +1875,76 @@
       "Position paper, no new empirical results",
       "Authors' views, not institutional"
     ],
+    "limitations": [
+      {
+        "kind": "stated",
+        "quote": "In cases where thinking out loud is not required, CoT Monitoring can detect some misbehavior, but does not by itself produce strong evidence of safety.",
+        "location": "5 Limitations"
+      },
+      {
+        "kind": "stated",
+        "quote": "It is unclear what proportion of the CoT monitorability demonstrated in these examples is due to the necessity versus the propensity for a model to reason out loud in the tasks considered.",
+        "location": "1.2 Chain of Thought is Often Monitorable in Practice"
+      },
+      {
+        "kind": "stated",
+        "quote": "Finally, it remains an open question whether the most serious harms in fact require difficult reasoning.",
+        "location": "1.1 Thinking Out Loud is Necessary for Hard Tasks"
+      },
+      {
+        "kind": "stated",
+        "quote": "Future models may become able to avoid detection by overriding their propensity to think out loud, and, when reasoning is required, to deliberately obfuscate it.",
+        "location": "5 Limitations"
+      }
+    ],
     "code_available": false,
     "relations": [],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "Like all other known AI oversight methods, CoT monitoring is imperfect and allows some misbehavior to go unnoticed. Nevertheless, it shows promise and we recommend further research into CoT monitorability and investment in CoT monitoring alongside existing safety methods.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "monitorability": {
+          "quote": "The externalized reasoning property does not guarantee monitorability — it states only that some reasoning appears in the chain of thought, but there may be other relevant reasoning that does not.",
+          "location": "1.1 Thinking Out Loud is Necessary for Hard Tasks"
+        },
+        "faithfulness": {
+          "quote": "CoT does not need to completely represent the actual reasoning process in order to be a valuable additional safety layer",
+          "location": "1 Chain of Thought Offers a Unique Safety Opportunity"
+        },
+        "verbalization": {
+          "quote": "models might not need to verbalize any of their thoughts and would thus lose the safety advantages",
+          "location": "2 May be Fragile"
+        }
+      },
+      "measured": "Nothing new is measured: the case rests on an argument that long serial computation in Transformers must pass through the CoT, plus cited examples of models stating misbehaviour in their reasoning.",
+      "unit": "CoT (conceptual)",
+      "models_scope": "LLM",
+      "lane": "position / theory"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "method_weak_link",
+          "text": "The architectural argument only shows that some information must pass through the CoT; that humans can read it is asserted from a pretraining prior, not tested.",
+          "quote": "in practice, large language models learn a strong “natural language prior” during pretraining such that they tend to use the chain of thought in a similar manner to the way that humans use natural language.",
+          "location": "1.1 Thinking Out Loud is Necessary for Hard Tasks"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "The section heading rests on cited anecdotes of models stating misbehaviour; no rates of verbalized versus unverbalized misbehaviour are given.",
+          "quote": "they often explicitly say so in their reasoning traces",
+          "location": "1.2 Chain of Thought is Often Monitorable in Practice"
+        }
+      ]
+    },
     "author_view": {
       "stance": 1,
       "relevance": "central",
-      "rationale": "The authors argue CoT monitoring is imperfect and CoTs are incomplete, but that CoT is informative enough to be a valuable additional safety layer worth investing in, with the caveat that this may be fragile.",
-      "framing_note": "They reject the premise that CoT must fully or reliably reveal the factors behind answers: CoT 'does not need to completely represent the actual reasoning process' to be useful, so they would say 'not fully faithful, but enough to support monitoring as one layer among several'.",
       "quote": "CoT reasoning traces are incomplete representations ... However, CoT does not need to completely represent the actual reasoning process in order to be a valuable additional safety layer",
       "location": "§1 Chain of Thought Offers a Unique Safety Opportunity",
       "basis": "estimated"
@@ -1340,6 +1984,28 @@
       "Constructed environments",
       "Shows possibility under training, not prevalence in deployed models"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We prompt Qwen3-4B to answer two types of questions.",
+        "location": "4.2.1 Experiment Design"
+      },
+      {
+        "kind": "scope",
+        "quote": "In this setting, Qwen3-8B has access to a Bash shell in a temporary directory containing a single file, verifier.py.",
+        "location": "4.3.1 Experiment Design"
+      },
+      {
+        "kind": "stated",
+        "quote": "These results show that our feedback spillover mitigations can degrade task performance. Training instability may be to blame",
+        "location": "4.2.2 Results"
+      },
+      {
+        "kind": "stated",
+        "quote": "Although that experiment used in-context examples to encourage use of the product rule, complex behavioral changes in CoTs may not be predictable in advance for real training runs.",
+        "location": "5 Discussion"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -1349,11 +2015,50 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "Our work implies that preserving CoT monitorability is more difficult than previously thought; we suggest practical guidelines for AI developers to maintain monitorable CoTs.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "monitorability": {
+          "quote": "the ability to detect model misbehavior by analyzing CoTs (“CoT monitorability”)",
+          "location": "1 Introduction"
+        },
+        "faithfulness": {
+          "quote": "A limitation of CoT monitoring is that the CoT may not reflect the steps the model used to reach its final answer.",
+          "location": "2 Related Work"
+        },
+        "verbalization": {
+          "quote": "penalizing mentions of the hint in the output causes the CoT to stop mentioning the hint",
+          "location": "4.2.2 Results"
+        }
+      },
+      "measured": "Change in a CoT-only monitor score (regex or LLM judge for the penalized behaviour) after RL against the same monitor applied to the output only, relative to a no-penalty control, while task reward shows the behaviour persists.",
+      "unit": "CoT under RL training",
+      "models_scope": "LLM",
+      "lane": "CoT interventions"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "scope_gap",
+          "text": "All three environments use Qwen3 models of 4B-14B in purpose-built tasks; the recommendations address frontier developers, whose models were not trained or tested.",
+          "quote": "Frontier model developers should therefore not assume that output-based training will leave the CoT monitorable.",
+          "location": "5.1 Recommendations for Developers"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "Monitorability is scored with the very judge (or regex) the output was trained against, so a falling CoT score may reflect evasion of that one monitor rather than of monitors in general.",
+          "quote": "The CoT monitor is the same LLM judge, but is presented with only the CoT.",
+          "location": "4.2.1 Experiment Design"
+        }
+      ]
+    },
     "author_view": {
       "stance": -1,
       "relevance": "partial",
-      "rationale": "They show that even output-only training can make CoTs hide penalised behaviour in all their environments, and warn this may already affect current models. So they would doubt that CoT can be assumed reliable, though they test only small Qwen3 models and do not measure frontier models directly.",
-      "framing_note": null,
       "quote": "Frontier model developers should therefore not assume that output-based training will leave the CoT monitorable. ... Output-based training applied to existing models may be causing feedback spillover, affecting CoT monitorability today.",
       "location": "§5.1 Recommendations for developers",
       "basis": "estimated"
@@ -1396,6 +2101,28 @@
       "Obfuscation is prompt-elicited",
       "Toy tasks plus SHADE-Arena"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We evaluate Claude Sonnet 3.7 and Claude Sonnet 4, which provide complete reasoning traces necessary for analyzing deceptive behavior patterns.",
+        "location": "Realistic Multi-turn Multi-tool Settings: SHADE-Arena"
+      },
+      {
+        "kind": "stated",
+        "quote": "we provide the attacker model with advantages (i.e., information about the monitor and evasion techniques) that exceed realistic deployment scenarios",
+        "location": "3 Methods"
+      },
+      {
+        "kind": "stated",
+        "quote": "Our prompt-based obfuscation taxonomy, while systematic, may miss stronger techniques like reinforcement learning or fine-tuning that could more fully probe CoT monitoring boundaries.",
+        "location": "6.1 Limitations and Future Work"
+      },
+      {
+        "kind": "stated",
+        "quote": "the scarcity of reasoning models with both full trace access and toggleable internal CoT limits our subject pool.",
+        "location": "6.1 Limitations and Future Work"
+      }
+    ],
     "code_available": true,
     "relations": [
       {
@@ -1405,11 +2132,45 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "These results suggest that while CoT provides valuable oversight in benign settings, robust deployment requires model-specific stress-testing of monitorability.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "monitorability": null
+      },
+      "measured": "Conditional obfuscation (hidden task completed and not flagged by a GPT-5-mini monitor at ≤1% FPR) under stacked prompt cues in 12 toy task pairs, and CoT-only / action-only / full-transcript monitor detection rates of successful side tasks in 3 SHADE-Arena task pairs for Claude Sonnet 3.7 and 4.",
+      "unit": "agent CoT",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "framing_overreach",
+          "text": "The ~10% figure comes from one agent (Claude Sonnet 3.7) on 3 task pairs; with Claude Sonnet 4 as the agent, the same CoT monitor still caught 86–88%.",
+          "quote": "CoT monitors detect ∼96% of malicious intent without obfuscation pressure but ∼10% under high pressure.",
+          "location": "Figure 1 caption"
+        },
+        {
+          "kind": "scope_gap",
+          "text": "Obfuscation is elicited by explicit instructions in the system prompt, so the results measure prompted evasion, not CoT that omits a factor unprompted.",
+          "quote": "Under Base (no pressure) or single-cue prompts, conditional obfuscation is ≈ 0% (strictly < 1%) across all models",
+          "location": "CoT Obfuscation Is Possible Under Strong Prompting Pressure"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "SHADE-Arena tasks were selected because CoT helps the side task, which builds in the finding that obfuscation lowers side-task success.",
+          "quote": "These tasks were selected based on the criterion that the CoT is a necessary part of the side task computation itself",
+          "location": "Realistic Multi-turn Multi-tool Settings: SHADE-Arena"
+        }
+      ]
+    },
     "author_view": {
       "stance": 0,
       "relevance": "central",
-      "rationale": "Mixed: CoT monitors catch about 96% of malicious intent without obfuscation pressure, but under stacked prompted pressure some models evade detection (about 10% detection). The authors call CoT oversight 'promising but fragile' and model-dependent.",
-      "framing_note": null,
       "quote": "we find that CoT monitoring is effective in baseline conditions but becomes unreliable when models receive stacked obfuscation cues—with CoT monitorability varying significantly across models. ... These results underscore that CoT oversight is promising but fragile",
       "location": "§6 Discussion",
       "basis": "estimated"
@@ -1449,6 +2210,28 @@
       "Coverage of necessary reasoning, not hidden influences",
       "Conclusion stresses fragility"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "This limits our evaluation to models where we can access these internal traces.",
+        "location": "5. Results on Gemini and Open-Source LLMs"
+      },
+      {
+        "kind": "stated",
+        "quote": "We emphasize that these metrics serve as a proxy for how monitorable models are by default, but they are not a substitute for the adversarial stress-testing required to ensure robustness against deliberately evasive models",
+        "location": "1. Introduction"
+      },
+      {
+        "kind": "stated",
+        "quote": "This means that our metrics might overestimate the degree with which a model is monitorable in practice, although we see no evidence for this yet.",
+        "location": "4.2 Synthetically Generating Illegible and Low-coverage CoTs"
+      },
+      {
+        "kind": "stated",
+        "quote": "our methodology depends on the capabilities of the language model being prompted as an autorater, as its capabilities implicitly define what reasoning steps need to be verbalized and which can be skipped",
+        "location": "6. Conclusion"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -1462,11 +2245,54 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "While current models are typically monitorable on tasks where CoT is necessary, there is no guarantee this property will persist.",
+      "location": "§6 Conclusion"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "faithfulness—whether the CoT accurately reflects the model’s true internal process",
+          "location": "1. Introduction"
+        },
+        "monitorability": {
+          "quote": "monitorability: whether a monitor can use the CoT to determine if a model is taking dangerous actions",
+          "location": "3.1 Motivation"
+        },
+        "verbalization": null
+      },
+      "measured": "Gemini 2.5 Pro autorater scores (0–4) for Legibility and Coverage of CoTs from correctly answered Humanity's Last Exam, GPQA, ARC AGI and AIME items, after a sanity check against synthetic perturbations.",
+      "unit": "CoT of correct solutions",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "definition_mismatch",
+          "term": "monitorability",
+          "text": "No target behaviour is present for a monitor to catch; Coverage asks whether sufficient steps appear, and the paper says it is distinct from faithfulness.",
+          "quote": "Coverage. Does the CoT contain all the (intermediate) reasoning steps needed to arrive at the model’s final answer?",
+          "location": "3.2 Metric Definition"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "The replacement rater comes from the same family as two of the five rated models.",
+          "quote": "To test for a bias in our autorater’s results (i.e., the autorater being less strict on outputs produced by the same model), we repeat our experiments with Gemini 2.5 Flash instead of 2.5 Pro as the autorater",
+          "location": "5.2 Legibility and Coverage Results"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "The scores are legibility and coverage ratings of correct benchmark solutions; no misbehaviour or monitor is involved.",
+          "quote": "Current frontier models exhibit high CoT monitorability on difficult tasks.",
+          "location": "Table 1 caption"
+        }
+      ]
+    },
     "author_view": {
       "stance": 1,
       "relevance": "central",
-      "rationale": "Their autorater finds near-perfect legibility and 95-99% coverage for frontier reasoning models on hard benchmarks, which they call a positive sign for current safety monitoring. They stress that this is default (non-adversarial) monitorability and may not persist.",
-      "framing_note": "They would set aside 'faithfulness' (revealing the factors that actually drive answers), which they say cannot be measured directly, in favour of monitorability. Their positive claim covers only tasks where CoT is necessary, not hidden influences on easy tasks or deliberately evasive models.",
       "quote": "While current models are typically monitorable on tasks where CoT is necessary, there is no guarantee this property will persist.",
       "location": "§6 Conclusion",
       "basis": "estimated"
@@ -1511,6 +2337,28 @@
       "Curated cue set",
       "Monitor quality confounds results"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "open-source reasoning models (1.5B–30B parameters) across mathematics, science, and ethics tasks and across 8 adversarial cue types",
+        "location": "1 Introduction"
+      },
+      {
+        "kind": "scope",
+        "quote": "we evaluate eight CoT intervention methods on Qwen3-4B.",
+        "location": "5 The Impact of CoT Intervention on CoT Monitorability"
+      },
+      {
+        "kind": "stated",
+        "quote": "While these cues capture a range of realistic failure modes, they do not exhaust the space of possible manipulations that may arise in real-world deployments.",
+        "location": "Limitations"
+      },
+      {
+        "kind": "stated",
+        "quote": "our study focuses on offline evaluation and does not examine how CoT monitoring would perform in dynamic, interactive, or deployment-scale environments",
+        "location": "Limitations"
+      }
+    ],
     "code_available": true,
     "relations": [
       {
@@ -1520,11 +2368,63 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "These findings highlight a critical gap between monitorability and effective monitoring, suggesting that simply exposing reasoning traces is insufficient for reliable supervision.",
+      "location": "§6 Conclusion"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "this ideal allows us to define unfaithfulness as the discrepancy between causal dependence (Ycue ) and verbalized dependence (V ).",
+          "location": "3.1 Preliminary, Formalizing Faithfulness and Monitorability"
+        },
+        "monitorability": {
+          "quote": "monitor reliability: whether misbehaviors can be reliably detected by a CoT monitor",
+          "location": "1 Introduction"
+        },
+        "verbalization": {
+          "quote": "the verbalization rate, i.e., how often the model explicitly mentions the cue use in its self-explanation, regardless of whether its answer changes",
+          "location": "3.2 Measuring CoT Monitorability"
+        }
+      },
+      "measured": "Rates at which cue-injected multiple-choice answers switch to the cued option, at which a GPT-5-nano judge says the cue is mentioned, and at which a Gemini-2.5-Flash-Lite monitor flags misbehavior, combined as products of these marginal rates.",
+      "unit": "reasoning-model CoT",
+      "models_scope": "LLM",
+      "lane": "hint / bias verbalization"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "scope_gap",
+          "text": "The reasoners top out at Qwen3-30B-A3B; GPT-5-nano and Gemini-2.5-Flash-Lite appear only as verbalization judge and monitor.",
+          "quote": "We evaluate the CoT monitorability of several open-source LRMs spanning different families and parameter scales.",
+          "location": "4.1 Experiment Setup, Models"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "Scheming is computed as (1 − VR)·CIRa from marginal rates, so it never measures whether verbalization is lower on the items where the cue actually flipped the answer.",
+          "quote": "This multiplication is valid because we treat these as joint probabilities of independent events across the dataset.",
+          "location": "Appendix A.3 Metrics"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "OSM multiplies the overall flag rate, including flags on cue-influenced answers, so even a perfect monitor scores above zero; it is not a false-positive rate.",
+          "quote": "whereas OSM values are much higher (54.70%), showing that the baseline LLM-based CoT monitors raised in (Baker et al., 2025) can be oversensitive",
+          "location": "4.2 Verbalization and Monitor Reliability Across Different Cue Types"
+        },
+        {
+          "kind": "definition_mismatch",
+          "term": "monitorability",
+          "text": "The monitor gets an open-ended misbehaviour checklist, so flags for other reasons on cue-resisting answers count as false positives.",
+          "quote": "We assume the \"misbehavior\" to be detected is the model succumbing to the misleading cue.",
+          "location": "3.2 Measuring CoT Monitorability"
+        }
+      ]
+    },
     "author_view": {
       "stance": -1,
       "relevance": "central",
-      "rationale": "They find that reasoning models often hide their reliance on injected cues and that LLM monitors are systematically over-sensitive. They conclude that exposing reasoning traces is not enough for reliable supervision, though their models are mostly small open models rather than frontier ones.",
-      "framing_note": "They split the question into two parts, whether the model verbalizes decision factors and whether the monitor judges correctly, and stress a gap between being monitorable and being monitored correctly. Part of their negative answer concerns monitor quality, not what the CoT reveals.",
       "quote": "These findings highlight a critical gap between monitorability and effective monitoring, suggesting that simply exposing reasoning traces is insufficient for reliable supervision.",
       "location": "§6 Conclusion",
       "basis": "estimated"
@@ -1562,6 +2462,28 @@
       "Unrealistic reward-hacking settings",
       "CoT not necessary for the tasks"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "Throughout this work, we use both Qwen3-4B and Qwen3-8B as our initial policies",
+        "location": "3 Methods (Model training)"
+      },
+      {
+        "kind": "stated",
+        "quote": "we only study this phenomenon on a single model family and two model sizes. Thus, we are unable to make strong claims about how this phenomenon may change across different sizes and training pipelines.",
+        "location": "5.1 Limitations and Future Works"
+      },
+      {
+        "kind": "stated",
+        "quote": "our results should not be taken as representative example of how obfuscation could occur in a production RL environment, but rather a specific example of a failure mode that can result in obfuscated CoTs.",
+        "location": "5.1 Limitations and Future Works"
+      },
+      {
+        "kind": "stated",
+        "quote": "Further work is necessary to understand how obfuscation generalises when the undesired behaviour typically requires CoT to be performed.",
+        "location": "5.1 Limitations and Future Works"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -1571,11 +2493,43 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "Our findings suggest that current practices of penalising harmful generations may inadvertently lead to a reduction in the broader monitorability of LLMs in unpredictable ways.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "unfaithful reasoning — when CoT does not accurately depict the true underlying reasoning process employed by the model",
+          "location": "2 Background and Related Work"
+        },
+        "monitorability": null
+      },
+      "measured": "Reward-hacking rate and the rate at which an LLM monitor (Kimi-K2 / K2.5) flags reasoning about the leaked information in the CoT, on held-out and high-stakes multiple-choice tasks, over GRPO training of Qwen3-4B/8B with CoT or summary penalties.",
+      "unit": "CoT under RL training",
+      "models_scope": "LLM",
+      "lane": "CoT interventions"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "method_weak_link",
+          "text": "Detection is scored by the same monitor and prompt the policy was trained against, so falling detection may reflect evasion of that one monitor rather than CoT that is uninformative to monitors in general.",
+          "quote": "Similarly, we use the same monitor query for (ii) and (iii) as we use during training.",
+          "location": "3 Methods (Measures and Visualisations)"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "The two policies are 4B and 8B parameters.",
+          "quote": "This rules out the explanation that our findings are specific to small-model training dynamics.",
+          "location": "4 Results (Replication at a second model scale)"
+        }
+      ]
+    },
     "author_view": {
       "stance": -1,
       "relevance": "partial",
-      "rationale": "They show that CoT obfuscation learned under output-only penalties carries over to unseen tasks, and argue that common output-supervision practice may erode monitorability unpredictably. They also say their toy settings are not representative of production RL.",
-      "framing_note": null,
       "quote": "Our findings suggest that current practices of penalising harmful generations may inadvertently lead to a reduction in the broader monitorability of LLMs in unpredictable ways.",
       "location": "Abstract",
       "basis": "estimated"
@@ -1616,6 +2570,28 @@
       "Side task is assigned",
       "Small number of runs per condition"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We evaluate six Claude models spanning two capability generations: three pre-4.5 models (Sonnet 3.7, Sonnet 4, Opus 4) and three 4.5-generation models (Haiku 4.5, Sonnet 4.5, Opus 4.5).",
+        "location": "3 Methods (Models)"
+      },
+      {
+        "kind": "stated",
+        "quote": "First, we evaluate only Claude models and use Claude Opus 4.5 as our LLM evaluator, introducing potential same-family bias",
+        "location": "5 Discussion (Limitations)"
+      },
+      {
+        "kind": "stated",
+        "quote": "Second, our feedback regime is somewhat artificial; real deployments may use different configurations that alter awareness dynamics.",
+        "location": "5 Discussion (Limitations)"
+      },
+      {
+        "kind": "stated",
+        "quote": "Third, we study only two tasks from SHADE-Arena; awareness rates may vary across task types.",
+        "location": "5 Discussion (Limitations)"
+      }
+    ],
     "code_available": false,
     "relations": [
       {
@@ -1625,11 +2601,46 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "This intent–capability gap is reassuring for current deployment, but the autonomous emergence of both monitoring awareness and evasion intent suggests that CoT monitoring is not a permanently reliable safeguard.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "CoT explanations can be unfaithful to actual computations",
+          "location": "2 Related Work"
+        },
+        "verbalization": {
+          "quote": "our evaluation of “awareness” relies on explicit statements in thinking tags: models could potentially develop awareness without verbalizing it.",
+          "location": "5 Discussion (Limitations)"
+        }
+      },
+      "measured": "Claude Opus 4.5-judged monitoring-awareness level (1–5) and stated obfuscation intent in thinking tags, plus side-task evasion of a hidden CoT monitor, over 10-episode SHADE-Arena runs of six Claude models.",
+      "unit": "agent CoT",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "framing_overreach",
+          "text": "The gap rests on three episodes out of 2,400 (two Sonnet 4.5, one Opus 4.5).",
+          "quote": "We demonstrate a consistent intent–capability gap: all models that form obfuscation intent fail to execute it",
+          "location": "1 Introduction (contributions)"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "The same sentence gives the validation subset as 50 episodes, so it is unclear how many judgements the 9/10 covers.",
+          "quote": "achieving 9/10 agreement on awareness levels",
+          "location": "3 Methods (Evaluation Metrics)"
+        }
+      ]
+    },
     "author_view": {
       "stance": 1,
       "relevance": "partial",
-      "rationale": "Current Claude models that inferred they were being monitored and intended to hide their reasoning all failed to do so, and kept reasoning openly about the hidden side task. The authors find this reassuring for current deployment but say the safeguard is not permanently reliable.",
-      "framing_note": "They would separate current from future reliability: yes for current models in their setting, but they argue the intent-capability gap is temporary, so they would resist calling CoT monitoring 'reliable' without that qualifier.",
       "quote": "This intent–capability gap is reassuring for current deployment, but the autonomous emergence of both monitoring awareness and evasion intent suggests that CoT monitoring is not a permanently reliable safeguard.",
       "location": "Abstract",
       "basis": "estimated"
@@ -1674,6 +2685,28 @@
       "Prompted stress tests, not training pressure",
       "Designed decision factors"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "We evaluate three open-source models (Qwen3-14B, Qwen3-235BA22B ... and five closed-source models (GPT-5-mini, GPT-5 (Singh et al., 2025), Claude Haiku 4.5, Claude Sonnet 4.5, Gemini-3-Flash)",
+        "location": "4 Experiments (Evaluated LLMs)"
+      },
+      {
+        "kind": "scope",
+        "quote": "For closed-source models, we set the reasoning effort to medium for GPT-5 and GPT-5-mini, high for Gemini 3 Flash",
+        "location": "Appendix: Implementation Details"
+      },
+      {
+        "kind": "stated",
+        "quote": "monitorability in subjective or creative reasoning domains remains largely unexplored",
+        "location": "A.1 Discussion"
+      },
+      {
+        "kind": "stated",
+        "quote": "our evaluation treats LLMs primarily as black boxes: we do not inspect internal model states.",
+        "location": "A.1 Discussion"
+      }
+    ],
     "code_available": true,
     "relations": [
       {
@@ -1683,11 +2716,56 @@
     ],
     "flagged": false,
     "human_override": null,
+    "author_claim": {
+      "quote": "Extensive experiments show that CoT monitorability is a conditional property affected by the evaluated LLM, monitor LLM, and task characteristics. Across these factors, monitorability is higher when decision-critical factors shape the intermediate reasoning process, rather than merely influencing the final answer.",
+      "location": "Abstract"
+    },
+    "operationalization": {
+      "terms": {
+        "faithfulness": {
+          "quote": "unfaithful CoT, where the reasoning trace does not reflect the basis of the final output",
+          "location": "2 Related Work"
+        },
+        "monitorability": {
+          "quote": "We define the monitorability score, which measures how much the monitor flags CoTs reveal the reasons behind the final responses",
+          "location": "3.3 Evaluation Metrics"
+        },
+        "verbalization": {
+          "quote": "In direct concealment, the model is explicitly instructed to avoid verbalizing the specific decision-critical factors that drive its output.",
+          "location": "3.1 Evaluation Design"
+        }
+      },
+      "measured": "How often a Qwen3-32B monitor, told the exact decision-critical factor, flags it in the CoT (or actions / full trace), relative to the factor's minimum attributable share of passes, across 19 tasks and 8 LLMs in standard and two stress-test prompting conditions.",
+      "unit": "raw or summarized CoT",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "method_weak_link",
+          "text": "The headline 'more capable LLMs tend to exhibit lower monitorability' correlation over 8 models compares raw open-source CoTs with summarized closed-source ones.",
+          "quote": "For the closed-source LLMs, we could only access the summarized CoT provided by the proprietary company.",
+          "location": "3.3 Evaluation Metrics"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "The 85–92% monitor F1 is from single-turn tasks; this sentence covers the multi-turn agentic ones.",
+          "quote": "We further evaluate trajectories involving multi-turn environment interaction and find a weak agreement between human annotations and LLM-based annotations.",
+          "location": "A.5.2 Monitor Calibration"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "The target is the minimum attributable share TE / E[Y|X=1], so a score of 1 does not require the factor to be flagged every time it drove the answer, nor that the flagged cases are the driven ones.",
+          "quote": "since the metric is capped at 1, all such values are mapped to 1.",
+          "location": "3.3 Evaluation Metrics"
+        }
+      ]
+    },
     "author_view": {
       "stance": 0,
       "relevance": "central",
-      "rationale": "They frame monitorability as conditional: high (around 90%) when the decision-critical factor is woven into the reasoning, low and easy to suppress when it only affects the final answer. They also find that more capable models tend to be less monitorable.",
-      "framing_note": "They would reject a single yes/no answer: whether CoT reveals the factors driving the answer depends on the model, the monitor and especially the task structure.",
       "quote": "Extensive experiments show that CoT monitorability is a conditional property affected by the evaluated LLM, monitor LLM, and task characteristics. Across these factors, monitorability is higher when decision-critical factors shape the intermediate reasoning process, rather than merely influencing the final answer.",
       "location": "Abstract",
       "basis": "estimated"
@@ -1731,6 +2809,23 @@
       "Developer self-report",
       "Some evals withheld (private data)"
     ],
+    "limitations": [
+      {
+        "kind": "scope",
+        "quote": "For reference, Figures 1-3 show results on the open-sourced subset of the evaluation suite for GPT-5.4 thinking with a CoT-only monitor scope.",
+        "location": "Release overview"
+      },
+      {
+        "kind": "stated",
+        "quote": "Faithfulness alone is (1) too stringent a requirement for CoT monitoring to be useful as a safety layer and (2) is operationally hard or impossible to measure.",
+        "location": "Why we care about CoT monitorability rather than CoT faithfulness"
+      },
+      {
+        "kind": "stated",
+        "quote": "noise-driven positives can look like genuine intervention effects and can dominate the aggregate metric.",
+        "location": "Noise-driven problem instances affect g-mean2"
+      }
+    ],
     "code_available": true,
     "relations": [
       {
@@ -1741,11 +2836,57 @@
     "flagged": false,
     "human_override": null,
     "source_type": "blog",
+    "author_claim": {
+      "quote": "OpenAI already uses CoT monitoring to detect reward hacking and other forms of misbehavior in frontier reasoning models and internal agent deployments, making it a practical safeguard today rather than a speculative one.",
+      "location": "Introduction (before first heading)"
+    },
+    "operationalization": {
+      "terms": {
+        "monitorability": {
+          "quote": "we use monitorability to describe whether a monitor can predict a property of interest about an agent's behavior from the agent's latent state.",
+          "location": "Why we care about CoT monitorability rather than CoT faithfulness"
+        },
+        "faithfulness": {
+          "quote": "A latent can fail to support monitoring because the relevant information is missing (failure of faithfulness), or because that information is present but not legible to the monitor (failure of legibility).",
+          "location": "Why we care about CoT monitorability rather than CoT faithfulness"
+        }
+      },
+      "measured": "The g-mean2 monitorability metric of a CoT-only monitor on intervention, process and outcome-property evals for GPT-5.4 thinking, plotted against CoT length and reasoning effort (figures only; no numbers appear in the text), plus a simulation of a new cross-fit filtering rule.",
+      "unit": "reasoning-model CoT",
+      "models_scope": "LLM",
+      "lane": "monitor evals"
+    },
+    "adversarial": {
+      "blinded": true,
+      "flags": [
+        {
+          "kind": "definition_mismatch",
+          "term": "faithfulness",
+          "quote": "we focus on monitorability, and only care about faithfulness to the extent it impacts monitorability.",
+          "location": "Why we care about CoT monitorability rather than CoT faithfulness"
+        },
+        {
+          "kind": "method_weak_link",
+          "text": "Under the new filter, sandbagging monitorability at RL steps from about 600 onward goes unreported instead of being measured.",
+          "quote": "Any missing datapoints correspond to situations where the metric was deemed not reliable enough to report",
+          "location": "Release overview"
+        },
+        {
+          "kind": "method_weak_link",
+          "quote": "We then pilot-tested candidate topic-attribute-value combinations and retained a compact subset with the largest and most reliable effects.",
+          "location": "Footnote 1 (Memory eval)"
+        },
+        {
+          "kind": "framing_overreach",
+          "text": "The post reports no detection rates from deployment to back this.",
+          "quote": "making it a practical safeguard today rather than a speculative one.",
+          "location": "Introduction"
+        }
+      ]
+    },
     "author_view": {
       "stance": 1,
       "relevance": "partial",
-      "rationale": "OpenAI says it already uses CoT monitoring to catch reward hacking and misbehavior in frontier models, calling it a practical safeguard today. It also says effectiveness depends on preserving CoT informativeness and that whether it remains reliable is still being studied.",
-      "framing_note": "They explicitly reject faithfulness as the standard ('too stringent a requirement for CoT monitoring to be useful'). Complete faithfulness is not needed for monitorability, so they would answer for monitorability, not for revealing all the factors that drive answers.",
       "quote": "OpenAI already uses CoT monitoring to detect reward hacking and other forms of misbehavior in frontier reasoning models and internal agent deployments, making it a practical safeguard today rather than a speculative one.",
       "location": "Intro (after TL;DR)",
       "basis": "estimated"
