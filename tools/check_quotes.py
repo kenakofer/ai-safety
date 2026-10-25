@@ -21,6 +21,7 @@ TRANS = str.maketrans({"‘": "'", "’": "'", "“": '"', "”": '"', "–": "-
 
 
 def norm(s):
+    s = re.sub(r"([—–])[ \t]*\n\s*", r"\1", s)  # line break right after an em/en dash
     s = s.translate(TRANS)
     s = re.sub(r"(\w)-\s*\n\s*(\w)", r"\1\2", s)  # pdftotext line-break hyphenation
     s = re.sub(r"[*_`]", "", s)  # markdown emphasis in .md sources

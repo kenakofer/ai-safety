@@ -42,8 +42,9 @@ else:
 t = t[m.start():] if m else t
 
 # Drop acknowledgements and the reference list, keeping any appendix after it.
-ack = re.search(r"\n\s*(?:Acknowledge?ments?|Author Contributions)\s*\n", t, re.I)
-refs = re.search(r"\n\s*(?:References|Bibliography)\s*\n", t, re.I)
+# Title Case or ALL CAPS only: a stray lowercase "references" line in figure text is not a heading.
+ack = re.search(r"\n\s*(?:Acknowledge?ments?|ACKNOWLEDGE?MENTS?|Author [Cc]ontributions|AUTHOR CONTRIBUTIONS)\s*\n", t)
+refs = re.search(r"\n\s*(?:References|REFERENCES|Bibliography|BIBLIOGRAPHY)\s*\n", t)
 cut = min((x.start() for x in (ack, refs) if x), default=None)
 if cut is not None:
     app = re.search(r"\n\s*(?:Appendix|A\s{1,3}[A-Z][^\n]{3,60})\s*\n", t[cut:])
