@@ -189,7 +189,9 @@ footer { margin-top: 20px; font-size: 0.82rem; }
 #matrix th + th, #matrix th + td, #matrix td + td { border-left: 1px solid var(--line); }
 #matrix tbody tr:last-child > * { border-bottom: 0; }
 #matrix thead th { font-size: 0.85rem; background: #f6f6f3; }
-#matrix thead th .def { display: block; font-weight: 400; color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+#matrix thead tr.sense > * { background: #f6f6f3; font-size: 0.8rem; color: var(--muted); }
+#matrix thead tr.sense th { font-weight: 600; }
+#matrix thead tr.sense td { font-weight: 400; }
 #matrix tbody th { font-weight: 500; min-width: 160px; }
 #matrix tr.selected { background: #eef2ff; }
 #matrix td.mismatch { background: var(--warn-bg); }

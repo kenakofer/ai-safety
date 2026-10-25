@@ -38,7 +38,7 @@ const authorAnswer = (p) => {
 const parseDate = d3.utcParse("%Y-%m-%d");
 const fmtDate = d3.utcFormat("%b %Y");
 
-const state = { papers: [], byId: new Map(), discussion: {}, q: null, selected: null };
+const state = { papers: [], byId: new Map(), discussion: {}, sources: {}, q: null, selected: null };
 const satellitesOf = (p) => state.discussion[`${p.id}|${p.question_id}`] || [];
 
 /* ---------- boot ---------- */
@@ -50,10 +50,11 @@ const getJSON = (url, optional = false) =>
     throw new Error(`${url}: ${r.status}`);
   });
 
-Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSON("data/discussion.json", true)])
-  .then(([questions, papers, discussion]) => {
+Promise.all([getJSON("data/questions.json"), getJSON("data/papers.json"), getJSON("data/discussion.json", true), getJSON("data/discussion_sources.json", true)])
+  .then(([questions, papers, discussion, sources]) => {
     QUESTIONS = questions;
     state.discussion = discussion;
+    state.sources = sources;
     for (const p of papers) {
       p._date = parseDate(p.first_version_date);
       p._key = `${p.id}|${p.question_id}`;
@@ -168,8 +169,9 @@ function updateStuck() {
     const scroll = table.parentElement, r = scroll.getBoundingClientRect(), cols = mRow.firstElementChild;
     mRow.style.marginLeft = `${r.left + scroll.clientLeft}px`;
     mRow.style.width = `${scroll.clientWidth}px`;
-    cols.innerHTML = [...thead.rows[0].cells].map((th) => {
-      const name = th.firstChild?.textContent ?? "", def = th.querySelector(".def")?.textContent ?? "";
+    const senses = thead.rows[1]?.cells;
+    cols.innerHTML = [...thead.rows[0].cells].map((th, i) => {
+      const name = th.textContent, def = i ? senses?.[i]?.textContent ?? "" : "";
       return `<span style="width:${th.getBoundingClientRect().width}px"${def ? ` title="${esc(def)}"` : ""}>${esc(name)}</span>`;
     }).join("");
     cols.style.transform = `translateX(${-scroll.scrollLeft}px)`;
@@ -500,7 +502,10 @@ function renderMatrix(papers) {
     <h2>How each paper defines the terms</h2>
     <p class="muted">Quotes are the papers' own words (machine-checked against the source text). ⚑ marks a cell where a blinded reader found the paper's sense differs from the question's.</p>
     <div class="matrix-scroll"><table>
-      <thead><tr><th>Paper</th>${terms.map((t) => `<th>${esc(t)}<span class="def">Question's sense: ${esc(q.terms[t])}</span></th>`).join("")}</tr></thead>
+      <thead>
+        <tr><th>Paper</th>${terms.map((t) => `<th>${esc(t)}</th>`).join("")}</tr>
+        <tr class="sense"><th scope="row">Question's sense</th>${terms.map((t) => `<td>${esc(q.terms[t])}</td>`).join("")}</tr>
+      </thead>
       <tbody>${rows.map((p) => `
         <tr${p.id === state.selected ? ' class="selected"' : ""}>
           <th scope="row"><button class="rel-link" data-id="${esc(p.id)}">${esc(trunc(p.title, 70))}</button><span class="loc">${esc(p.first_version_date.slice(0, 4))}${isEssay(p) ? " · essay" : ""}</span><span class="loc">${esc(p.operationalization.unit)} · ${esc(p.operationalization.models_scope)}</span></th>
@@ -563,6 +568,11 @@ function renderDetail(p) {
       <q>${esc(o.quote)}</q>${llm(o.summary)}${replies.length ? `<ul class="sat-boxes">${replies.map(satBox).join("")}</ul>` : ""}</li>`;
   };
   const sats = allSats.filter((o) => !urls.has(o.reply_to)).sort(byKarma).map(satBox);
+  // Without critiques, say whether anyone looked: a paper missing from discussion_sources.json hasn't been searched.
+  const threads = state.sources[p.id];
+  const noSats = !threads ? "Not yet reviewed." : threads.length
+    ? `None kept from ${threads.length === 1 ? "one LessWrong thread" : `${threads.length} LessWrong threads`}.`
+    : "No LessWrong or Alignment Forum discussion found.";
 
   el.innerHTML = `
     <h2><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></h2>
@@ -574,7 +584,7 @@ function renderDetail(p) {
       ${row("Method", op ? `${llm(op.measured)} <span class="loc">${esc(op.unit)} · ${esc(op.models_scope)} · ${esc(op.lane)}</span>` : llm(p.setup))}
       ${op ? row("Definitions", list(Object.entries(op.terms || {}).map(([t, v]) => `<li><span class="flag-kind">${esc(t)}</span> ${v ? quote(v) : `<span class="muted">used, not defined</span>`}</li>`), "tag-list")) : ""}
       ${lims.length ? row("Scope and limitations", list(lims, "tag-list")) : ""}
-      ${row(`Outside critiques (${allSats.length})`, sats.length ? `<ul class="sat-boxes">${sats.join("")}</ul>` : `<span class="muted">None kept yet.</span>`)}
+      ${row(`Outside critiques (${allSats.length})`, sats.length ? `<ul class="sat-boxes">${sats.join("")}</ul>` : `<span class="muted">${noSats}</span>`)}
       ${row("Models tested", p.models_tested.length ? `<div class="chips">${p.models_tested.map((m) => `<span class="chip">${esc(m)}</span>`).join("")}</div>` : "—")}
       ${row("Caveats", p.caveats.length ? `<div class="llm">${list(p.caveats.map((c) => `<li>${esc(c)}</li>`))}</div>` : "—")}
       ${row("Code available", p.code_available ? "Yes" : "No / not found")}
